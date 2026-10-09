@@ -1,0 +1,11 @@
+{
+  "name": "GymCoach AI — персональний фітнес-помічник",
+  "short_name": "GymCoach AI",
+  "description": "Тренування, харчування та прогрес в одному місці.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0d0b",
+  "theme_color": "#0a0d0b",
+  "icons": [{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
