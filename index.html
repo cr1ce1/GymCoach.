@@ -160,6 +160,42 @@ body{background:radial-gradient(ellipse at 50% -20%,#14264a 0,transparent 48%),v
 #thLegacyPlanMount #gtPlanEditor{background:var(--panel)!important;border-color:var(--line)!important}
 @media(max-width:520px){.top{padding:18px 16px 12px!important}}
 </style>
+
+<style id="gymcoach-final-blue-theme">
+:root{--bg:#070b18!important;--panel:#0d1426!important;--panel2:#131f38!important;--line:#243454!important;--lime:#38bdf8!important;--text:#f1f5ff!important;--muted:#9aaaca!important;--danger:#fb7185!important;--training-accent:#38bdf8!important}
+html,body{background-color:var(--bg)!important;color:var(--text)!important}
+body{background:radial-gradient(ellipse at 50% -20%,#14264a 0,transparent 48%),var(--bg)!important}
+.top{background:radial-gradient(ellipse at 50% -20%,#14264a 0,transparent 48%),var(--bg)!important;border-color:var(--line)!important}
+.hero{background:radial-gradient(ellipse at 90% 0%,rgba(56,189,248,.18),transparent 40%),linear-gradient(135deg,#101d38,#0a1020 78%)!important;border-color:#244a78!important}
+.hero p,.muted,.gt-muted{color:var(--muted)!important}
+.card,.option,.exercise-card,.onboard .card,.metric,.gt-metric,.gt-achievement,.gt-food-row,.gt-extra-nav button,.gt-reminder input[type=time]{background:linear-gradient(150deg,#101a31,#0c1325)!important;border-color:var(--line)!important;color:var(--text)!important}
+.btn,.gt-install-action{background:linear-gradient(135deg,#38bdf8,#3b82f6)!important;border-color:#38bdf8!important;color:#04101e!important;box-shadow:0 6px 18px rgba(56,189,248,.12)!important}
+.btn.secondary,.btn.danger,.chip,.gt-chip,.gt-extra-nav button,.th-btn.ghost{background:var(--panel2)!important;border-color:var(--line)!important;color:var(--text)!important}
+.pill,.chip.selected,.nav button.active{background:#10243a!important;border-color:#2b91c8!important;color:#7dd3fc!important}
+input,select,textarea,.field input,.field select,.field textarea{background:#0d1426!important;border-color:var(--line)!important;color:var(--text)!important}
+input:focus,select:focus,textarea:focus,.field input:focus,.field select:focus,.field textarea:focus{border-color:#38bdf8!important;box-shadow:0 0 0 3px rgba(56,189,248,.12)!important}
+label{color:#dbeafe!important}
+.nav{background:rgba(7,11,24,.96)!important;border-color:var(--line)!important}
+.nav button{color:var(--muted)!important}.nav button.active{color:#7dd3fc!important;background:#10243a!important}
+.gt-progress{background:#1b2c45!important}.gt-progress span,.chart-bar span{background:#38bdf8!important}
+#authGate{background:radial-gradient(ellipse at 20% 5%,rgba(56,189,248,.1),transparent 35%),rgba(5,8,16,.94)!important}
+.auth-card{background:linear-gradient(145deg,#101d38,#090f20)!important;border-color:#29466e!important}
+#gtGoogleLogin{background:#121e36!important;border-color:#2b4269!important;color:var(--text)!important}
+#gtInstallBanner{background:rgba(13,20,38,.98)!important;border-color:var(--line)!important}
+#gtInstallBanner .gt-install-close{color:var(--muted)!important}
+#langBtn.lang{background:var(--panel)!important;border-color:var(--line)!important}
+#langBtn .lang-segment.active{background:linear-gradient(135deg,#38bdf8,#3b82f6)!important;color:#04101e!important;box-shadow:0 3px 14px rgba(56,189,248,.18)!important}
+#trainingHub{--th-accent:#38bdf8!important}
+.th-tabs,.th-program,.th-feature-card,.th-day,.th-secondary-panel,.th-custom-row,.th-library-card{background:linear-gradient(150deg,#101a31,#0c1325)!important;border-color:var(--line)!important;color:var(--text)!important}
+.th-tabs button{color:var(--muted)!important}.th-tabs button.active,.th-start-day,.th-btn{background:linear-gradient(135deg,#38bdf8,#3b82f6)!important;color:#04101e!important}
+.th-program.active{background:#10243a!important;border-color:#38bdf8!important}.th-program.active span,.th-day-number,.th-library-card .th-category{color:#7dd3fc!important}
+.th-kicker,.th-day-number{background:var(--panel2)!important;border-color:var(--line)!important}
+.th-video-link,.tech-video{background:#10243a!important;border-color:#24527a!important;color:#7dd3fc!important}
+.th-field{background:#0d1426!important;border-color:var(--line)!important;color:var(--text)!important}
+#thLegacyPlanMount #gtPlanEditor{background:var(--panel)!important;border-color:var(--line)!important}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
 </head>
 <body>
 
@@ -593,7 +629,11 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
    const training=goal!=='general'&&goal!=='maintain';
    const protein=Math.round(kg*(training?1.6:age<18?1.2:1.0));
    const fat=Math.round(kg*(age<18?1.0:0.9));
-   const kcal=Number(($('gtTargetKcal')?.textContent||'').replace(/[^\d]/g,''))||null;
+   const kcalText=$('gtTargetKcal')?.textContent||'';
+   const kcalParts=(kcalText.match(/\d[\d\u00a0\u202f ]*/g)||[]).map(v=>Number(v.replace(/\D/g,''))).filter(v=>Number.isFinite(v)&&v>0);
+   // A teen's energy estimate is shown as a broad range; use its midpoint for a rough macro estimate.
+   // Never concatenate both ends of a range into one enormous number.
+   const kcal=kcalParts.length>1?Math.round((kcalParts[0]+kcalParts[1])/2):(kcalParts[0]||null);
    const carbs=kcal?Math.max(0,Math.round((kcal-protein*4-fat*9)/4)):null;
    if($('gtMacroP'))$('gtMacroP').textContent=protein+' г';
    if($('gtMacroF'))$('gtMacroF').textContent=fat+' г';
