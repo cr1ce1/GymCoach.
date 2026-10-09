@@ -63,6 +63,80 @@ let lang=localStorage.getItem('gtai_lang')||'uk',profile=JSON.parse(localStorage
 const $=id=>document.getElementById(id),t=k=>translations[lang][k]||translations.uk[k]||k;
 const exercises={home:[['Bodyweight squat','3 × 8–12'],['Wall or knee push-up','3 × 6–10'],['Glute bridge','3 × 10–15'],['Bird dog','2 × 8 each side'],['Plank','3 × 15–30 sec']],dumbbells:[['Goblet squat','3 × 8–12'],['Dumbbell row','3 × 8–12'],['Dumbbell floor press','3 × 8–12'],['Dumbbell Romanian deadlift','2 × 8–12'],['Dead bug','2 × 8 each side']],gym:[['Leg press or goblet squat','3 × 8–12'],['Chest press','3 × 8–12'],['Lat pulldown','3 × 8–12'],['Seated cable row','2 × 10–12'],['Dead bug','2 × 8 each side']],outdoor:[['Bodyweight squat','3 × 8–12'],['Incline push-up','3 × 6–12'],['Step-up','2 × 8 each side'],['Inverted row if safe setup','2 × 6–10'],['Plank','3 × 15–30 sec']]};
 function toggleLang(){lang=lang==='uk'?'en':'uk';localStorage.setItem('gtai_lang',lang);applyLang();if(profile){renderHome();renderPlan();renderHistory();}}
+
+function renderHome() {
+  if (!profile) return;
+
+  const nameEl = document.getElementById('helloName');
+  const summaryEl = document.getElementById('homeSummary');
+
+  if (nameEl) {
+    nameEl.textContent = profile.name ? ', ' + profile.name : '';
+  }
+
+  if (summaryEl) {
+    summaryEl.textContent =
+      'Твоя ціль: ' + goalText() +
+      '. Тренуйся регулярно та відстежуй свій прогрес!';
+  }
+
+  let history = [];
+
+  try {
+    history = JSON.parse(
+      localStorage.getItem('gtai_history') || '[]'
+    );
+  } catch (e) {
+    history = [];
+  }
+
+  const totalEl = document.getElementById('totalStat');
+  const weekEl = document.getElementById('weekStat');
+  const minutesEl = document.getElementById('minutesStat');
+  const recentEl = document.getElementById('recent');
+
+  if (totalEl) totalEl.textContent = history.length;
+
+  const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+
+  const weekHistory = history.filter(item => {
+    const date = new Date(item.date || item.completedAt || 0).getTime();
+    return date >= weekAgo && date <= Date.now();
+  });
+
+  if (weekEl) weekEl.textContent = weekHistory.length;
+
+  const minutes = history.reduce((sum, item) => {
+    return sum + Number(item.duration || item.minutes || 0);
+  }, 0);
+
+  if (minutesEl) minutesEl.textContent = minutes;
+
+  if (recentEl) {
+    if (history.length === 0) {
+      recentEl.textContent =
+        "Завершені тренування з'являться тут.";
+    } else {
+      recentEl.textContent = '';
+
+      history.slice(-3).reverse().forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'history-item';
+
+        const title = document.createElement('strong');
+        title.textContent = item.name || item.type || 'Тренування';
+
+        const details = document.createElement('p');
+        details.textContent =
+          (item.duration || item.minutes || 0) + ' хвилин';
+
+        row.appendChild(title);
+        row.appendChild(details);
+        recentEl.appendChild(row);
+      });
+    }
+  }
+}
 function applyLang(){document.documentElement.lang=lang;document.querySelectorAll('[data-i]').forEach(el=>{const key=el.dataset.i;if(translations[lang][key])el.textContent=translations[lang][key]});document.querySelectorAll('[data-placeholder]').forEach(el=>el.placeholder=t(el.dataset.placeholder));$('langBtn').textContent=lang==='uk'?'EN 🇬🇧':'УКР 🇺🇦';if(profile){renderHome();renderPlan();renderHistory();renderCustomSessionText();}}
 function pickDays(n){daysChosen=n;document.querySelectorAll('[data-days]').forEach(b=>b.classList.toggle('selected',+b.dataset.days===n));}
 function showPage(id){if(!profile&&id!=='setup')id='setup';document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));$('nav').style.display=id==='setup'?'none':'flex';if(id==='home')renderHome();if(id==='recommend')renderPlan();if(id==='history')renderHistory();if(id==='profile')fillEditProfile();if(id==='library')renderLibrary();window.scrollTo(0,0)}
