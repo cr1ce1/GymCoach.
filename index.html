@@ -281,7 +281,126 @@ function gtToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getM
 function gtLocalSchedule(){try{return JSON.parse(localStorage.getItem('gtai_schedule')||'[]')}catch{return []}}
 function gtSaveLocalSchedule(){localStorage.setItem('gtai_schedule',JSON.stringify(gtSchedule))}
 async function gtAuthSubmit(e){e.preventDefault();if(!gtSupabase){gtStatus('Авторизація ще не налаштована. Власнику сайту потрібно заповнити config.js значеннями з Supabase. Дивись README.md.');return}const email=document.getElementById('authEmail').value.trim(),password=document.getElementById('authPassword').value;const btn=document.getElementById('authSubmit');btn.disabled=true;gtStatus('Зачекай…');try{const result=gtAuthMode==='signup'?await gtSupabase.auth.signUp({email,password,options:{emailRedirectTo:location.origin}}):await gtSupabase.auth.signInWithPassword({email,password});if(result.error)throw result.error;if(gtAuthMode==='signup'&&!result.data.session){gtStatus('Акаунт створено. Перевір пошту та підтвердь адресу, після цього увійди.');return}gtSession=result.data.session;gtUser=result.data.user;await gtAfterLogin()}catch(err){gtStatus(err.message||'Не вдалося виконати вхід. Перевір дані.')}finally{btn.disabled=false}}
-async function gtAfterLogin(){if(!gtUser||!gtSupabase)return;gtShowGate(false);gtStatus('');try{const {data:prof,error}=await gtSupabase.from('user_profiles').select('profile').eq('user_id',gtUser.id).maybeSingle();if(error)throw error;if(prof?.profile){profile=prof.profile;localStorage.setItem('gtai_profile',JSON.stringify(profile))}else{profile=null;localStorage.removeItem('gtai_profile');showPage('setup');if($('pEmail'))$('pEmail').value=gtUser.email||''}const {data:rows,error:he}=await gtSupabase.from('workout_logs').select('*').order('created_at',{ascending:false}).limit(200);if(he)throw he;history=(rows||[]).map(r=>({id:r.id,name:r.title,date:r.created_at,done:r.completed_exercises,minutes:r.minutes,exercises:r.details?.exercises||[]}));localStorage.setItem('gtai_history',JSON.stringify(history));const {data:sch,error:se}=await gtSupabase.from('workout_schedule').select('*').order('scheduled_for',{ascending:true}).limit(100);if(se)throw se;gtSchedule=(sch||[]).map(r=>({id:r.id,title:r.title,date:r.scheduled_for,details:r.details||{}}));gtSaveLocalSchedule();gtCloudReady=true;if(profile){showPage('home');renderHome();renderPlan();renderHistory();fillEditProfile()}else showPage('setup');gtRenderStats();gtRenderSchedule()}catch(err){console.error(err);gtStatus('Увійшли, але дані не завантажились. Перевір таблиці та RLS у Supabase.');gtShowGate(true)}}
+
+async function gtAfterLogin() {
+  if (!gtUser || !gtSupabase) return;
+
+  gtShowGate(false);
+  gtStatus('');
+
+  let loadError = false;
+
+  // 1. Завантаження профілю
+  try {
+    const { data, error } = await gtSupabase
+      .from('user_profiles')
+      .select('profile')
+      .eq('user_id', gtUser.id)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (data && data.profile) {
+      profile = data.profile;
+      localStorage.setItem(
+        'gtai_profile',
+        JSON.stringify(profile)
+      );
+    } else {
+      const savedProfile = localStorage.getItem('gtai_profile');
+      profile = savedProfile ? JSON.parse(savedProfile) : null;
+    }
+  } catch (err) {
+    console.error('Помилка профілю:', err);
+    loadError = true;
+
+    try {
+      const savedProfile = localStorage.getItem('gtai_profile');
+      profile = savedProfile ? JSON.parse(savedProfile) : null;
+    } catch (e) {
+      profile = null;
+    }
+  }
+
+  // 2. Завантаження історії тренувань
+  try {
+    const { data, error } = await gtSupabase
+      .from('workout_logs')
+      .select('*')
+      .eq('user_id', gtUser.id)
+      .order('created_at', { ascending: false })
+      .limit(200);
+
+    if (error) throw error;
+
+    history = (data || []).map(r => ({
+      id: r.id,
+      name: r.title,
+      date: r.created_at,
+      done: r.completed_exercises,
+      minutes: r.minutes,
+      exercises: r.details?.exercises || []
+    }));
+
+    localStorage.setItem(
+      'gtai_history',
+      JSON.stringify(history)
+    );
+  } catch (err) {
+    console.error('Помилка історії:', err);
+    loadError = true;
+  }
+
+  // 3. Завантаження розкладу
+  try {
+    const { data, error } = await gtSupabase
+      .from('workout_schedule')
+      .select('*')
+      .eq('user_id', gtUser.id)
+      .order('scheduled_for', { ascending: true })
+      .limit(100);
+
+    if (error) throw error;
+
+    gtSchedule = (data || []).map(r => ({
+      id: r.id,
+      title: r.title,
+      date: r.scheduled_for,
+      details: r.details || {}
+    }));
+
+    gtSaveLocalSchedule();
+  } catch (err) {
+    console.error('Помилка розкладу:', err);
+    loadError = true;
+  }
+
+  // 4. Відкриття сайту
+  gtCloudReady = !loadError;
+
+  if (profile) {
+    showPage('home');
+    renderHome();
+    renderPlan();
+    renderHistory();
+    fillEditProfile();
+  } else {
+    showPage('setup');
+
+    if ($('pEmail')) {
+      $('pEmail').value = gtUser.email || '';
+    }
+  }
+
+  gtRenderStats();
+  gtRenderSchedule();
+
+  if (loadError) {
+    console.warn(
+      'Вхід успішний, але деякі дані не завантажилися. Перевір таблиці та RLS у Supabase.'
+    );
+  }
+}
 async function gtSyncProfile(){if(!gtSupabase||!gtUser||!profile)return;const {error}=await gtSupabase.from('user_profiles').upsert({user_id:gtUser.id,profile,updated_at:new Date().toISOString()},{onConflict:'user_id'});if(error)console.error('Profile sync failed:',error)}
 async function gtSyncWorkout(item){if(!gtSupabase||!gtUser)return;const {data,error}=await gtSupabase.from('workout_logs').insert({user_id:gtUser.id,title:item.name,completed_exercises:item.done,minutes:item.minutes,details:{exercises:item.exercises||[]},created_at:item.date}).select().single();if(error){console.error(error);return}if(data)item.id=data.id}
 function gtEscape(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
