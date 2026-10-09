@@ -10,6 +10,28 @@
 /* GYM TRAINER AI PRO additions */
 #authGate{position:fixed;inset:0;z-index:1000;background:rgba(8,11,8,.97);display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}#authGate[hidden]{display:none!important}.auth-card{width:min(100%,480px);background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:0 25px 90px #0008}.auth-card h1{font-size:30px;margin:8px 0}.auth-tabs{display:flex;gap:8px;margin:18px 0}.auth-tabs button{flex:1}.auth-status{color:var(--muted);font-size:13px;line-height:1.5;margin-top:12px;white-space:pre-wrap}.metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.metric{padding:15px;background:var(--panel2);border:1px solid var(--line);border-radius:16px}.metric strong{display:block;font-size:24px;color:var(--lime)}.metric small{color:var(--muted)}.chart-bars{height:190px;display:flex;align-items:end;gap:8px;padding:14px 4px 4px}.chart-bar{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:end;gap:7px;height:100%}.chart-bar span{width:min(100%,34px);border-radius:8px 8px 3px 3px;background:var(--lime);min-height:3px}.chart-bar small{font-size:10px;color:var(--muted)}.session-row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;padding:13px 0;border-bottom:1px solid var(--line)}.session-row:last-child{border-bottom:0}.session-main{min-width:0}.session-inputs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.session-inputs label{font-size:11px;color:var(--muted)}.session-inputs input{width:100%;min-width:0;padding:9px;border:1px solid var(--line);background:#111610;color:var(--text);border-radius:9px}.session-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.calendar-item{display:grid;grid-template-columns:minmax(0,1fr) 150px auto;gap:9px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.calendar-item:last-child{border-bottom:0}.calendar-item input{min-width:0;width:100%;background:#111610;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:9px}.pr-row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.pr-row:last-child{border-bottom:0}.tag.ok{color:var(--lime)}.config-help{font-size:12px;color:var(--muted);line-height:1.5}.nav{overflow-x:auto;justify-content:flex-start}.nav button{flex:1 0 auto;min-width:0;padding:4px 5px}.nav button i{white-space:nowrap}@media(max-width:520px){.auth-card{padding:18px}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.calendar-item{grid-template-columns:minmax(0,1fr) 116px}.calendar-item .calendar-save{grid-column:1/-1}.session-inputs{grid-template-columns:repeat(3,minmax(0,1fr))}.nav button{font-size:9px;padding:4px 3px}.nav button span{font-size:17px}}
 
+
+
+/* GT_FEATURE_PACK_V1 */
+.nav{grid-template-columns:repeat(4,minmax(0,1fr))!important;max-width:760px!important}
+.nav button{min-width:0}
+.gt-extra-nav{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px}
+.gt-extra-nav button,.gt-chip{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:12px;padding:10px 12px;font-weight:750}
+.gt-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.gt-metric{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:14px;min-width:0}
+.gt-metric strong{display:block;font-size:22px;color:var(--lime);margin-bottom:4px}
+.gt-metric small,.gt-muted{color:var(--muted);font-size:12px}
+.gt-food-form{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:8px;align-items:end}
+.gt-food-form .field{margin:0;min-width:0}.gt-food-form input{width:100%;min-width:0}
+.gt-food-row{display:grid;grid-template-columns:2fr repeat(4,1fr) auto;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding:11px 0;font-size:13px}
+.gt-food-row button,.gt-small-btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:9px;padding:7px 9px}
+.gt-progress{height:8px;background:var(--panel2);border-radius:99px;overflow:hidden;margin-top:8px}.gt-progress span{display:block;height:100%;background:var(--lime);width:0;transition:width .2s}
+.gt-achievements{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.gt-achievement{padding:13px;border-radius:14px;background:var(--panel);border:1px solid var(--line);opacity:.56}
+.gt-achievement.unlocked{opacity:1;border-color:var(--lime)}.gt-achievement .gt-icon{font-size:24px}.gt-achievement b{display:block;margin:5px 0}
+.gt-reminder{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.gt-reminder input[type=time]{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px}
+@media(max-width:650px){.gt-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.gt-food-form{grid-template-columns:1fr 1fr}.gt-food-form .gt-food-name{grid-column:1/-1}.gt-food-row{grid-template-columns:1fr 1fr 1fr;font-size:12px}.gt-food-row .gt-food-title{grid-column:1/-1}.gt-food-row button{grid-column:1/-1}.gt-achievements{grid-template-columns:repeat(2,minmax(0,1fr))}.nav button i{font-size:11px}}
+
 </style></head>
 <body>
 
@@ -53,9 +75,25 @@
 </section>
 
 <section id="library" class="page"><div class="section-head"><h2>Бібліотека вправ</h2><span class="pill" id="exerciseCount">78 вправ</span></div><p class="muted">Обери вправу, щоб переглянути техніку, основні м’язи та відеодемонстрацію. Починай з легкого варіанта й припиняй рух, якщо відчуваєш біль.</p><div class="field"><label for="exerciseSearch">Пошук вправи</label><input id="exerciseSearch" placeholder="Наприклад, присідання або спина" oninput="renderLibrary()"></div><div class="chips" id="libraryFilters"><button class="chip selected" onclick="setLibraryFilter('Усі',this)">Усі</button><button class="chip" onclick="setLibraryFilter('Ноги',this)">Ноги</button><button class="chip" onclick="setLibraryFilter('Груди',this)">Груди</button><button class="chip" onclick="setLibraryFilter('Спина',this)">Спина</button><button class="chip" onclick="setLibraryFilter('Кор',this)">Кор</button><button class="chip" onclick="setLibraryFilter('Сідниці',this)">Сідниці</button><button class="chip" onclick="setLibraryFilter('Плечі',this)">Плечі</button><button class="chip" onclick="setLibraryFilter('Руки',this)">Руки</button><button class="chip" onclick="setLibraryFilter('Усе тіло',this)">Усе тіло</button><button class="chip" onclick="setLibraryFilter('Мобільність',this)">Мобільність</button></div><div id="libraryList" style="margin-top:14px"></div><p class="hint">Відео демонстрації — окремі файли Wikimedia Commons, не YouTube. Частина вправ поки має лише текстову інструкцію. Для відео в картці можна відкрити файл або завантажити його через меню браузера. Відео: FitnessScape, ліцензія CC BY 3.0.</p></section>
+<section id="nutrition" class="page">
+ <div class="section-head"><h2>Харчування</h2><span class="pill">ЩОДЕННИК</span></div>
+ <div class="card"><div class="field"><label for="gtFoodDate">Дата щоденника</label><input id="gtFoodDate" type="date"></div>
+ <div class="gt-metrics"><div class="gt-metric"><strong id="gtKcal">0</strong><small>ккал записано</small></div><div class="gt-metric"><strong id="gtProtein">0 г</strong><small>Білки</small></div><div class="gt-metric"><strong id="gtFat">0 г</strong><small>Жири</small></div><div class="gt-metric"><strong id="gtCarbs">0 г</strong><small>Вуглеводи</small></div></div>
+ <p class="gt-muted" style="margin-top:12px">Це підрахунок із внесених продуктів, а не обов’язкова денна норма. Особливо для підлітків потреби залежать від росту, активності та самопочуття — не використовуй цифри для суворих обмежень.</p></div>
+ <div class="card"><h3 id="gtFoodFormTitle">Додати продукт</h3><div class="gt-food-form">
+ <div class="field gt-food-name"><label for="gtFoodName">Продукт / страва</label><input id="gtFoodName" placeholder="Наприклад, вівсянка" maxlength="100"></div>
+ <div class="field"><label for="gtFoodKcal">Ккал</label><input id="gtFoodKcal" type="number" min="0" max="10000" step="1" placeholder="150"></div>
+ <div class="field"><label for="gtFoodP">Білки, г</label><input id="gtFoodP" type="number" min="0" max="1000" step="0.1" placeholder="5"></div>
+ <div class="field"><label for="gtFoodF">Жири, г</label><input id="gtFoodF" type="number" min="0" max="1000" step="0.1" placeholder="3"></div>
+ <div class="field"><label for="gtFoodC">Вуглеводи, г</label><input id="gtFoodC" type="number" min="0" max="1000" step="0.1" placeholder="20"></div>
+ </div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" id="gtFoodSave" onclick="gtSaveFood()">Додати</button><button class="btn secondary" id="gtFoodCancel" onclick="gtCancelFoodEdit()" hidden>Скасувати</button></div><p class="gt-muted">Вводь значення для своєї порції з етикетки або надійної таблиці харчової цінності.</p></div>
+ <div class="card"><div class="section-head"><h3>Записи за день</h3><button class="btn secondary" onclick="gtExportFood()">Експорт CSV</button></div><div id="gtFoodList"></div><p id="gtFoodEmpty" class="gt-muted">Поки немає записів за цю дату.</p></div>
+ <div class="gt-extra-nav"><button onclick="showPage('recommend')">🏋️ План тренувань</button><button onclick="showPage('coach')">✦ Чат-тренера</button><button onclick="showPage('stats')">▥ Статистика</button></div>
+ </section>
+ 
 <div class="footer">GYM TRAINER AI · <span data-i="footer">Плануй розумно. Прогресуй поступово.</span></div>
 </main>
-<nav class="nav" id="nav"><button data-page="home" class="active" onclick="showPage('home')"><span>⌂</span><i data-i="navHome">Головна</i></button><button data-page="recommend" onclick="showPage('recommend')"><span>▦</span><i data-i="navPlan">План</i></button><button data-page="library" onclick="showPage('library')"><span>▶</span><i>Вправи</i></button><button data-page="coach" onclick="showPage('coach')"><span>✦</span><i data-i="navCoach">AI-тренер</i></button><button data-page="stats" onclick="showPage('stats')"><span>▥</span><i>Прогрес</i></button><button data-page="calendar" onclick="showPage('calendar')"><span>▦</span><i>Календар</i></button><button data-page="history" onclick="showPage('history')"><span>◷</span><i data-i="navHistory">Історія</i></button><button data-page="profile" onclick="showPage('profile')"><span>♙</span><i data-i="navProfile">Профіль</i></button></nav>
+<nav class="nav" id="nav"><button data-page="home" class="active" onclick="showPage('home')"><span>⌂</span><i>Головна</i></button><button data-page="training" onclick="showPage('recommend')"><span>▦</span><i>Тренування</i></button><button data-page="nutrition" onclick="showPage('nutrition')"><span>◉</span><i>Харчування</i></button><button data-page="profile" onclick="showPage('profile')"><span>♙</span><i>Профіль</i></button></nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="./config.js"></script>
 <script>
 const translations={uk:{tagline:'Тренування, підібрані під тебе',welcome:'ТВОЯ ФІТНЕС-ІСТОРІЯ ПОЧИНАЄТЬСЯ ТУТ',welcomeTitle:'Створимо план, який підходить саме тобі.',welcomeText:'Розкажи трохи про себе — і Gym Trainer підбере стартову програму відповідно до твоєї мети, досвіду, обладнання та часу.',profileSetup:'Твій профіль',name:'Як до тебе звертатися?',age:'Вік',level:'Твій досвід',beginner:'Початківець',some:'Тренуюся час від часу',experienced:'Є досвід',goal:'Головна мета',gMaintain:'Підтримувати форму',gMass:'Набрати м’язову масу',gLose:'Покращити форму та звички',gStrength:'Стати сильнішим',gMuscle:"Розвинути м'язи",gEndurance:'Покращити витривалість',gGeneral:'Загальна активність і самопочуття',gSport:'Підготовка до спорту',place:'Де тренуватимешся?',home:'Вдома без обладнання',dumbbells:'Вдома з гантелями',gym:'У тренажерному залі',outdoor:'На вулиці / майданчику',days:'Скільки днів на тиждень?',duration:'Скільки часу на тренування?',notes:"Що ще варто врахувати? (необов'язково)",privacyHint:'Не вказуй приватні медичні дані. Якщо є біль або травма, порадься з фахівцем перед тренуванням.',makePlan:'Створити мій план →',localNote:'Демо-профіль зберігається лише в цьому браузері. Це не створює онлайн-акаунт.',yourJourney:'ТВІЙ ПЛАН • ТВОЇ ЦІЛІ',hello:'Привіт',seePlan:'Переглянути план →',quickStart:'Швидкий старт',fullBodyDesc:'Базові вправи на все тіло',mobility:'Мобільність',mobilityDesc:'Легка рухливість і розминка',coach:'Тренер AI',coachDesc:'Запитай про план чи вправу',settings:'Мій профіль',settingsDesc:'Онови цілі та параметри',yourProgress:'Твій прогрес',allHistory:'Уся історія',workouts:'ТРЕНУВАНЬ',thisWeek:'ЦЬОГО ТИЖНЯ',minutes:'ХВИЛИН',noHistory:"Завершені тренування з'являться тут.",yourPlan:'План для тебе',editProfile:'Змінити профіль',recommendation:'РЕКОМЕНДАЦІЯ ЗА ТВОЇМИ ВІДПОВІДЯМИ',whyThis:'Чому цей план?',safety:'Починай із комфортного навантаження, зосереджуйся на техніці та відпочивай за потреби. При болю припини вправу. Для індивідуальних медичних рекомендацій звертайся до кваліфікованого фахівця.',startRecommended:'Почати тренування →',back:'← Назад',workoutInProgress:'ТРЕНУВАННЯ',checkExercises:'Відмічай вправи після виконання.',restTimer:'ТАЙМЕР ВІДПОЧИНКУ',startTimer:'▶ Запустити таймер',pauseTimer:'Ⅱ Пауза',finish:'Завершити й зберегти ✓',coachTitle:'Тренер Gym AI',coachIntro:'Напиши, що хочеш покращити, і я допоможу зорієнтуватися. Це вбудований помічник із готовими рекомендаціями, не підключена модель ChatGPT.',askPlan:'Підбери план',askRecovery:'Відновлення',askTechnique:'Техніка вправ',chatWelcome:'Привіт! Я можу підказати стартову програму, пояснити базові принципи тренувань або допомогти скоригувати розклад.',chatPlaceholder:'Напиши своє запитання…',send:'Надіслати',aiLimit:'Для справжнього діалогу з ChatGPT потрібне безпечне серверне підключення до AI API.',historyTitle:'Історія тренувань',clearHistory:'Очистити історію',profileTitle:'Мій профіль',savedLocally:'ЗБЕРЕЖЕНО ЛОКАЛЬНО',saveChanges:'Зберегти зміни й оновити план',dataHeading:'Твої дані',dataNote:'Ця версія не має серверної авторизації. Профіль і статистика зберігаються в локальному сховищі браузера; очищення даних браузера може їх видалити.',export:'Експортувати мої дані',reset:'Скинути все',footer:'Плануй розумно. Прогресуй поступово.',navHome:'Головна',navPlan:'План',navCoach:'AI-тренер',navHistory:'Історія',navProfile:'Профіль',strength:'Сила та базові рухи',muscle:'Збалансований розвиток м’язів',endurance:'Витривалість і контроль темпу',general:'Загальна фізична підготовка',sport:'Сила, стабільність і рухливість',daysLabel:'днів / тиждень',minLabel:'хв / сесія',levelLabel:'рівень',whyBeginner:'План має просту структуру, щоб можна було освоїти техніку та поступово звикнути до регулярних тренувань.',whySome:'План поєднує знайомі базові рухи з поступовим збільшенням складності відповідно до самопочуття.',whyExperienced:'План має структуру для регулярної практики. Підвищуй навантаження поступово, лише коли техніка стабільна.',day:'День',rest:'Відпочинок',sets:'підходи',reps:'повторень',sec:'сек',noExercises:'Список вправ порожній.',done:'вправ виконано',finished:'Тренування збережено!',noName:'Спершу введи ім’я.',badAge:'Введи коректний вік.',profileSaved:'Профіль збережено й план оновлено.',askPlanReply:'За твоїм профілем рекомендую почати з плану нижче. Обирай навантаження, з яким зберігається правильна техніка, та збільшуй його поступово.',askRecoveryReply:'Для відновлення важливі сон, регулярне харчування, вода та дні легшої активності. Не тренуй ту саму групу м’язів інтенсивно, якщо вона ще сильно втомлена. Біль — причина зупинитися, а не проштовхуватися крізь нього.',askTechniqueReply:'Рухайся контрольовано, не поспішай із вагою, дихай рівномірно й припиняй підхід, якщо втрачається техніка. Для конкретної вправи напиши її назву.',defaultReply:'Можу допомогти з базовим планом, відновленням, розминкою або технікою. Напиши мету чи назву вправи. Поки що я не підключений до живої моделі ChatGPT.',mobilityWorkout:'Мобільність і розминка',mobilityExercises:['Легка ходьба на місці','Колові рухи плечима','Контрольовані присідання без ваги','Рухливість тазостегнових суглобів','Спокійне розтягнення без болю'],recommended:'Рекомендоване тренування',saveFirst:'Спочатку створи профіль.',clearConfirm:'Видалити всю історію?',resetConfirm:'Видалити профіль, програми й історію з цього браузера?',exported:'Файл із даними підготовлено.'},en:{tagline:'Workouts tailored to you',welcome:'YOUR FITNESS JOURNEY STARTS HERE',welcomeTitle:'Let’s build a plan that fits you.',welcomeText:'Tell us a little about yourself and Gym Trainer will suggest a starter plan based on your goal, experience, equipment and schedule.',profileSetup:'Your profile',name:'What should we call you?',age:'Age',level:'Experience level',beginner:'Beginner',some:'I train sometimes',experienced:'Experienced',goal:'Main goal',gStrength:'Build strength',gMuscle:'Build muscle',gEndurance:'Improve endurance',gGeneral:'General fitness and wellbeing',gSport:'Sports preparation',place:'Where will you train?',home:'At home, no equipment',dumbbells:'At home with dumbbells',gym:'At a gym',outdoor:'Outdoors / sports park',days:'How many days per week?',duration:'How long per workout?',notes:'Anything else to consider? (optional)',privacyHint:'Avoid entering private medical details. If you have pain or an injury, consult a qualified professional before exercising.',makePlan:'Build my plan →',localNote:'This demo profile is saved only in this browser. It does not create an online account.',yourJourney:'YOUR PLAN • YOUR GOALS',hello:'Hello',seePlan:'View my plan →',quickStart:'Quick start',fullBodyDesc:'Basic full-body exercises',mobility:'Mobility',mobilityDesc:'Gentle movement and warm-up',coach:'AI Coach',coachDesc:'Ask about your plan or an exercise',settings:'My profile',settingsDesc:'Update goals and details',yourProgress:'Your progress',allHistory:'Full history',workouts:'WORKOUTS',thisWeek:'THIS WEEK',minutes:'MINUTES',noHistory:'Completed workouts will appear here.',yourPlan:'Your plan',editProfile:'Edit profile',recommendation:'RECOMMENDATION BASED ON YOUR ANSWERS',whyThis:'Why this plan?',safety:'Start at a comfortable effort, focus on technique and rest as needed. Stop if you feel pain. For individual medical advice, consult a qualified professional.',startRecommended:'Start workout →',back:'← Back',workoutInProgress:'WORKOUT',checkExercises:'Check off exercises as you complete them.',restTimer:'REST TIMER',startTimer:'▶ Start timer',pauseTimer:'Ⅱ Pause',finish:'Finish and save ✓',coachTitle:'Gym AI Coach',coachIntro:'Tell me what you want to improve. This is a built-in helper with prepared guidance, not a connected ChatGPT model.',askPlan:'Suggest a plan',askRecovery:'Recovery',askTechnique:'Exercise technique',chatWelcome:'Hi! I can suggest a starter routine, explain basic training principles or help you adjust your schedule.',chatPlaceholder:'Type your question…',send:'Send',aiLimit:'A real ChatGPT conversation requires a secure server connection to an AI API.',historyTitle:'Workout history',clearHistory:'Clear history',profileTitle:'My profile',savedLocally:'SAVED LOCALLY',saveChanges:'Save changes and update plan',dataHeading:'Your data',dataNote:'This version does not have server-side authentication. Your profile and stats are stored in this browser; clearing browser data may remove them.',export:'Export my data',reset:'Reset everything',footer:'Train smart. Progress gradually.',navHome:'Home',navPlan:'Plan',navCoach:'AI Coach',navHistory:'History',navProfile:'Profile',strength:'Strength and foundational movements',muscle:'Balanced muscle development',endurance:'Endurance and pace control',general:'General fitness',sport:'Strength, stability and mobility',daysLabel:'days / week',minLabel:'min / session',levelLabel:'level',whyBeginner:'This plan keeps the structure simple so you can learn technique and build a regular habit gradually.',whySome:'This plan combines familiar foundational movements with gradual progression based on how you feel.',whyExperienced:'This plan provides structure for consistent practice. Increase the challenge gradually only when your technique stays solid.',day:'Day',rest:'Rest',sets:'sets',reps:'reps',sec:'sec',noExercises:'No exercises listed.',done:'exercises completed',finished:'Workout saved!',noName:'Please enter your name first.',badAge:'Please enter a valid age.',profileSaved:'Profile saved and plan updated.',askPlanReply:'Based on your profile, I recommend starting with the plan below. Choose an effort that lets you keep good technique and progress gradually.',askRecoveryReply:'Recovery depends on sleep, regular meals, hydration and easier activity days. Avoid training the same muscle group hard if it is still very fatigued. Pain is a reason to stop, not push through.',askTechniqueReply:'Move with control, do not rush to add weight, breathe steadily and stop a set when technique breaks down. Tell me the exercise name for more specific tips.',defaultReply:'I can help with a basic plan, recovery, warm-ups or technique. Tell me your goal or the exercise name. I am not connected to a live ChatGPT model yet.',mobilityWorkout:'Mobility and warm-up',mobilityExercises:['Easy marching in place','Shoulder circles','Controlled bodyweight squats','Hip mobility movements','Gentle pain-free stretching'],recommended:'Recommended workout',saveFirst:'Please create your profile first.',clearConfirm:'Delete all workout history?',resetConfirm:'Delete profile, custom plans and history from this browser?',exported:'Your data file is ready.'}};
@@ -63,80 +101,6 @@ let lang=localStorage.getItem('gtai_lang')||'uk',profile=JSON.parse(localStorage
 const $=id=>document.getElementById(id),t=k=>translations[lang][k]||translations.uk[k]||k;
 const exercises={home:[['Bodyweight squat','3 × 8–12'],['Wall or knee push-up','3 × 6–10'],['Glute bridge','3 × 10–15'],['Bird dog','2 × 8 each side'],['Plank','3 × 15–30 sec']],dumbbells:[['Goblet squat','3 × 8–12'],['Dumbbell row','3 × 8–12'],['Dumbbell floor press','3 × 8–12'],['Dumbbell Romanian deadlift','2 × 8–12'],['Dead bug','2 × 8 each side']],gym:[['Leg press or goblet squat','3 × 8–12'],['Chest press','3 × 8–12'],['Lat pulldown','3 × 8–12'],['Seated cable row','2 × 10–12'],['Dead bug','2 × 8 each side']],outdoor:[['Bodyweight squat','3 × 8–12'],['Incline push-up','3 × 6–12'],['Step-up','2 × 8 each side'],['Inverted row if safe setup','2 × 6–10'],['Plank','3 × 15–30 sec']]};
 function toggleLang(){lang=lang==='uk'?'en':'uk';localStorage.setItem('gtai_lang',lang);applyLang();if(profile){renderHome();renderPlan();renderHistory();}}
-
-function renderHome() {
-  if (!profile) return;
-
-  const nameEl = document.getElementById('helloName');
-  const summaryEl = document.getElementById('homeSummary');
-
-  if (nameEl) {
-    nameEl.textContent = profile.name ? ', ' + profile.name : '';
-  }
-
-  if (summaryEl) {
-    summaryEl.textContent =
-      'Твоя ціль: ' + goalText() +
-      '. Тренуйся регулярно та відстежуй свій прогрес!';
-  }
-
-  let history = [];
-
-  try {
-    history = JSON.parse(
-      localStorage.getItem('gtai_history') || '[]'
-    );
-  } catch (e) {
-    history = [];
-  }
-
-  const totalEl = document.getElementById('totalStat');
-  const weekEl = document.getElementById('weekStat');
-  const minutesEl = document.getElementById('minutesStat');
-  const recentEl = document.getElementById('recent');
-
-  if (totalEl) totalEl.textContent = history.length;
-
-  const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-
-  const weekHistory = history.filter(item => {
-    const date = new Date(item.date || item.completedAt || 0).getTime();
-    return date >= weekAgo && date <= Date.now();
-  });
-
-  if (weekEl) weekEl.textContent = weekHistory.length;
-
-  const minutes = history.reduce((sum, item) => {
-    return sum + Number(item.duration || item.minutes || 0);
-  }, 0);
-
-  if (minutesEl) minutesEl.textContent = minutes;
-
-  if (recentEl) {
-    if (history.length === 0) {
-      recentEl.textContent =
-        "Завершені тренування з'являться тут.";
-    } else {
-      recentEl.textContent = '';
-
-      history.slice(-3).reverse().forEach(item => {
-        const row = document.createElement('div');
-        row.className = 'history-item';
-
-        const title = document.createElement('strong');
-        title.textContent = item.name || item.type || 'Тренування';
-
-        const details = document.createElement('p');
-        details.textContent =
-          (item.duration || item.minutes || 0) + ' хвилин';
-
-        row.appendChild(title);
-        row.appendChild(details);
-        recentEl.appendChild(row);
-      });
-    }
-  }
-}
 function applyLang(){document.documentElement.lang=lang;document.querySelectorAll('[data-i]').forEach(el=>{const key=el.dataset.i;if(translations[lang][key])el.textContent=translations[lang][key]});document.querySelectorAll('[data-placeholder]').forEach(el=>el.placeholder=t(el.dataset.placeholder));$('langBtn').textContent=lang==='uk'?'EN 🇬🇧':'УКР 🇺🇦';if(profile){renderHome();renderPlan();renderHistory();renderCustomSessionText();}}
 function pickDays(n){daysChosen=n;document.querySelectorAll('[data-days]').forEach(b=>b.classList.toggle('selected',+b.dataset.days===n));}
 function showPage(id){if(!profile&&id!=='setup')id='setup';document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));$('nav').style.display=id==='setup'?'none':'flex';if(id==='home')renderHome();if(id==='recommend')renderPlan();if(id==='history')renderHistory();if(id==='profile')fillEditProfile();if(id==='library')renderLibrary();window.scrollTo(0,0)}
@@ -281,126 +245,7 @@ function gtToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getM
 function gtLocalSchedule(){try{return JSON.parse(localStorage.getItem('gtai_schedule')||'[]')}catch{return []}}
 function gtSaveLocalSchedule(){localStorage.setItem('gtai_schedule',JSON.stringify(gtSchedule))}
 async function gtAuthSubmit(e){e.preventDefault();if(!gtSupabase){gtStatus('Авторизація ще не налаштована. Власнику сайту потрібно заповнити config.js значеннями з Supabase. Дивись README.md.');return}const email=document.getElementById('authEmail').value.trim(),password=document.getElementById('authPassword').value;const btn=document.getElementById('authSubmit');btn.disabled=true;gtStatus('Зачекай…');try{const result=gtAuthMode==='signup'?await gtSupabase.auth.signUp({email,password,options:{emailRedirectTo:location.origin}}):await gtSupabase.auth.signInWithPassword({email,password});if(result.error)throw result.error;if(gtAuthMode==='signup'&&!result.data.session){gtStatus('Акаунт створено. Перевір пошту та підтвердь адресу, після цього увійди.');return}gtSession=result.data.session;gtUser=result.data.user;await gtAfterLogin()}catch(err){gtStatus(err.message||'Не вдалося виконати вхід. Перевір дані.')}finally{btn.disabled=false}}
-
-async function gtAfterLogin() {
-  if (!gtUser || !gtSupabase) return;
-
-  gtShowGate(false);
-  gtStatus('');
-
-  let loadError = false;
-
-  // 1. Завантаження профілю
-  try {
-    const { data, error } = await gtSupabase
-      .from('user_profiles')
-      .select('profile')
-      .eq('user_id', gtUser.id)
-      .maybeSingle();
-
-    if (error) throw error;
-
-    if (data && data.profile) {
-      profile = data.profile;
-      localStorage.setItem(
-        'gtai_profile',
-        JSON.stringify(profile)
-      );
-    } else {
-      const savedProfile = localStorage.getItem('gtai_profile');
-      profile = savedProfile ? JSON.parse(savedProfile) : null;
-    }
-  } catch (err) {
-    console.error('Помилка профілю:', err);
-    loadError = true;
-
-    try {
-      const savedProfile = localStorage.getItem('gtai_profile');
-      profile = savedProfile ? JSON.parse(savedProfile) : null;
-    } catch (e) {
-      profile = null;
-    }
-  }
-
-  // 2. Завантаження історії тренувань
-  try {
-    const { data, error } = await gtSupabase
-      .from('workout_logs')
-      .select('*')
-      .eq('user_id', gtUser.id)
-      .order('created_at', { ascending: false })
-      .limit(200);
-
-    if (error) throw error;
-
-    history = (data || []).map(r => ({
-      id: r.id,
-      name: r.title,
-      date: r.created_at,
-      done: r.completed_exercises,
-      minutes: r.minutes,
-      exercises: r.details?.exercises || []
-    }));
-
-    localStorage.setItem(
-      'gtai_history',
-      JSON.stringify(history)
-    );
-  } catch (err) {
-    console.error('Помилка історії:', err);
-    loadError = true;
-  }
-
-  // 3. Завантаження розкладу
-  try {
-    const { data, error } = await gtSupabase
-      .from('workout_schedule')
-      .select('*')
-      .eq('user_id', gtUser.id)
-      .order('scheduled_for', { ascending: true })
-      .limit(100);
-
-    if (error) throw error;
-
-    gtSchedule = (data || []).map(r => ({
-      id: r.id,
-      title: r.title,
-      date: r.scheduled_for,
-      details: r.details || {}
-    }));
-
-    gtSaveLocalSchedule();
-  } catch (err) {
-    console.error('Помилка розкладу:', err);
-    loadError = true;
-  }
-
-  // 4. Відкриття сайту
-  gtCloudReady = !loadError;
-
-  if (profile) {
-    showPage('home');
-    renderHome();
-    renderPlan();
-    renderHistory();
-    fillEditProfile();
-  } else {
-    showPage('setup');
-
-    if ($('pEmail')) {
-      $('pEmail').value = gtUser.email || '';
-    }
-  }
-
-  gtRenderStats();
-  gtRenderSchedule();
-
-  if (loadError) {
-    console.warn(
-      'Вхід успішний, але деякі дані не завантажилися. Перевір таблиці та RLS у Supabase.'
-    );
-  }
-}
+async function gtAfterLogin(){if(!gtUser||!gtSupabase)return;gtShowGate(false);gtStatus('');try{const {data:prof,error}=await gtSupabase.from('user_profiles').select('profile').eq('user_id',gtUser.id).maybeSingle();if(error)throw error;if(prof?.profile){profile=prof.profile;localStorage.setItem('gtai_profile',JSON.stringify(profile))}else{profile=null;localStorage.removeItem('gtai_profile');showPage('setup');if($('pEmail'))$('pEmail').value=gtUser.email||''}const {data:rows,error:he}=await gtSupabase.from('workout_logs').select('*').order('created_at',{ascending:false}).limit(200);if(he)throw he;history=(rows||[]).map(r=>({id:r.id,name:r.title,date:r.created_at,done:r.completed_exercises,minutes:r.minutes,exercises:r.details?.exercises||[]}));localStorage.setItem('gtai_history',JSON.stringify(history));const {data:sch,error:se}=await gtSupabase.from('workout_schedule').select('*').order('scheduled_for',{ascending:true}).limit(100);if(se)throw se;gtSchedule=(sch||[]).map(r=>({id:r.id,title:r.title,date:r.scheduled_for,details:r.details||{}}));gtSaveLocalSchedule();gtCloudReady=true;if(profile){showPage('home');renderHome();renderPlan();renderHistory();fillEditProfile()}else showPage('setup');gtRenderStats();gtRenderSchedule()}catch(err){console.error(err);gtStatus('Увійшли, але дані не завантажились. Перевір таблиці та RLS у Supabase.');gtShowGate(true)}}
 async function gtSyncProfile(){if(!gtSupabase||!gtUser||!profile)return;const {error}=await gtSupabase.from('user_profiles').upsert({user_id:gtUser.id,profile,updated_at:new Date().toISOString()},{onConflict:'user_id'});if(error)console.error('Profile sync failed:',error)}
 async function gtSyncWorkout(item){if(!gtSupabase||!gtUser)return;const {data,error}=await gtSupabase.from('workout_logs').insert({user_id:gtUser.id,title:item.name,completed_exercises:item.done,minutes:item.minutes,details:{exercises:item.exercises||[]},created_at:item.date}).select().single();if(error){console.error(error);return}if(data)item.id=data.id}
 function gtEscape(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -432,6 +277,52 @@ const gtOriginalShowHome=renderHome;renderHome=function(){gtOriginalShowHome();g
 document.getElementById('authForm').addEventListener('submit',gtAuthSubmit);document.getElementById('gtScheduleDate').value=gtToday();
 if(!gtSupabase){gtShowGate(true);gtStatus('Supabase ще не налаштований. Заповни config.js за інструкцією README.md, щоб увімкнути реєстрацію та вхід.');}
 else{gtShowGate(true);gtSupabase.auth.getSession().then(async({data,error})=>{if(error){gtStatus(error.message);return}gtSession=data.session;gtUser=data.session?.user||null;if(gtSession)await gtAfterLogin();else gtStatus('Увійди або створи акаунт, щоб продовжити.')});gtSupabase.auth.onAuthStateChange((_event,session)=>{gtSession=session;gtUser=session?.user||null;if(session)setTimeout(()=>gtAfterLogin(),0);else gtShowGate(true)})}
+</script>
+
+
+<script>
+/* GT_FEATURE_PACK_V1: four-tab navigation, nutrition diary, achievements, reminders and streak */
+(()=>{
+ const $=id=>document.getElementById(id); const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+ const safeParse=(s,f)=>{try{return JSON.parse(s)||f}catch{return f}};
+ const accountKey=()=>{const uid=(typeof gtUser!=='undefined'&&gtUser?.id)||(typeof gtSession!=='undefined'&&gtSession?.user?.id)||(typeof profile!=='undefined'&&profile?.email)||$('editEmail')?.value||'guest';return String(uid).toLowerCase().replace(/[^a-z0-9@._-]/g,'_')};
+ const key=(part)=>`gtai_${part}_${accountKey()}`;
+ const load=(part,fallback)=>safeParse(localStorage.getItem(key(part)),fallback);
+ const save=(part,value)=>{try{localStorage.setItem(key(part),JSON.stringify(value))}catch(e){console.warn('Could not save',part,e)}};
+ let foods=[],editingFood=null,reminderTimer=null;
+ function navActive(id){const mapped=['recommend','library','coach','stats','calendar','history'].includes(id)?'training':id;document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===mapped));}
+ // Existing internal pages remain intact and reachable from the Training tab.
+ const originalShowPage=window.showPage;
+ window.showPage=function(id){if(typeof originalShowPage==='function')originalShowPage(id);else{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(id)?.classList.add('active')};navActive(id);if(id==='nutrition')gtRenderFood();if(id==='home')gtRenderHomeExtras();if(['stats','history','calendar','recommend','library','coach'].includes(id))gtEnsureTrainingLinks();};
+ function gtEnsureTrainingLinks(){const page=$('recommend');if(!page||page.querySelector('.gt-extra-nav'))return;const box=document.createElement('div');box.className='gt-extra-nav';box.innerHTML='<button onclick="showPage(\'library\')">▶ Бібліотека вправ</button><button onclick="showPage(\'coach\')">✦ Чат-тренера</button><button onclick="showPage(\'stats\')">▥ Прогрес</button><button onclick="showPage(\'calendar\')">▦ Календар</button><button onclick="showPage(\'history\')">◷ Історія</button>';page.prepend(box);}
+ function gtGetFoods(){foods=load('food_diary',[]);if(!Array.isArray(foods))foods=[]}
+ window.gtRenderFood=function(){if(!$('gtFoodDate'))return;gtGetFoods();const date=$('gtFoodDate').value||today();const rows=foods.filter(x=>x.date===date);const sum=k=>rows.reduce((a,x)=>a+(Number(x[k])||0),0);$('gtKcal').textContent=Math.round(sum('kcal'));$('gtProtein').textContent=`${Math.round(sum('p')*10)/10} г`;$('gtFat').textContent=`${Math.round(sum('f')*10)/10} г`;$('gtCarbs').textContent=`${Math.round(sum('c')*10)/10} г`;
+ const list=$('gtFoodList');list.innerHTML='';$('gtFoodEmpty').hidden=rows.length>0;rows.forEach(x=>{const row=document.createElement('div');row.className='gt-food-row';const title=document.createElement('b');title.className='gt-food-title';title.textContent=x.name;row.append(title);[['kcal','ккал'],['p','Б'],['f','Ж'],['c','В']].forEach(([k,l])=>{const d=document.createElement('span');d.textContent=`${x[k]||0} ${l}`;row.append(d)});const actions=document.createElement('span');const edit=document.createElement('button');edit.textContent='Змінити';edit.onclick=()=>gtEditFood(x.id);const del=document.createElement('button');del.textContent='✕';del.title='Видалити';del.onclick=()=>{if(confirm(`Видалити «${x.name}»?`)){foods=foods.filter(y=>y.id!==x.id);save('food_diary',foods);gtRenderFood()}};actions.append(edit,del);row.append(actions);list.append(row)});
+ };
+ window.gtSaveFood=function(){const name=$('gtFoodName').value.trim();if(!name){alert('Вкажи назву продукту або страви.');return}const fields=['gtFoodKcal','gtFoodP','gtFoodF','gtFoodC'];const vals=fields.map(id=>$(id).value.trim()===''?0:Number($(id).value));if(vals.some(v=>!Number.isFinite(v)||v<0)){alert('Введи коректні невід’ємні значення.');return}const date=$('gtFoodDate').value||today();gtGetFoods();const item={id:editingFood||`${Date.now()}_${Math.random().toString(36).slice(2,8)}`,date,name,kcal:vals[0],p:vals[1],f:vals[2],c:vals[3]};if(editingFood)foods=foods.map(x=>x.id===editingFood?item:x);else foods.push(item);save('food_diary',foods);gtCancelFoodEdit();gtRenderFood()};
+ window.gtEditFood=function(id){gtGetFoods();const x=foods.find(y=>y.id===id);if(!x)return;editingFood=id;$('gtFoodName').value=x.name;$('gtFoodKcal').value=x.kcal;$('gtFoodP').value=x.p;$('gtFoodF').value=x.f;$('gtFoodC').value=x.c;$('gtFoodFormTitle').textContent='Редагувати продукт';$('gtFoodSave').textContent='Зберегти зміни';$('gtFoodCancel').hidden=false;document.querySelector('#nutrition .card:nth-of-type(2)')?.scrollIntoView({behavior:'smooth',block:'start'})};
+ window.gtCancelFoodEdit=function(){editingFood=null;['gtFoodName','gtFoodKcal','gtFoodP','gtFoodF','gtFoodC'].forEach(id=>{if($(id))$(id).value=''});if($('gtFoodFormTitle'))$('gtFoodFormTitle').textContent='Додати продукт';if($('gtFoodSave'))$('gtFoodSave').textContent='Додати';if($('gtFoodCancel'))$('gtFoodCancel').hidden=true};
+ window.gtExportFood=function(){gtGetFoods();const date=$('gtFoodDate').value||today();const rows=foods.filter(x=>x.date===date);const csv=[['Дата','Продукт','Ккал','Білки, г','Жири, г','Вуглеводи, г'],...rows.map(x=>[x.date,x.name,x.kcal,x.p,x.f,x.c])].map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`harcuvannia-${date}.csv`;a.click();URL.revokeObjectURL(a.href)};
+ function gtEnsureHomeCards(){const home=$('home');if(!home||$('gtHomeExtras'))return;const wrap=document.createElement('div');wrap.id='gtHomeExtras';wrap.innerHTML=`<div class="section-head"><h2>Твоя регулярність</h2></div><div class="card"><div class="gt-metrics"><div class="gt-metric"><strong id="gtStreak">0</strong><small>днів активності поспіль</small></div><div class="gt-metric"><strong id="gtWorkoutCount">0</strong><small>тренувань усього</small></div><div class="gt-metric"><strong id="gtAchievementsCount">0</strong><small>досягнень відкрито</small></div><div class="gt-metric"><strong id="gtReminderStatus">Вимк.</strong><small>нагадування</small></div></div><div class="gt-progress"><span id="gtStreakBar"></span></div></div><div class="section-head"><h2>Досягнення</h2></div><div class="gt-achievements" id="gtAchievements"></div><div class="section-head"><h2>Нагадування про тренування</h2></div><div class="card"><div class="gt-reminder"><label for="gtReminderTime">Час нагадування</label><input type="time" id="gtReminderTime" value="18:00"><label><input type="checkbox" id="gtReminderOn"> Увімкнути</label><button class="btn" onclick="gtSaveReminder()">Зберегти</button></div><p class="gt-muted">Нагадування працює, поки сайт відкритий у браузері. Дозволь сповіщення у браузері, якщо хочеш отримувати їх поза сторінкою — це залежить від браузера та пристрою.</p><p id="gtReminderMsg" class="gt-muted"></p></div>`;home.append(wrap)}
+ function gtGetHistory(){let h=(typeof history!=='undefined'&&Array.isArray(history))?history:[];if(!h.length){try{h=JSON.parse(localStorage.getItem('gtai_history')||'[]')}catch{h=load('history',[])}}return Array.isArray(h)?h:[]}
+ function gtActiveDates(){const dates=new Set();gtGetHistory().forEach(x=>{const raw=x.date||x.completedAt||x.created_at||x.timestamp;if(raw){const d=new Date(raw);if(!isNaN(d))dates.add(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`)}});return dates}
+ function gtStreak(){const dates=gtActiveDates();let d=new Date();let fmt=x=>`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;if(!dates.has(fmt(d)))d.setDate(d.getDate()-1);let n=0;while(dates.has(fmt(d))&&n<3650){n++;d.setDate(d.getDate()-1)}return n}
+ function gtAchievementData(){const hist=gtGetHistory(),streak=gtStreak(),dates=gtActiveDates();return [
+ {id:'first',icon:'🌱',title:'Перший крок',desc:'Завершити перше тренування',ok:hist.length>=1},
+ {id:'five',icon:'💪',title:'У ритмі',desc:'Завершити 5 тренувань',ok:hist.length>=5},
+ {id:'ten',icon:'🏅',title:'Десять занять',desc:'Завершити 10 тренувань',ok:hist.length>=10},
+ {id:'streak3',icon:'🔥',title:'Три дні поспіль',desc:'Активність 3 дні поспіль',ok:streak>=3},
+ {id:'streak7',icon:'⚡',title:'Тиждень ритму',desc:'Активність 7 днів поспіль',ok:streak>=7},
+ {id:'food',icon:'🥗',title:'Уважність до їжі',desc:'Додати перший запис харчування',ok:load('food_diary',[]).length>0}
+ ]}
+ window.gtRenderHomeExtras=function(){gtEnsureHomeCards();if(!$('gtStreak'))return;const hist=gtGetHistory(),streak=gtStreak(),ach=gtAchievementData();$('gtStreak').textContent=streak;$('gtWorkoutCount').textContent=hist.length;$('gtAchievementsCount').textContent=ach.filter(a=>a.ok).length;$('gtStreakBar').style.width=`${Math.min(streak/7*100,100)}%`;const box=$('gtAchievements');box.innerHTML='';ach.forEach(a=>{const el=document.createElement('div');el.className='gt-achievement'+(a.ok?' unlocked':'');el.innerHTML=`<div class="gt-icon">${a.icon}</div><b></b><small class="gt-muted"></small><div class="gt-muted" style="margin-top:6px">${a.ok?'Відкрито ✓':'Ще попереду'}</div>`;el.querySelector('b').textContent=a.title;el.querySelector('small').textContent=a.desc;box.append(el)});const r=load('reminder',{on:false,time:'18:00'});$('gtReminderTime').value=r.time||'18:00';$('gtReminderOn').checked=!!r.on;$('gtReminderStatus').textContent=r.on?'Увімк.':'Вимк.';gtScheduleReminder()};
+ window.gtSaveReminder=async function(){const r={on:$('gtReminderOn').checked,time:$('gtReminderTime').value||'18:00',lastDate:''};save('reminder',r);if(r.on&&'Notification'in window&&Notification.permission==='default'){try{await Notification.requestPermission()}catch{}}$('gtReminderMsg').textContent=r.on?'Нагадування збережено. Тримай сайт відкритим для нагадування.':'Нагадування вимкнено.';gtRenderHomeExtras()};
+ function gtScheduleReminder(){if(reminderTimer)clearTimeout(reminderTimer);const r=load('reminder',{on:false,time:'18:00'});if(!r.on)return;const tick=()=>{const now=new Date(),parts=(r.time||'18:00').split(':').map(Number);if(now.getHours()===parts[0]&&now.getMinutes()===parts[1]){const date=today();const current=load('reminder',{on:false,time:'18:00'});if(current.on&&current.lastDate!==date){current.lastDate=date;save('reminder',current);if('Notification'in window&&Notification.permission==='granted')new Notification('GYM TRAINER AI',{body:'Час згадати про заплановане тренування 💪'});else if(document.visibilityState==='visible')$('gtReminderMsg').textContent='Нагадування: якщо сьогодні планував/планувала тренування — час перевірити свій план.'}}};tick();reminderTimer=setInterval(tick,30000)}
+ function gtBind(){if($('gtFoodDate')){$('gtFoodDate').value=today();$('gtFoodDate').addEventListener('change',()=>{gtCancelFoodEdit();gtRenderFood()})}gtEnsureHomeCards();gtEnsureTrainingLinks();gtRenderFood();gtRenderHomeExtras();}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',gtBind);else gtBind();
+ // Keep the new local features separated per signed-in account when auth changes.
+ window.addEventListener('storage',e=>{if(e.key&&e.key.includes('food_diary'))gtRenderFood()});
+})();
 </script>
 
 </body></html>
