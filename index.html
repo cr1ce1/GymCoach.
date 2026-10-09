@@ -1,0 +1,533 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090b0a">
+<title>GYM TRAINER AI</title>
+<style>
+:root{--bg:#090b0a;--panel:#121613;--line:#273129;--green:#b7ff45;--muted:#929c92;--white:#f4f7f1}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);font-family:Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+header{height:68px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;background:#090b0af2;z-index:5}
+.logo{font-size:19px;font-weight:900;letter-spacing:1px}.logo span{color:var(--green)}
+.pill{background:#192218;color:var(--green);padding:8px 12px;border-radius:30px;font-size:12px}
+main{max-width:1100px;margin:auto;padding:28px 18px 100px}
+h1{font-size:clamp(28px,5vw,43px);margin:8px 0 12px;letter-spacing:-1px}
+h2{font-size:22px;margin:0 0 16px}
+h3{margin:8px 0}
+p{color:var(--muted);line-height:1.5}
+.green{color:var(--green)}
+.btn{border:0;background:var(--green);color:#10150c;font-weight:800;border-radius:10px;padding:13px 17px}
+.btn:hover{filter:brightness(1.08)}
+.btn.secondary{background:#202820;color:var(--white);border:1px solid var(--line)}
+.btn.danger{background:#392020;color:#ffaaaa}
+input,select,textarea{width:100%;background:#0c100d;color:var(--white);border:1px solid var(--line);border-radius:9px;padding:12px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--green)}
+label{font-size:13px;color:#bdc7bc;display:block;margin:12px 0 7px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.stack{display:grid;gap:14px}
+.muted{color:var(--muted);font-size:13px}
+.big{font-size:28px;font-weight:900;margin:10px 0}
+.tag{display:inline-block;border:1px solid #34402f;color:var(--green);padding:5px 9px;border-radius:7px;font-size:12px;margin:3px}
+.hero{padding:24px 0 28px}
+.hero .card{background:linear-gradient(120deg,#172019,#0e120f);border-color:#35452d}
+.nav{display:flex;gap:8px;overflow-x:auto;padding:12px 0 18px}
+.nav button{white-space:nowrap;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:#cbd2c9;padding:11px 14px}
+.nav button.active{background:var(--green);color:#10150c;border-color:var(--green);font-weight:bold}
+.exercise{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:14px 0}
+.exercise:last-child{border:0}
+.exercise input{width:19px;height:19px;accent-color:var(--green)}
+.exercise label{margin:0;font-size:14px;flex:1}
+.auth-wrap{min-height:100vh;display:grid;place-items:center;padding:18px}
+.auth{width:100%;max-width:430px}
+.auth .logo{font-size:25px;margin-bottom:28px}
+.auth .card{padding:25px}
+.auth .btn{width:100%;margin-top:18px}
+.link{color:var(--green);background:none;border:0;padding:10px 0}
+.notice{font-size:12px;color:var(--muted);line-height:1.5}
+.progress{height:8px;background:#293029;border-radius:20px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:var(--green);transition:width .2s}
+.stat{font-size:26px;font-weight:900}
+.statlabel{font-size:12px;color:var(--muted);margin-top:5px}
+footer{text-align:center;color:#596459;font-size:12px;padding:24px}
+#toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:var(--green);color:#10150c;padding:12px 18px;border-radius:10px;font-weight:bold;z-index:20;display:none;max-width:90%;text-align:center}
+@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}main{padding:20px 14px 100px}.card{padding:16px}.hero{padding-top:12px}}
+@media(max-width:390px){.grid{grid-template-columns:1fr}.logo{font-size:16px}}
+</style>
+</head>
+<body>
+
+<section id="authScreen" class="auth-wrap">
+  <div class="auth">
+    <div class="logo">GYM <span>TRAINER</span> AI</div>
+    <div class="card">
+      <span class="tag">YOUR PERSONAL FITNESS</span>
+      <h1 id="authTitle">Твій прогрес<br><span class="green">починається тут.</span></h1>
+      <p id="authDesc">Увійди, щоб планувати тренування та відстежувати свій прогрес.</p>
+      <form id="authForm">
+        <label for="authEmail">Електронна пошта</label>
+        <input id="authEmail" type="email" placeholder="you@example.com" required>
+        <label for="authPassword">Пароль</label>
+        <input id="authPassword" type="password" placeholder="Мінімум 6 символів" minlength="6" required>
+        <button id="authSubmit" class="btn" type="submit">Увійти</button>
+      </form>
+      <button class="link" id="authSwitch">Немає акаунта? Зареєструватися</button>
+      <p class="notice">Демо-версія: дані зберігаються у браузері цього пристрою. Це не захищена серверна авторизація.</p>
+    </div>
+  </div>
+</section>
+
+<div id="app" class="hidden">
+<header>
+  <div class="logo">GYM <span>TRAINER</span> AI</div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span class="pill">● ONLINE</span>
+    <button class="btn secondary" id="logout" style="padding:9px 12px">Вийти</button>
+  </div>
+</header>
+<main>
+  <div class="nav">
+    <button class="active" data-page="home">Головна</button>
+    <button data-page="workouts">Тренування</button>
+    <button data-page="coach">AI-тренер</button>
+    <button data-page="profile">Профіль</button>
+    <button data-page="stats">Статистика</button>
+  </div>
+
+  <section id="page-home" class="page">
+    <div class="hero">
+      <div class="card">
+        <span class="tag">ТВІЙ ФІТНЕС-ПРОСТІР</span>
+        <h1>Ставай сильнішим.<br><span class="green">Крок за кроком.</span></h1>
+        <p id="welcome">Твій наступний рівень починається з одного тренування.</p>
+        <button class="btn" onclick="showPage('workouts')">Почати тренування →</button>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="muted">Тренувань завершено</div><div class="big" id="homeSessions">0</div></div>
+      <div class="card"><div class="muted">Активність цього тижня</div><div class="big" id="homeWeek">0</div><div class="muted">тренувань</div></div>
+      <div class="card"><div class="muted">Моя ціль</div><div class="big" style="font-size:20px" id="homeGoal">Фітнес</div></div>
+    </div>
+    <div style="height:22px"></div>
+    <h2>Рекомендовано для тебе</h2>
+    <div class="grid">
+      <div class="card"><span class="tag">30–45 ХВ</span><h3>Full Body</h3><p>Тренування на все тіло.</p><button class="btn" onclick="startWorkout('Full Body')">Обрати</button></div>
+      <div class="card"><span class="tag">ВЕРХ</span><h3>Upper Body</h3><p>Груди, спина, плечі та руки.</p><button class="btn" onclick="startWorkout('Upper Body')">Обрати</button></div>
+      <div class="card"><span class="tag">НИЗ</span><h3>Lower Body</h3><p>Ноги, сідниці та корпус.</p><button class="btn" onclick="startWorkout('Lower Body')">Обрати</button></div>
+    </div>
+  </section>
+
+  <section id="page-workouts" class="page hidden">
+    <h1>Тренування<span class="green">.</span></h1>
+    <p>Обери програму, відмічай виконані вправи та зберігай результат.</p>
+    <div class="grid">
+      <div class="card"><span class="tag">ВСЕ ТІЛО</span><h3>Full Body</h3><p>Для комплексного тренування.</p><button class="btn" onclick="startWorkout('Full Body')">Почати</button></div>
+      <div class="card"><span class="tag">ВЕРХ</span><h3>Upper Body</h3><p>Груди, спина, плечі, руки.</p><button class="btn" onclick="startWorkout('Upper Body')">Почати</button></div>
+      <div class="card"><span class="tag">НИЗ</span><h3>Lower Body</h3><p>Ноги та стабілізація.</p><button class="btn" onclick="startWorkout('Lower Body')">Почати</button></div>
+      <div class="card"><span class="tag">PUSH</span><h3>Push Day</h3><p>Груди, плечі та трицепс.</p><button class="btn" onclick="startWorkout('Push Day')">Почати</button></div>
+      <div class="card"><span class="tag">PULL</span><h3>Pull Day</h3><p>Спина та біцепс.</p><button class="btn" onclick="startWorkout('Pull Day')">Почати</button></div>
+      <div class="card"><span class="tag">LEGS</span><h3>Leg Day</h3><p>Ноги та сідниці.</p><button class="btn" onclick="startWorkout('Leg Day')">Почати</button></div>
+    </div>
+    <div style="height:20px"></div>
+    <div id="activeWorkout" class="card hidden">
+      <h2 id="workoutTitle">Тренування</h2>
+      <p id="workoutSub">Відмічай вправи після виконання.</p>
+      <div class="progress"><div id="workoutProgress"></div></div>
+      <div id="exerciseList"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+        <button class="btn" id="finishWorkout">Завершити та зберегти</button>
+        <button class="btn secondary" onclick="document.getElementById('activeWorkout').classList.add('hidden')">Закрити</button>
+      </div>
+    </div>
+    <div style="height:20px"></div>
+    <div class="card">
+      <h2>Конструктор тренування</h2>
+      <p>Створи власне тренування з улюблених вправ.</p>
+      <label for="customName">Назва тренування</label><input id="customName" placeholder="Наприклад, Моє тренування">
+      <label for="customExercises">Вправи (кожна з нового рядка)</label>
+      <textarea id="customExercises" rows="4" placeholder="Присідання&#10;Віджимання&#10;Планка"></textarea>
+      <button class="btn" style="margin-top:12px" onclick="startCustom()">Створити та почати</button>
+    </div>
+  </section>
+
+  <section id="page-coach" class="page hidden">
+    <h1>AI-тренер<span class="green">.</span></h1>
+    <p>Запитуй про планування, відновлення, вправи та техніку.</p>
+    <div class="card">
+      <div id="chatMessages" style="min-height:180px;max-height:380px;overflow:auto;margin-bottom:15px">
+        <div class="card" style="background:#192119;margin-bottom:10px">Привіт! Я демонстраційний помічник Gym Trainer. Запитай про тренування або відновлення.</div>
+      </div>
+      <form id="chatForm" class="stack">
+        <input id="chatInput" placeholder="Наприклад, склади план на 3 дні..." required>
+        <button class="btn" type="submit">Надіслати →</button>
+      </form>
+      <p class="notice">Зараз відповіді формуються за простими правилами, а не справжньою AI-моделлю. Для реального AI потрібно підключити API через захищений сервер.</p>
+    </div>
+    <div style="height:16px"></div>
+    <div class="card">
+      <h2>Аналіз техніки вправ</h2>
+      <p>У цій версії немає справжнього аналізу зображень або відео. Не завантажуй особисті матеріали у сторонні сервіси, яким не довіряєш.</p>
+      <button class="btn secondary" onclick="toast('Для AI-аналізу потрібно підключити окремий сервіс.')">Як це працюватиме?</button>
+    </div>
+  </section>
+
+  <section id="page-profile" class="page hidden">
+    <h1>Мій профіль<span class="green">.</span></h1>
+    <p>Заповни дані, щоб планувати тренування відповідно до власних цілей.</p>
+    <div class="card">
+      <form id="profileForm">
+        <div class="two">
+          <div><label for="pName">Ім'я</label><input id="pName" maxlength="50" placeholder="Твоє ім'я"></div>
+          <div><label for="pAge">Вік</label><input id="pAge" type="number" min="13" max="100" placeholder="Вік"></div>
+          <div><label for="pHeight">Зріст (см)</label><input id="pHeight" type="number" min="80" max="250" placeholder="Наприклад, 170"></div>
+          <div><label for="pWeight">Вага (кг)</label><input id="pWeight" type="number" min="20" max="350" step="0.1" placeholder="Наприклад, 60"></div>
+          <div><label for="pGoal">Мета</label><select id="pGoal"><option value="Фізична форма">Покращити фізичну форму</option><option value="Сила">Розвивати силу</option><option value="Витривалість">Покращити витривалість</option><option value="Здоров'я">Загальне здоров'я</option><option value="М'язи">Розвивати м'язи</option></select></div>
+          <div><label for="pLevel">Досвід</label><select id="pLevel"><option>Початківець</option><option>Середній</option><option>Досвідчений</option></select></div>
+          <div><label for="pPlace">Де тренуєшся?</label><select id="pPlace"><option>Вдома без обладнання</option><option>Вдома з гантелями</option><option>У спортзалі</option></select></div>
+          <div><label for="pDays">Днів на тиждень</label><select id="pDays"><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+        </div>
+        <button class="btn" style="margin-top:20px" type="submit">Зберегти профіль</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="page-stats" class="page hidden">
+    <h1>Моя статистика<span class="green">.</span></h1>
+    <div class="grid">
+      <div class="card"><div class="stat" id="statTotal">0</div><div class="statlabel">Завершених тренувань</div></div>
+      <div class="card"><div class="stat" id="statWeek">0</div><div class="statlabel">За останні 7 днів</div></div>
+      <div class="card"><div class="stat" id="statMinutes">0</div><div class="statlabel">Хвилин тренувань</div></div>
+    </div>
+    <div style="height:20px"></div>
+    <div class="card">
+      <h2>Історія тренувань</h2>
+      <div id="historyList"><p>Поки що тренувань немає. Почни з першого!</p></div>
+      <button class="btn secondary" style="margin-top:15px" onclick="clearHistory()">Очистити історію</button>
+    </div>
+  </section>
+</main>
+<footer>GYM TRAINER AI · Твій прогрес — твій шлях.</footer>
+</div>
+<div id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const read = (key, fallback) => {
+  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+  catch { return fallback; }
+};
+const save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+
+let account = null;
+let mode = "login";
+let currentExercises = [];
+let currentWorkoutName = "";
+let currentStart = 0;
+
+function toast(message) {
+  $("toast").textContent = message;
+  $("toast").style.display = "block";
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => $("toast").style.display = "none", 2600);
+}
+
+function userKey(key) {
+  return "gym_" + account + "_" + key;
+}
+function getData(key, fallback) {
+  return read(userKey(key), fallback);
+}
+function putData(key, value) {
+  save(userKey(key), value);
+}
+
+function switchAuth() {
+  mode = mode === "login" ? "signup" : "login";
+  $("authTitle").innerHTML = mode === "login"
+    ? 'Твій прогрес<br><span class="green">починається тут.</span>'
+    : 'Створи свій<br><span class="green">фітнес-акаунт.</span>';
+  $("authDesc").textContent = mode === "login"
+    ? "Увійди, щоб планувати тренування та відстежувати свій прогрес."
+    : "Зареєструйся, щоб зберігати профіль та результати на цьому пристрої.";
+  $("authSubmit").textContent = mode === "login" ? "Увійти" : "Зареєструватися";
+  $("authSwitch").textContent = mode === "login"
+    ? "Немає акаунта? Зареєструватися"
+    : "Вже є акаунт? Увійти";
+}
+$("authSwitch").addEventListener("click", switchAuth);
+
+$("authForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const email = $("authEmail").value.trim().toLowerCase();
+  const password = $("authPassword").value;
+  const accounts = read("gym_demo_accounts", {});
+  if (mode === "signup") {
+    if (accounts[email]) return toast("Ця пошта вже зареєстрована.");
+    accounts[email] = { password };
+    save("gym_demo_accounts", accounts);
+    account = email;
+    putData("profile", {name: email.split("@")[0]});
+    openApp();
+    toast("Демо-акаунт створено!");
+  } else {
+    if (!accounts[email] || accounts[email].password !== password)
+      return toast("Неправильна пошта або пароль.");
+    account = email;
+    openApp();
+    toast("Вітаємо!");
+  }
+});
+
+function openApp() {
+  $("authScreen").classList.add("hidden");
+  $("app").classList.remove("hidden");
+  loadProfile();
+  refreshStats();
+  showPage("home");
+}
+$("logout").addEventListener("click", () => {
+  account = null;
+  $("app").classList.add("hidden");
+  $("authScreen").classList.remove("hidden");
+  $("authForm").reset();
+  toast("Ти вийшов із демо-акаунта.");
+});
+
+function showPage(name) {
+  document.querySelectorAll(".page").forEach(page => page.classList.add("hidden"));
+  $("page-" + name).classList.remove("hidden");
+  document.querySelectorAll(".nav button").forEach(btn =>
+    btn.classList.toggle("active", btn.dataset.page === name)
+  );
+  if (name === "stats") refreshStats();
+}
+document.querySelectorAll(".nav button").forEach(btn =>
+  btn.addEventListener("click", () => showPage(btn.dataset.page))
+);
+
+function loadProfile() {
+  const p = getData("profile", {});
+  $("pName").value = p.name || "";
+  $("pAge").value = p.age || "";
+  $("pHeight").value = p.height || "";
+  $("pWeight").value = p.weight || "";
+  $("pGoal").value = p.goal || "Фізична форма";
+  $("pLevel").value = p.level || "Початківець";
+  $("pPlace").value = p.place || "Вдома без обладнання";
+  $("pDays").value = p.days || "3";
+  $("welcome").textContent = p.name
+    ? "Привіт, " + p.name + "! Готовий до наступного тренування?"
+    : "Твій наступний рівень починається з одного тренування.";
+  $("homeGoal").textContent = p.goal || "Фітнес";
+}
+$("profileForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const profile = {
+    name: $("pName").value.trim(),
+    age: $("pAge").value,
+    height: $("pHeight").value,
+    weight: $("pWeight").value,
+    goal: $("pGoal").value,
+    level: $("pLevel").value,
+    place: $("pPlace").value,
+    days: $("pDays").value
+  };
+  putData("profile", profile);
+  loadProfile();
+  toast("Профіль збережено!");
+});
+
+const programs = {
+  "Full Body": [
+    ["Присідання", "3 × 10"],
+    ["Віджимання", "3 × 8"],
+    ["Тяга гантелі або рюкзака", "3 × 10"],
+    ["Сідничний місток", "3 × 12"],
+    ["Планка", "3 × 20 сек"]
+  ],
+  "Upper Body": [
+    ["Віджимання", "3 × 8"],
+    ["Тяга гантелі або рюкзака", "3 × 10"],
+    ["Жим гантелей", "3 × 10"],
+    ["Згинання рук на біцепс", "3 × 10"],
+    ["Розгинання рук на трицепс", "3 × 10"]
+  ],
+  "Lower Body": [
+    ["Присідання", "3 × 10"],
+    ["Випади", "3 × 8 на ногу"],
+    ["Сідничний місток", "3 × 12"],
+    ["Підйоми на носки", "3 × 15"],
+    ["Планка", "3 × 20 сек"]
+  ],
+  "Push Day": [
+    ["Віджимання", "3 × 8"],
+    ["Жим гантелей", "3 × 10"],
+    ["Жим над головою", "3 × 10"],
+    ["Розгинання рук на трицепс", "3 × 10"]
+  ],
+  "Pull Day": [
+    ["Тяга гантелі або рюкзака", "3 × 10"],
+    ["Тяга гумової стрічки", "3 × 12"],
+    ["Згинання рук на біцепс", "3 × 10"],
+    ["Bird dog", "3 × 10"]
+  ],
+  "Leg Day": [
+    ["Присідання", "3 × 10"],
+    ["Випади", "3 × 8 на ногу"],
+    ["Сідничний місток", "3 × 12"],
+    ["Підйоми на носки", "3 × 15"]
+  ]
+};
+
+function startWorkout(name) {
+  currentWorkoutName = name;
+  currentExercises = (programs[name] || []).map(e => ({
+    name: e[0], sets: e[1], done: false
+  }));
+  currentStart = Date.now();
+  renderWorkout();
+  $("activeWorkout").classList.remove("hidden");
+  $("activeWorkout").scrollIntoView({behavior:"smooth", block:"start"});
+}
+function startCustom() {
+  const name = $("customName").value.trim() || "Моє тренування";
+  const exercises = $("customExercises").value.split("\n")
+    .map(s => s.trim()).filter(Boolean).slice(0, 30);
+  if (!exercises.length) return toast("Впиши хоча б одну вправу.");
+  currentWorkoutName = name;
+  currentExercises = exercises.map(name => ({name, sets:"За планом",done:false}));
+  currentStart = Date.now();
+  renderWorkout();
+  $("activeWorkout").classList.remove("hidden");
+  $("activeWorkout").scrollIntoView({behavior:"smooth"});
+}
+function renderWorkout() {
+  $("workoutTitle").textContent = currentWorkoutName;
+  $("workoutSub").textContent = "Відміть виконані вправи. Не поспішай і стеж за технікою.";
+  $("exerciseList").innerHTML = "";
+  currentExercises.forEach((ex, i) => {
+    const row = document.createElement("div");
+    row.className = "exercise";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = ex.done;
+    checkbox.id = "ex" + i;
+    checkbox.addEventListener("change", () => {
+      currentExercises[i].done = checkbox.checked;
+      updateProgress();
+    });
+    const label = document.createElement("label");
+    label.htmlFor = checkbox.id;
+    label.textContent = ex.name + " · " + ex.sets;
+    row.append(checkbox, label);
+    $("exerciseList").append(row);
+  });
+  updateProgress();
+}
+function updateProgress() {
+  const done = currentExercises.filter(e => e.done).length;
+  const total = currentExercises.length || 1;
+  $("workoutProgress").style.width = (done / total * 100) + "%";
+  $("workoutSub").textContent = done + " із " + currentExercises.length + " вправ виконано";
+}
+$("finishWorkout").addEventListener("click", () => {
+  const done = currentExercises.filter(e => e.done).length;
+  if (!done) return toast("Відміть хоча б одну виконану вправу.");
+  const history = getData("history", []);
+  const minutes = Math.max(1, Math.round((Date.now() - currentStart) / 60000));
+  history.unshift({
+    name: currentWorkoutName,
+    date: new Date().toISOString(),
+    minutes,
+    completed: done,
+    total: currentExercises.length
+  });
+  putData("history", history.slice(0, 100));
+  $("activeWorkout").classList.add("hidden");
+  refreshStats();
+  showPage("stats");
+  toast("Результат збережено!");
+});
+
+function refreshStats() {
+  const history = getData("history", []);
+  const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const week = history.filter(h => new Date(h.date).getTime() >= cutoff);
+  const minutes = history.reduce((sum, h) => sum + (h.minutes || 0), 0);
+  $("homeSessions").textContent = history.length;
+  $("homeWeek").textContent = week.length;
+  $("statTotal").textContent = history.length;
+  $("statWeek").textContent = week.length;
+  $("statMinutes").textContent = minutes;
+  $("historyList").innerHTML = "";
+  if (!history.length) {
+    $("historyList").innerHTML = "<p>Поки що тренувань немає. Почни з першого!</p>";
+    return;
+  }
+  history.forEach(h => {
+    const item = document.createElement("div");
+    item.className = "exercise";
+    const info = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = h.name;
+    const details = document.createElement("div");
+    details.className = "muted";
+    details.textContent = new Date(h.date).toLocaleDateString("uk-UA") +
+      " · " + h.minutes + " хв · " + h.completed + "/" + h.total + " вправ";
+    info.append(title, details);
+    item.append(info);
+    $("historyList").append(item);
+  });
+}
+function clearHistory() {
+  if (!confirm("Очистити всю історію тренувань?")) return;
+  putData("history", []);
+  refreshStats();
+  toast("Історію очищено.");
+}
+
+$("chatForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const input = $("chatInput");
+  const question = input.value.trim();
+  if (!question) return;
+  addMessage(question, true);
+  input.value = "";
+  const q = question.toLowerCase();
+  let answer = "Почни з комфортного навантаження, звертай увагу на техніку й відновлення. Якщо маєш біль або проблеми зі здоров'ям, припини вправу та звернися до кваліфікованого фахівця.";
+  if (q.includes("план") || q.includes("програм")) {
+    answer = "Для початку спробуй 2–3 тренування на тиждень із днями відпочинку між ними. Чергуй вправи на ноги, поштовхові та тягові рухи. Збільшуй навантаження поступово.";
+  } else if (q.includes("біл") || q.includes("їст") || q.includes("харч")) {
+    answer = "Для підтримки тренувань регулярно харчуйся різноманітно: білкові продукти, овочі, фрукти, зернові та достатньо води. Не потрібні жорсткі дієти чи пропускання їжі.";
+  } else if (q.includes("віднов") || q.includes("сон")) {
+    answer = "Відновлення важливе не менше за тренування. Намагайся спати достатньо, їсти регулярно та робити дні відпочинку. Якщо відчуваєш біль, не тренуйся через нього.";
+  } else if (q.includes("технік") || q.includes("присідан") || q.includes("віджим")) {
+    answer = "Виконуй рух повільно й контрольовано, без різкого болю. Почни з простішого варіанта вправи. Цей демонстраційний чат не бачить твоєї техніки та не може оцінити фото або відео.";
+  } else if (q.includes("привіт")) {
+    answer = "Привіт! 💪 Запитай мене про план тренувань, вправи, відпочинок або здорові звички.";
+  }
+  setTimeout(() => addMessage(answer, false), 250);
+});
+function addMessage(text, mine) {
+  const bubble = document.createElement("div");
+  bubble.className = "card";
+  bubble.style.marginBottom = "10px";
+  bubble.style.background = mine ? "#202b1a" : "#121613";
+  bubble.textContent = text;
+  $("chatMessages").append(bubble);
+  $("chatMessages").scrollTop = $("chatMessages").scrollHeight;
+}
+
+// Автоматично показуємо вхід під час відкриття сайту.
+$("authScreen").classList.remove("hidden");
+$("app").classList.add("hidden");
+</script>
+</body>
+</html>
