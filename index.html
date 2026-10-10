@@ -214,7 +214,6 @@ body{background:radial-gradient(ellipse at 50% -20%,#14264a 0,transparent 48%),v
    <button class="btn full" id="authSubmit" type="submit">Увійти</button>
   </form>
   <p id="authStatus" class="auth-status" role="status"></p>
-  <details><summary class="config-help">Налаштування для власника сайту</summary><p class="config-help">Щоб увімкнути акаунти, заповни config.js значеннями Supabase. Для справжнього ШІ розгорни Node-сервер і задай OPENAI_API_KEY у серверних змінних середовища. Не вставляй секретний ключ у цей файл.</p></details>
  </div>
 </div>
 
@@ -703,7 +702,7 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
 (function(){
   const ukToEn = {
     'Тренування':'Training','Тренування, підібрані під тебе':'Workouts tailored to you','Харчування':'Nutrition','Профіль':'Profile','Головна':'Home','Програми':'Programs','Власні':'My workouts','Бібліотека':'Library','Все тіло':'Full Body','Верх / Низ':'Upper / Lower','Жим / Тяга / Ноги':'Push / Pull / Legs','Активна програма':'Active program','Рекомендовано':'Recommended','Вправ':'Exercises','Вправа':'Exercise','День':'Day','Відпочинок':'Rest','План для тебе':'Your plan','Змінити профіль':'Edit profile','Змінити план':'Change plan','Почати тренування →':'Start workout →','Почати тренування':'Start workout','Переглянути план →':'View plan →','Рекомендована програма':'Recommended program','Підтримувати форму':'Maintain fitness','Набрати м’язову масу':'Build muscle','Покращити форму та звички':'Improve fitness and habits','Стати сильнішим':'Build strength','Покращити витривалість':'Improve endurance','Загальна активність і самопочуття':'General activity and wellbeing','Підготовка до спорту':'Sports preparation','Початківець':'Beginner','Тренуюся час від часу':'I train sometimes','Є досвід':'Experienced','Вдома без обладнання':'At home, no equipment','Вдома з гантелями':'At home with dumbbells','У тренажерному залі':'At a gym','На вулиці / майданчику':'Outdoors / sports park',
-    'Привіт':'Hello','Твій план • Твої цілі':'Your plan • Your goals','ТВІЙ ПЛАН • ТВОЇ ЦІЛІ':'YOUR PLAN • YOUR GOALS','Твій прогрес':'Your progress','Швидкий старт':'Quick start','Уся історія':'Full history','Історія тренувань':'Workout history','Очистити історію':'Clear history','Мій профіль':'My profile','ЗБЕРЕЖЕНО ЛОКАЛЬНО':'SAVED LOCALLY','Зберегти зміни й оновити план':'Save changes and update plan','Зберегти зміни':'Save changes','Експортувати мої дані':'Export my data','Скинути все':'Reset everything','Плануй розумно. Прогресуй поступово.':'Train smart. Progress gradually.','Створити мій план →':'Build my plan →','Створити план':'Create plan','Твій профіль':'Your profile','Як до тебе звертатися?':'What should we call you?','Вік':'Age','Зріст, см':'Height, cm','Вага, кг':'Weight, kg','Стать для розрахунку енерговитрат':'Sex for energy estimate','Жіноча':'Female','Чоловіча':'Male','Не вказувати':'Prefer not to say','Твій спосіб життя':'Your activity level','Спосіб життя':'Activity level','Переважно сидячий — мало руху поза тренуваннями':'Mostly sedentary — little movement outside workouts','Легко активний — ходьба та трохи руху щодня':'Lightly active — walking and some daily movement','Помірно активний — регулярні прогулянки / спорт кілька разів на тиждень':'Moderately active — regular walks or exercise several times a week','Активний — спорт або багато руху майже щодня':'Active — sports or lots of movement most days','Дуже активний — інтенсивний спорт / фізична робота':'Very active — intense sports or physical work','Твій досвід':'Your experience','Головна мета':'Main goal','Де тренуватимешся?':'Where will you train?','Скільки днів на тиждень?':'How many days per week?','Скільки часу на тренування?':'How long per workout?','Додаткові побажання':'Additional notes','Що ще варто врахувати? (необов’язково)':'Anything else to consider? (optional)','Що ще варто врахувати? (необов\'язково)':'Anything else to consider? (optional)','Не вказуй приватні медичні дані. Якщо є біль або травма, порадься з фахівцем перед тренуванням.':'Avoid entering private medical details. If you have pain or an injury, consult a qualified professional before exercising.','Не вказуй приватні медичні дані.':'Avoid entering private medical details.','Пошта в цій демоверсії зберігається лише в браузері — підтвердження листом немає.':'In this demo, your email is stored only in this browser; no confirmation email is sent.','Електронна пошта':'Email address','Пароль':'Password','Увійти':'Log in','Реєстрація':'Sign up','Створи свій акаунт':'Create your account','З поверненням!':'Welcome back!','Створити акаунт':'Create account','◉ Продовжити з Google':'◉ Continue with Google','Щонайменше 8 символів':'At least 8 characters','Налаштування для власника сайту':'Site owner settings',
+    'Привіт':'Hello','Твій план • Твої цілі':'Your plan • Your goals','ТВІЙ ПЛАН • ТВОЇ ЦІЛІ':'YOUR PLAN • YOUR GOALS','Твій прогрес':'Your progress','Швидкий старт':'Quick start','Уся історія':'Full history','Історія тренувань':'Workout history','Очистити історію':'Clear history','Мій профіль':'My profile','ЗБЕРЕЖЕНО ЛОКАЛЬНО':'SAVED LOCALLY','Зберегти зміни й оновити план':'Save changes and update plan','Зберегти зміни':'Save changes','Експортувати мої дані':'Export my data','Скинути все':'Reset everything','Плануй розумно. Прогресуй поступово.':'Train smart. Progress gradually.','Створити мій план →':'Build my plan →','Створити план':'Create plan','Твій профіль':'Your profile','Як до тебе звертатися?':'What should we call you?','Вік':'Age','Зріст, см':'Height, cm','Вага, кг':'Weight, kg','Стать для розрахунку енерговитрат':'Sex for energy estimate','Жіноча':'Female','Чоловіча':'Male','Не вказувати':'Prefer not to say','Твій спосіб життя':'Your activity level','Спосіб життя':'Activity level','Переважно сидячий — мало руху поза тренуваннями':'Mostly sedentary — little movement outside workouts','Легко активний — ходьба та трохи руху щодня':'Lightly active — walking and some daily movement','Помірно активний — регулярні прогулянки / спорт кілька разів на тиждень':'Moderately active — regular walks or exercise several times a week','Активний — спорт або багато руху майже щодня':'Active — sports or lots of movement most days','Дуже активний — інтенсивний спорт / фізична робота':'Very active — intense sports or physical work','Твій досвід':'Your experience','Головна мета':'Main goal','Де тренуватимешся?':'Where will you train?','Скільки днів на тиждень?':'How many days per week?','Скільки часу на тренування?':'How long per workout?','Додаткові побажання':'Additional notes','Що ще варто врахувати? (необов’язково)':'Anything else to consider? (optional)','Що ще варто врахувати? (необов\'язково)':'Anything else to consider? (optional)','Не вказуй приватні медичні дані. Якщо є біль або травма, порадься з фахівцем перед тренуванням.':'Avoid entering private medical details. If you have pain or an injury, consult a qualified professional before exercising.','Не вказуй приватні медичні дані.':'Avoid entering private medical details.','Пошта в цій демоверсії зберігається лише в браузері — підтвердження листом немає.':'In this demo, your email is stored only in this browser; no confirmation email is sent.','Електронна пошта':'Email address','Пароль':'Password','Увійти':'Log in','Реєстрація':'Sign up','Створи свій акаунт':'Create your account','З поверненням!':'Welcome back!','Створити акаунт':'Create account','◉ Продовжити з Google':'◉ Continue with Google','Щонайменше 8 символів':'At least 8 characters',
     'Бібліотека вправ':'Exercise library','Обери вправу, щоб переглянути техніку, основні м’язи та відеодемонстрацію. Починай з легкого варіанта й припиняй рух, якщо відчуваєш біль.':'Choose an exercise to view technique cues, target muscles and a video demonstration. Start with an easier variation and stop if you feel pain.','Пошук вправи':'Search exercises','Наприклад, присідання або спина':'e.g. squat or back','Усі':'All','Ноги':'Legs','Груди':'Chest','Спина':'Back','Кор':'Core','Сідниці':'Glutes','Плечі':'Shoulders','Руки':'Arms','Усе тіло':'Full Body','Мобільність':'Mobility','Основні м’язи:':'Main muscles:','Як виконувати:':'How to do it:','Поширені помилки:':'Common mistakes:','▶ Переглянути відеофайл':'▶ Watch video','Відкрити / завантажити файл':'Open / download file','Відео для цієї вправи ще не додано.':'A video has not been added for this exercise yet.','Нічого не знайдено.':'No results found.','вправ':'exercises',
     'Орієнтир енергії':'Energy estimate','За профілем':'Based on profile','орієнтир ккал/день':'estimated kcal/day','записано сьогодні':'logged today','Білки':'Protein','Жири':'Fat','Вуглеводи':'Carbohydrates','Щоденник харчування':'Food diary','Додавай страви за прийомами їжі, швидко обирай популярні продукти та дивись підсумок за день.':'Add meals by mealtime, choose common foods quickly and review your daily totals.','Дата щоденника':'Diary date','Прийом їжі':'Meal','Швидко додати продукт':'Quick-add food','Значення орієнтовні для типової порції. Якщо маєш етикетку — використовуй її дані.':'Values are estimates for a typical serving. Use the nutrition label when available.','Вівсянка':'Oatmeal','Яйце':'Egg','Банан':'Banana','Яблуко':'Apple','Рис':'Rice','Курка':'Chicken','Йогурт':'Yogurt','Хліб':'Bread','Додати страву':'Add food','Назва страви / продукту':'Meal / food name','Наприклад, омлет із тостом':'e.g. omelette and toast','Ккал':'Kcal','Білки, г':'Protein, g','Жири, г':'Fat, g','Вуглеводи, г':'Carbs, g','＋ Додати в щоденник':'＋ Add to diary','Скасувати':'Cancel','Страви за день':'Meals today','Експорт CSV':'Export CSV','Поки немає записів за цю дату. Обери швидкий продукт або додай свою страву.':'There are no entries for this date yet. Choose a quick-add food or enter your own meal.','План тренувань':'Workout plan','Чат-тренера':'Coach chat','Статистика':'Statistics','Прогрес і статистика':'Progress and statistics','↻ Оновити':'↻ Refresh','Тренування за останні 7 днів':'Workouts in the last 7 days','Особисті рекорди':'Personal records','Рекорди розраховуються з ваги та повторень, які ти записуєш у режимі тренування.':'Records are calculated from the weights and reps you log during workouts.','Останні тренування':'Recent workouts','Календар тренувань':'Workout calendar','Твій розклад':'Your schedule','Заплануй заняття або згенеруй розклад на найближчий тиждень. Дату кожного заняття можна перенести без зміни програми.':'Schedule sessions or generate a plan for the coming week. You can change each session date without changing the program.','Назва тренування':'Workout name','Наприклад, Верх тіла A':'e.g. Upper body A','Дата':'Date','＋ Додати до календаря':'＋ Add to calendar','Створити розклад за моїм планом':'Generate schedule from my plan','Заплановані заняття':'Scheduled sessions','Поки немає занять у календарі. Додай тренування або створи розклад за планом.':'No sessions in the calendar yet. Add a workout or generate a plan schedule.','Перенести дату':'Move date','Видалити':'Delete','Додати продукт':'Add food','Редагувати продукт':'Edit food','Зберегти':'Save','Зберегти зміни':'Save changes',
     'Твоя регулярність':'Your consistency','днів активності поспіль':'consecutive active days','тренувань усього':'total workouts','досягнень відкрито':'achievements unlocked','Вимк.':'Off','Увімк.':'On','Досягнення':'Achievements','Нагадування про тренування':'Workout reminders','Час нагадування':'Reminder time','Увімкнути':'Enable','Нагадування працює, поки сайт відкритий у браузері. Дозволь сповіщення у браузері, якщо хочеш отримувати їх поза сторінкою — це залежить від браузера та пристрою.':'Reminders work while the site is open in your browser. Allow browser notifications to receive them outside the page; availability depends on your browser and device.','Перший крок':'First step','Завершити перше тренування':'Complete your first workout','У ритмі':'In a rhythm','Завершити 5 тренувань':'Complete 5 workouts','Десять занять':'Ten sessions','Завершити 10 тренувань':'Complete 10 workouts','Три дні поспіль':'Three days in a row','Активність 3 дні поспіль':'Be active 3 days in a row','Тиждень ритму':'A week in rhythm','Активність 7 днів поспіль':'Be active 7 days in a row','Уважність до їжі':'Mindful eating','Додати перший запис харчування':'Add your first food entry','Відкрито ✓':'Unlocked ✓','Ще попереду':'Still ahead','Зберегти нагадування':'Save reminder',
@@ -793,40 +792,80 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
     if(!profile||!Array.isArray(libraryExercises)||!libraryExercises.length)return basePlan.days||[];
     const count=Math.max(2,Math.min(5,Number(profile.days)||basePlan.days?.length||3));
     const equipment=profile.place||'home';
-    const requiresMachine=/(тренажері|тренажерний|блок|машин|cable|machine|lat pulldown|жим ногами|leg press|leg curl|leg extension|pec deck|treadmill|stationary bike|elliptical)/i;
-    const requiresBarOrBench=/(штанг|лаві|лавиц|bench|barbell)/i;
+    const requiresMachine=/(тренажер|блок|машин|cable|machine|lat pulldown|leg press|leg curl|leg extension|pec deck|treadmill|stationary bike|elliptical|кросовер|сміта|smith)/i;
+    const requiresBarOrBench=/(штанг|лаві|лавиц|bench|barbell|smith machine)/i;
     const requiresBand=/(еспандер|гумов|resistance band|band row|band triceps|band face|lateral band)/i;
     const requiresDumbbell=/(гантел|dumbbell|goblet squat|hammer curl|reverse fly)/i;
-    const clearlyHomeOnly=/(bodyweight squat|chair squat|wall push-up|push-up|віджиман|towel hamstring curl|glute bridge|сідничний місток|side-lying leg raise|donkey kick|fire hydrant|пожежний гідрант|cat-cow|кішка-корова|bird dog|пташка-собака|superman|підйом рук і ніг навхрест|prone y-t-w|prone alternating lift|dead bug|forearm plank|side plank|планка|tuck|march in place|марш на місці|jumping jack|burpee|альпініст)/i;
-    function suitable(e){const n=e.name+' '+e.en;if(Array.isArray(e.equipment)&&e.equipment.length)return e.equipment.includes(equipment);
-      if(equipment==='gym')return /(тренажер|блок|машин|cable|machine|lat pulldown|leg press|leg curl|leg extension|pec deck|treadmill|stationary bike|elliptical|кросовер|сміта|smith|штанг|barbell|гантел|dumbbell|kettlebell|гирею|pull.?up|chin.?up|підтягув|dip station|бруси|hanging knee raise)/i.test(n)&&!requiresBand.test(n);
+    function suitable(e){
+      const n=(e.name||'')+' '+(e.en||'');
+      if(Array.isArray(e.equipment)&&e.equipment.length)return e.equipment.includes(equipment);
+      if(equipment==='gym')return /(тренажер|блок|машин|cable|machine|lat pulldown|leg press|leg curl|leg extension|pec deck|treadmill|stationary bike|elliptical|кросовер|сміта|smith|штанг|barbell|гантел|dumbbell|kettlebell|гир|pull.?up|chin.?up|підтягув|dip station|брус|hanging knee raise|hip thrust|жим ногами)/i.test(n)&&!requiresBand.test(n);
       if(equipment==='dumbbells')return !requiresMachine.test(n)&&!requiresBarOrBench.test(n)&&!requiresBand.test(n);
       if(equipment==='outdoor')return !requiresMachine.test(n)&&!requiresDumbbell.test(n)&&!requiresBand.test(n)&&!/(штанг|barbell|smith|машині сміта)/i.test(n);
       return !requiresMachine.test(n)&&!requiresBarOrBench.test(n)&&!requiresBand.test(n)&&!requiresDumbbell.test(n)&&!/pull-up|підтягув/i.test(n);
     }
-    function pool(category){let xs=libraryExercises.filter(e=>e.category===category&&suitable(e));if(equipment==='gym'){const gymGear=e=>{const n=e.name+' '+e.en;return requiresMachine.test(n)||requiresDumbbell.test(n)||requiresBarOrBench.test(n)||/pull-up|підтягування|hanging knee raise|leg press|machine/i.test(n)};xs.sort((a,b)=>Number(gymGear(b))-Number(gymGear(a)));}return xs;} 
+    const commonRules=[
+      [/(barbell back squat|присідання зі штангою на спині|goblet squat|присідання з гантеллю перед грудьми|bodyweight squat|присідання з власною вагою|leg press machine|жим ногами в тренажері)/i,10],
+      [/(barbell bench press|жим штанги лежачи|dumbbell floor press|жим гантелей лежачи на підлозі|push-up|віджимання від підлоги|machine chest press|жим від грудей у тренажері)/i,10],
+      [/(lat pulldown|тяга верхнього блока|pull-up|підтягування|one-arm dumbbell row|тяга гантелі однією рукою|seated cable row|тяга нижнього блока)/i,9],
+      [/(romanian deadlift|румунська тяга|hip thrust|хіп-траст|glute bridge|сідничний місток|leg curl|згинання ніг)/i,8],
+      [/(reverse lunge|випади назад|split squat|спліт-присідання|step-up|крок на платформу)/i,7],
+      [/(shoulder press|жим гантелей над головою|machine shoulder press|жим плечима в тренажері|lateral raise|підйом гантелей у сторони)/i,6],
+      [/(biceps curl|згинання рук|triceps|розгинання рук|plank|планка|dead bug|bird dog)/i,4]
+    ];
+    function score(e){
+      const n=(e.name||'')+' '+(e.en||'');let sc=1;
+      commonRules.forEach(([re,v])=>{if(re.test(n))sc+=v});
+      if(equipment==='gym'&&/(barbell|штанг|machine|тренажер|cable|блок)/i.test(n))sc+=4;
+      if(equipment==='dumbbells'&&/(dumbbell|гантел|floor press|гоблет|goblet)/i.test(n))sc+=5;
+      if((equipment==='home'||equipment==='outdoor')&&/(bodyweight|push-up|віджиман|plank|планка|lunge|випад|glute bridge|місток|step-up|крок на платформу|bird dog|dead bug)/i.test(n))sc+=5;
+      if(profile.level==='beginner'&&/(conventional barbell deadlift|класична станова|barbell back squat|присідання зі штангою на спині|good morning|гуд морнінг)/i.test(n))sc-=3;
+      return sc;
+    }
+    function pool(category){return libraryExercises.filter(e=>e.category===category&&suitable(e)).sort((a,b)=>score(b)-score(a));}
     const titleSets={full:{uk:['Усе тіло A','Усе тіло B','Усе тіло C'],en:['Full Body A','Full Body B','Full Body C']},upperLower:{uk:['Верх тіла A','Низ тіла A','Верх тіла B','Низ тіла B'],en:['Upper Body A','Lower Body A','Upper Body B','Lower Body B']},ppl:{uk:['Жим A','Тяга A','Ноги A','Жим B','Тяга B'],en:['Push A','Pull A','Legs A','Push B','Pull B']}};
-    const categories=selectedProgram==='full'?['Ноги','Груди','Спина','Сідниці','Кор']:selectedProgram==='ppl'?['Груди','Спина','Ноги']:['Груди','Ноги'];
     const sessions=[];
     for(let i=0;i<count;i++){
-      let title, cats;
+      let title,cats;
       const weightGoal=profile.goal==='lose';
-      const conditioning=weightGoal&&((count===2&&i===1)||(count>=3&&i%2===1));
+      const conditioning=weightGoal&&((count===2&&i===1)||(count>=3&&i%3===2));
       if(weightGoal&&conditioning){title=lang==='en'?'Low-impact cardio & core':'Кардіо низької ударності й кор';cats=['Усе тіло','Кор','Ноги'];}
-      else if(selectedProgram==='full'){title=titleSets.full[lang==='en'?'en':'uk'][i%3];cats=['Ноги','Груди','Спина','Сідниці','Кор'];}
-      else if(selectedProgram==='ppl'){const k=i%3;title=titleSets.ppl[lang==='en'?'en':'uk'][k]+(i>=3?' B':'');cats=k===0?['Груди','Плечі','Руки']:k===1?['Спина','Руки','Плечі']:['Ноги','Сідниці','Кор'];}
-      else {const upper=i%2===0;title=titleSets.upperLower[lang==='en'?'en':'uk'][i%4];cats=upper?['Груди','Спина','Плечі','Руки']:['Ноги','Сідниці','Ноги','Кор'];}
-      const max=profile.duration<=20?3:profile.duration<=45?4:5;const items=[];
+      else if(selectedProgram==='full'){title=titleSets.full[lang==='en'?'en':'uk'][i%3];cats=['Ноги','Груди','Спина','Сідниці','Кор','Плечі'];}
+      else if(selectedProgram==='ppl'){
+        const k=i%3;title=titleSets.ppl[lang==='en'?'en':'uk'][k]+(i>=3?' B':'');
+        cats=k===0?['Груди','Плечі','Руки','Кор']:k===1?['Спина','Руки','Плечі','Кор']:['Ноги','Сідниці','Кор'];
+      } else {const upper=i%2===0;title=titleSets.upperLower[lang==='en'?'en':'uk'][i%4];cats=upper?['Груди','Спина','Плечі','Руки','Кор']:['Ноги','Сідниці','Ноги','Кор'];}
+      const mins=Number(profile.duration)||30;
+      const max=mins<=20?3:mins<=30?4:mins<=45?5:mins<=60?6:mins<=90?7:8;
+      const items=[];
       if(weightGoal&&conditioning){
-        const cardioName=equipment==='gym'?(lang==='en'?'Treadmill walking':'Ходьба на біговій доріжці'):equipment==='outdoor'?(lang==='en'?'Brisk outdoor walk':'Швидка ходьба на вулиці'):equipment==='dumbbells'?(lang==='en'?'Side steps at a comfortable pace':'Кроки вбік у комфортному темпі'):(lang==='en'?'March in place':'Марш на місці');
+        const cardioName=equipment==='gym'?(lang==='en'?'Treadmill walking':'Ходьба на біговій доріжці'):equipment==='outdoor'?(lang==='en'?'Brisk outdoor walk':'Швидка ходьба на вулиці'):equipment==='dumbbells'?(lang==='en'?'Comfortable side steps':'Кроки вбік у комфортному темпі'):(lang==='en'?'March in place':'Марш на місці');
         items.push([cardioName,lang==='en'?'8–20 min at a comfortable pace':'8–20 хв у комфортному темпі']);
       }
-      cats.forEach((cat,j)=>{if(items.length>=max)return;const xs=pool(cat);if(!xs.length)return;let ordered=xs;if(weightGoal&&conditioning&&cat==='Усе тіло'){ordered=xs.slice().sort((a,b)=>Number(/treadmill|bike|elliptical|walk|march|step/i.test(b.en+' '+b.name))-Number(/treadmill|bike|elliptical|walk|march|step/i.test(a.en+' '+a.name)));}let idx=(Math.floor(i/2)+j+(selectedProgram==='full'?i:0))%ordered.length;let ex=ordered[idx];if(items.some(v=>v[0]===ex.name)){ex=ordered[(idx+1)%ordered.length]||ex;}if(ex&&!items.some(v=>v[0]===ex.name))items.push([ex.name,weightGoal&&conditioning?(lang==='en'?'2 × 8–12, comfortable pace':'2 × 8–12, комфортний темп'):'3 × 8–12']);});
+      const addFromCategory=(cat)=>{
+        if(items.length>=max)return;
+        const xs=pool(cat);if(!xs.length)return;
+        // Rotate through top-ranked movements across days while preserving variety inside a session.
+        const windowSize=Math.min(xs.length,Math.max(4,Math.ceil(max/2)+2));
+        const start=(i*2+items.length+jitter(cat))%windowSize;
+        for(let k=0;k<xs.length;k++){
+          const ex=xs[(start+k)%xs.length];
+          if(!items.some(x=>x[0]===ex.name)){
+            items.push([ex.name,mins<=30?'2–3 × 8–12':'3 × 8–12']);return;
+          }
+        }
+      };
+      function jitter(cat){return (['Ноги','Груди','Спина','Сідниці','Кор','Плечі','Руки'].indexOf(cat)+1)%3}
+      cats.forEach(cat=>addFromCategory(cat));
+      let rounds=0;
+      while(items.length<max&&rounds<cats.length*4){addFromCategory(cats[rounds%cats.length]);rounds++;}
       if(!items.length&&basePlan.days?.[i])return basePlan.days;
       sessions.push({title:(i+1)+'. '+title,items});
     }
     return sessions;
   }
+
+  window.gtGetOptimizedPlan=function(){const base=typeof buildPlan==='function'&&profile?buildPlan():{title:tr('Твій план','Your plan'),days:[]};return {...base,days:makeTrainingDays(base)}};
   function techniqueUrl(name){return 'https://www.youtube.com/results?search_query='+encodeURIComponent((lang==='en'?getENExercise(name):name)+' proper exercise technique tutorial')}
   function ensureHub(){const sec=document.getElementById('recommend');if(!sec)return null;let hub=document.getElementById('trainingHub');if(!hub){hub=document.createElement('div');hub.id='trainingHub';sec.prepend(hub);Array.from(sec.children).forEach(el=>{if(el!==hub)el.classList.add('training-legacy-hidden')});}return hub}
   function renderTrainingHub(){const hub=ensureHub();if(!hub)return;if(!legacyPlanEditor)legacyPlanEditor=document.getElementById('gtPlanEditor');const info=trainingProgramInfo();const basePlan=typeof buildPlan==='function'&&profile?buildPlan():{title:tr('Твій план','Your plan'),days:[]};const plan={...basePlan,days:makeTrainingDays(basePlan)};
@@ -968,7 +1007,7 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
 
 
 <style id="gt-complete-update-styles">
-#subscription .gt-sub-wrap{max-width:850px;margin:10px auto 30px}#subscription .gt-sub-hero{border:1px solid #26486c;border-radius:24px;padding:22px;background:radial-gradient(ellipse at 90% 0%,rgba(56,189,248,.19),transparent 42%),linear-gradient(135deg,#101d38,#0a1020)}#subscription .gt-sub-hero h1{font-size:clamp(26px,4vw,38px);margin:10px 0}#subscription .gt-sub-hero p{color:var(--muted);line-height:1.6}#subscription .gt-sub-plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}#subscription .gt-sub-plan{background:linear-gradient(150deg,#101a31,#0c1325);border:1px solid #29405f;border-radius:20px;padding:18px;min-width:0}#subscription .gt-sub-plan.featured{border-color:#38bdf8;box-shadow:0 0 0 1px #38bdf822}#subscription .gt-sub-plan h2{font-size:21px;margin-bottom:8px}#subscription .gt-sub-price{font-weight:900;font-size:22px;margin:14px 0;color:#7dd3fc}#subscription .gt-sub-plan ul{padding-left:19px;line-height:1.65;color:#c4d2e8;font-size:14px}#subscription .gt-sub-note{border:1px solid var(--line);border-radius:15px;padding:14px;background:var(--panel);color:var(--muted);line-height:1.6;font-size:13px;white-space:pre-wrap}#subscription .gt-sub-status{font-size:12px;font-weight:800;color:#7dd3fc;text-transform:uppercase;letter-spacing:.04em}#subscription .gt-sub-message{margin-top:12px;color:#fda4af;font-size:13px;line-height:1.5;white-space:pre-wrap}#subscription .gt-sub-details{margin-top:14px}#subscription .gt-sub-details summary{cursor:pointer;color:#7dd3fc;font-weight:800}#subscription .gt-sub-details code{white-space:normal;overflow-wrap:anywhere;color:#dbeafe}@media(max-width:600px){#subscription .gt-sub-plans{grid-template-columns:1fr}#subscription .gt-sub-hero{padding:18px}}.th-show-more{display:block;width:100%;margin:12px 0 18px;border:1px solid #3a5068;border-radius:14px;background:#121e36;color:#dbeafe;padding:13px;font-weight:850}.th-show-more:hover{border-color:#38bdf8;color:#7dd3fc}
+#subscription .gt-sub-wrap{max-width:850px;margin:10px auto 30px}#subscription .gt-sub-hero{border:1px solid #26486c;border-radius:24px;padding:22px;background:radial-gradient(ellipse at 90% 0%,rgba(56,189,248,.19),transparent 42%),linear-gradient(135deg,#101d38,#0a1020)}#subscription .gt-sub-hero h1{font-size:clamp(26px,4vw,38px);margin:10px 0}#subscription .gt-sub-hero p{color:var(--muted);line-height:1.6}#subscription .gt-sub-plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}#subscription .gt-sub-plan{background:linear-gradient(150deg,#101a31,#0c1325);border:1px solid #29405f;border-radius:20px;padding:18px;min-width:0}#subscription .gt-sub-plan.featured{border-color:#38bdf8;box-shadow:0 0 0 1px #38bdf822}#subscription .gt-sub-plan h2{font-size:21px;margin-bottom:8px}#subscription .gt-sub-price{font-weight:900;font-size:22px;margin:14px 0;color:#7dd3fc}#subscription .gt-sub-plan ul{padding-left:19px;line-height:1.65;color:#c4d2e8;font-size:14px}#subscription .gt-sub-note{border:1px solid var(--line);border-radius:15px;padding:14px;background:var(--panel);color:var(--muted);line-height:1.6;font-size:13px;white-space:pre-wrap}#subscription .gt-sub-status{font-size:12px;font-weight:800;color:#7dd3fc;text-transform:uppercase;letter-spacing:.04em}#subscription .gt-sub-message{margin-top:12px;color:#fda4af;font-size:13px;line-height:1.5;white-space:pre-wrap}@media(max-width:600px){#subscription .gt-sub-plans{grid-template-columns:1fr}#subscription .gt-sub-hero{padding:18px}}.th-show-more{display:block;width:100%;margin:12px 0 18px;border:1px solid #3a5068;border-radius:14px;background:#121e36;color:#dbeafe;padding:13px;font-weight:850}.th-show-more:hover{border-color:#38bdf8;color:#7dd3fc}
 </style>
 
 
@@ -989,7 +1028,6 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
        <article class="gt-sub-plan featured"><span class="gt-sub-status">${en?'OPTIONAL MEMBERSHIP':'ДОДАТКОВА ПІДПИСКА'}</span><h2>GymCoach Plus</h2><div class="gt-sub-price">${priceText}</div><ul><li>${en?'Expanded custom workout planning':'Розширене створення власних програм'}</li><li>${en?'Nutrition diary and macro tracking':'Щоденник харчування та КБЖВ'}</li><li>${en?'Workout calendar, statistics and records':'Календар, статистика й особисті рекорди'}</li><li>${en?'Access period and renewal terms are shown by the payment provider':'Термін доступу й умови продовження показує платіжний сервіс'}</li></ul><button type="button" class="btn full" onclick="gtStartSubscription()">${en?'Continue to payment':'Перейти до оплати'} →</button><p id="gtSubscriptionMessage" class="gt-sub-message" role="status">${checkout?'':(en?'Payments are not connected yet. No charge will be made from this page.':'Оплата ще не підключена. Ця сторінка не списує кошти.')}</p></article>
       </div>
       <div class="gt-sub-note">${en?'Payment status: no active paid subscription has been confirmed by this page. To safely enable paid access, configure a hosted checkout page and a server-side payment confirmation/webhook. A client-side HTML page alone cannot verify payments securely.':'Статус оплати: ця сторінка поки не підтверджує активну платну підписку. Щоб безпечно відкривати платний доступ, потрібно налаштувати захищену сторінку оплати та серверне підтвердження платежу/webhook. Сам HTML у браузері не може надійно перевіряти оплату.'}</div>
-      <details class="gt-sub-details"><summary>${en?'Payment setup for the site owner':'Налаштування оплати для власника сайту'}</summary><p class="hint">${en?'Add a hosted payment URL to the existing config.js file under GTAI_CONFIG.SUBSCRIPTION_CHECKOUT_URL and a price label under GTAI_CONFIG.PREMIUM_PRICE_LABEL. Do not put secret API keys into index.html or config.js served to visitors. A backend/webhook is still needed to activate or cancel paid access.':'У наявний config.js потрібно додати посилання на сторінку оплати в GTAI_CONFIG.SUBSCRIPTION_CHECKOUT_URL і текст ціни в GTAI_CONFIG.PREMIUM_PRICE_LABEL. Не додавай секретні API-ключі в index.html чи config.js, який бачать відвідувачі. Для активації або скасування платного доступу також потрібен сервер/webhook.'}</p><p class="hint"><code>GTAI_CONFIG.SUBSCRIPTION_CHECKOUT_URL</code><br><code>GTAI_CONFIG.PREMIUM_PRICE_LABEL</code></p></details>
     </div>`;
   };
   window.gtStartSubscription=function(){
@@ -1001,6 +1039,246 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
   const oldToggle=window.toggleLang;
   if(typeof oldToggle==='function'&&!oldToggle.__gtSubWrapped){const wrapped=function(){oldToggle();if(el('subscription')?.classList.contains('active'))window.gtRenderSubscription()};wrapped.__gtSubWrapped=true;window.toggleLang=wrapped;}
   document.addEventListener('DOMContentLoaded',()=>{if(el('subscription')?.classList.contains('active'))window.gtRenderSubscription()});
+})();
+</script>
+
+
+<script id="gt-popular-exercise-expansion">
+(function(){
+ const extras = [{"name": "Жим гантелей лежачи на підлозі (нейтральний хват)", "en": "Neutral-grip dumbbell floor press", "category": "Груди", "muscles": "Грудні м’язи, трицепси", "how": "Лежачи на підлозі, тримай долоні одна до одної. Опускай лікті контрольовано й виштовхуй гантелі вгору.", "mistakes": "Не бий ліктями об підлогу; обери вагу, яку легко контролювати.", "aliases": ["neutral grip floor press"], "equipment": ["dumbbells"]}, {"name": "Тяга двох гантелей у нахилі", "en": "Dumbbell bent-over row", "category": "Спина", "muscles": "Широчайші, ромбоподібні м’язи, біцепси", "how": "Нахились із рівною спиною, тримай гантелі під плечима й веди лікті назад.", "mistakes": "Не розгойдуй тулуб і не округлюй спину.", "aliases": ["two dumbbell row"], "equipment": ["dumbbells"]}, {"name": "Болгарські спліт-присідання з гантелями", "en": "Dumbbell Bulgarian split squat", "category": "Ноги", "muscles": "Квадрицепси, сідниці, корпус", "how": "Постав задню ногу на стійку опору, виконуй рух повільно з гантелями або без них.", "mistakes": "Почни без ваги та перевір стійкість опори.", "aliases": ["rear foot elevated split squat"], "equipment": ["dumbbells"]}, {"name": "Жим гантелей сидячи над головою", "en": "Seated dumbbell shoulder press", "category": "Плечі", "muscles": "Дельти, трицепси", "how": "Сядь на стійку лаву зі спинкою, виштовхни гантелі над головою й опусти до комфортної висоти.", "mistakes": "Не прогинай поперек і не використовуй надмірну вагу.", "aliases": ["seated shoulder press"], "equipment": ["dumbbells"]}, {"name": "Молоткові згинання з гантелями", "en": "Dumbbell hammer curl", "category": "Руки", "muscles": "Біцепси, плечовий м’яз, передпліччя", "how": "Тримай долоні одна до одної й згинай лікті без розгойдування.", "mistakes": "Не підкидай вагу корпусом.", "aliases": ["hammer curls"], "equipment": ["dumbbells"]}, {"name": "Розгинання рук з гантеллю над головою", "en": "Overhead dumbbell triceps extension", "category": "Руки", "muscles": "Трицепси", "how": "Тримай одну легку гантель двома руками над головою, згинай лікті й розгинай контрольовано.", "mistakes": "Не прогинай поперек; припини рух при болю в плечах.", "aliases": ["overhead triceps extension"], "equipment": ["dumbbells"]}, {"name": "Присідання до стільця з паузою", "en": "Paused chair squat", "category": "Ноги", "muscles": "Квадрицепси, сідниці", "how": "Повільно торкнися стільця, зроби коротку паузу й піднімися без розгойдування.", "mistakes": "Використовуй стійкий стілець і не падай на сидіння.", "aliases": ["chair squat pause"]}, {"name": "Віджимання з руками на опорі", "en": "Incline push-up", "category": "Груди", "muscles": "Грудні м’язи, трицепси, корпус", "how": "Постав долоні на нерухому опору, тримай тіло прямим і опускай груди до неї.", "mistakes": "Не використовуй хитку опору й не провисай у попереку.", "aliases": ["incline pushup"]}, {"name": "Присідання з розведенням ніг", "en": "Bodyweight squat to calf raise", "category": "Усе тіло", "muscles": "Ноги, литки, корпус", "how": "Виконай комфортне присідання, а при підйомі плавно піднімися на носки.", "mistakes": "Не поспішай та не втрачай рівновагу.", "aliases": ["squat calf raise"]}, {"name": "Віджимання від лави з колін (полегшений варіант)", "en": "Knee push-up", "category": "Груди", "muscles": "Грудні м’язи, трицепси, плечі", "how": "Упрись колінами в килимок, тримай тулуб прямим і виконуй короткий контрольований рух.", "mistakes": "Не провисай у попереку й зупинися, якщо зап’ястя або плечі болять.", "aliases": ["modified pushup"]}, {"name": "Бічна планка", "en": "Side plank", "category": "Кор", "muscles": "Косі м’язи живота, стабілізатори корпуса", "how": "Обіпрись на передпліччя, підніми таз і тримай тіло в одній лінії; можна з нижнім коліном на підлозі.", "mistakes": "Не затримуй дихання й не опускай таз, якщо втрачаєш контроль."}, {"name": "Dead bug — почергове опускання руки й ноги", "en": "Dead bug", "category": "Кор", "muscles": "М’язи живота, стабілізатори тулуба", "how": "Лежачи на спині, повільно опускай протилежні руку та ногу, зберігаючи контроль корпуса.", "mistakes": "Зменш амплітуду, якщо поперек відривається від підлоги."}, {"name": "Пташка-собака", "en": "Bird dog", "category": "Кор", "muscles": "Стабілізатори корпуса, сідниці, спина", "how": "На четвереньках витягни протилежні руку й ногу, затримайся й повернись; чергуй сторони.", "mistakes": "Не повертай таз і не задирай голову."}, {"name": "Відведення таза назад без ваги", "en": "Bodyweight hip hinge", "category": "Ноги", "muscles": "Сідниці, задня поверхня стегна", "how": "Злегка зігни коліна й відведи таз назад, тримаючи спину нейтральною; повернись у стояння.", "mistakes": "Не округлюй спину; спершу опануй рух без ваги."}, {"name": "Тяга верхнього блока вузьким нейтральним хватом", "en": "Close-grip lat pulldown", "category": "Спина", "muscles": "Широчайші, біцепси", "how": "Сядь стабільно, потягни рукоять до верхньої частини грудей і повільно поверни.", "mistakes": "Не тягни рукоять за шию й не розгойдуйся.", "equipment": ["gym"]}, {"name": "Тяга нижнього блока сидячи", "en": "Seated cable row", "category": "Спина", "muscles": "Середина спини, широчайші, біцепси", "how": "Тягни рукоять до живота, м’яко зводячи лопатки, і повертай руки під контролем.", "mistakes": "Не округлюй поперек і не відхиляйся різко назад.", "equipment": ["gym"]}, {"name": "Жим від грудей у тренажері", "en": "Machine chest press", "category": "Груди", "muscles": "Грудні м’язи, трицепси, плечі", "how": "Відрегулюй сидіння так, щоб рукояті були приблизно на рівні середини грудей. Виштовхни й повільно поверни.", "mistakes": "Не блокуй лікті силою й не відривай спину від спинки.", "equipment": ["gym"]}, {"name": "Жим плечима в тренажері", "en": "Machine shoulder press", "category": "Плечі", "muscles": "Дельти, трицепси", "how": "Відрегулюй сидіння, тримай спину на спинці й виштовхни рукояті вгору контрольовано.", "mistakes": "Не використовуй вагу, яка змушує прогинатися.", "equipment": ["gym"]}, {"name": "Згинання рук на біцепс у блоці", "en": "Cable biceps curl", "category": "Руки", "muscles": "Біцепси, передпліччя", "how": "Тримай лікті біля тулуба, згинай руки й повільно поверни рукоять.", "mistakes": "Не розгойдуйся й не тягни плечима.", "equipment": ["gym"]}, {"name": "Розгинання рук на верхньому блоці", "en": "Cable triceps pushdown", "category": "Руки", "muscles": "Трицепси", "how": "Тримай лікті біля тулуба й розгинай передпліччя вниз без руху плечей.", "mistakes": "Не нахиляйся на рукоять усією вагою тіла.", "equipment": ["gym"]}, {"name": "Згинання ніг у тренажері", "en": "Leg curl machine", "category": "Ноги", "muscles": "Задня поверхня стегна", "how": "Відрегулюй валики й згинай коліна плавно, повертаючи вагу під контролем.", "mistakes": "Не смикай вагу й не відривай таз від опори.", "equipment": ["gym"]}, {"name": "Ходьба на біговій доріжці", "en": "Treadmill walking", "category": "Усе тіло", "muscles": "Ноги, серцево-судинна система", "how": "Почни з комфортної швидкості й рівного кроку, тримайся за поручні лише для безпеки.", "mistakes": "Не стрибай на рухому доріжку й не збільшуй швидкість різко.", "equipment": ["gym"]}, {"name": "Підтягування з допомогою тренажера", "en": "Assisted pull-up machine", "category": "Спина", "muscles": "Широчайші, біцепси, м’язи лопаток", "how": "Налаштуй допомогу тренажера, тримай корпус стабільним і виконуй підтягування контрольовано.", "mistakes": "Не розгойдуйся й перевір налаштування платформи.", "equipment": ["gym"]}, {"name": "Підйом на платформу", "en": "Step-up", "category": "Ноги", "muscles": "Квадрицепси, сідниці", "how": "Постав усю стопу на стійку платформу, піднімися й повільно спустися.", "mistakes": "Не використовуй хитку поверхню."}, {"name": "Ходьба на місці з активною роботою рук", "en": "March in place", "category": "Усе тіло", "muscles": "Ноги, корпус, серцево-судинна система", "how": "Крокуй на місці у комфортному темпі, природно рухай руками й дихай рівно.", "mistakes": "Не потрібно піднімати коліна високо або працювати через біль."}, {"name": "Підйом на носки стоячи", "en": "Standing calf raise", "category": "Ноги", "muscles": "Литкові м’язи", "how": "Тримайся за стійку опору за потреби, піднімай п’яти та опускай повільно.", "mistakes": "Не пружинь і не поспішай."}, {"name": "Зворотні випади без ваги", "en": "Reverse lunge", "category": "Ноги", "muscles": "Квадрицепси, сідниці, корпус", "how": "Зроби крок назад, опустися в контрольованій амплітуді й повернись; чергуй ноги.", "mistakes": "Тримай передню стопу стійко й за потреби тримайся за опору."}, {"name": "Тяга гантелі з опорою на лаву", "en": "Bench-supported dumbbell row", "category": "Спина", "muscles": "Широчайші, ромбоподібні м’язи, біцепси", "how": "Обіприся однією рукою на стійку лаву, тримай спину рівною та тягни гантель до боку.", "mistakes": "Перевір стійкість лави, не крути тулуб.", "equipment": ["dumbbells"]}, {"name": "Фермерська хода з гантелями", "en": "Dumbbell farmer carry", "category": "Усе тіло", "muscles": "Хват, трапеції, корпус, ноги", "how": "Візьми легкі гантелі, стань рівно й пройди коротку вільну дистанцію без поспіху.", "mistakes": "Не затримуй дихання, не сутулься й прибери перешкоди з проходу.", "equipment": ["dumbbells"]}];
+ if(!Array.isArray(window.libraryExercises) && typeof libraryExercises==='undefined') return;
+ const arr=libraryExercises;
+ const keys=new Set(arr.map(x=>String(x.name||'').trim().toLowerCase()));
+ extras.forEach(x=>{const k=String(x.name||'').trim().toLowerCase();if(k&&!keys.has(k)){arr.push(x);keys.add(k)}});
+ const count=document.getElementById('exerciseCount');if(count)count.textContent=arr.length+' вправ';
+})();
+</script>
+
+
+<style id="gt-live-coach-calendar-profile-styles">
+:root{--gc-accent:#38bdf8;--gc-accent2:#818cf8;--gc-card:#0e1930;--gc-muted:#9fb0ce}
+#nav{display:flex;gap:1px!important;max-width:780px!important}
+#nav button{min-width:0!important;padding:7px 2px!important;font-size:9px!important;white-space:normal;line-height:1.15}
+#nav button span{font-size:19px!important;margin-bottom:3px}
+@media(max-width:430px){#nav button{font-size:8px!important}#nav button span{font-size:17px!important}}
+#calendar .gt-calendar-shell{background:linear-gradient(145deg,#0e1a31,#0a1223);border:1px solid #263c60;border-radius:22px;padding:16px;margin:12px 0 16px;box-shadow:0 18px 45px #0002}
+.gt-calendar-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.gt-calendar-month{font-size:clamp(18px,3vw,24px);font-weight:900;letter-spacing:-.5px}
+.gt-calendar-arrows{display:flex;gap:6px}.gt-calendar-arrows button{width:38px;height:38px;border:1px solid #2b4269;border-radius:12px;color:#dbeafe;background:#12213d;font-size:20px}
+.gt-calendar-weekdays,.gt-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.gt-calendar-weekdays{margin-bottom:6px}.gt-calendar-weekdays span{text-align:center;font-size:10px;text-transform:uppercase;font-weight:800;color:#93a9ca;padding:6px 0}
+.gt-calendar-day{min-width:0;aspect-ratio:1/1;border:1px solid transparent;border-radius:13px;background:#111e36;color:#e7efff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-weight:750;font-size:13px;position:relative;padding:2px}
+.gt-calendar-day.outside{opacity:.35;background:transparent}.gt-calendar-day.today{border-color:#38bdf8}.gt-calendar-day.selected{background:linear-gradient(145deg,#0e7490,#3b82f6);color:white;border-color:#7dd3fc;box-shadow:0 6px 20px #0284c733}.gt-calendar-day .gt-cal-dot{width:5px;height:5px;border-radius:50%;background:#a5f3fc;display:block}.gt-calendar-day.has-workout:not(.selected) .gt-cal-dot{background:#38bdf8}
+.gt-calendar-selected{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid #233858;margin-top:13px;padding-top:14px}.gt-calendar-selected strong{display:block}.gt-calendar-selected small{display:block;color:var(--gc-muted);margin-top:4px}
+.gt-day-agenda{margin-top:12px;display:grid;gap:8px}.gt-agenda-item{display:flex;align-items:center;gap:10px;background:#111f39;border:1px solid #263c60;border-radius:13px;padding:12px}.gt-agenda-marker{width:9px;height:34px;flex:none;border-radius:20px;background:linear-gradient(#38bdf8,#818cf8)}.gt-agenda-copy{min-width:0;flex:1}.gt-agenda-copy strong{display:block;font-size:13px}.gt-agenda-copy small{color:var(--gc-muted)}
+#profile .gt-profile-overview{display:flex;align-items:center;gap:14px;padding:15px;border:1px solid #263c60;background:linear-gradient(145deg,#10203b,#0b1427);border-radius:18px;margin-bottom:13px}
+#profile .gt-profile-avatar{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,#38bdf8,#6366f1);color:#071326;font-size:22px;font-weight:950;flex:none}
+#profile .gt-profile-overview strong{font-size:17px;display:block}#profile .gt-profile-overview small{color:var(--gc-muted);line-height:1.5}
+#profile .gt-profile-section{border:1px solid #263a5a;background:linear-gradient(145deg,#0f1b32,#0b1425);border-radius:18px;padding:15px;margin:12px 0}
+#profile .gt-profile-section .profile-group-title{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:#7dd3fc;margin:0 0 14px;font-weight:900}
+#profile .gt-profile-section .grid{gap:10px}#profile .gt-profile-section .field{margin-bottom:10px}
+#profile .gt-profile-section .field:last-child{margin-bottom:0}
+#profile .gt-profile-section input,#profile .gt-profile-section select,#profile .gt-profile-section textarea{background:#0a1427;border-color:#283f63}
+#gtLiveCoach,#gtCoachInbox{max-width:840px;margin:10px auto}
+.gt-chat-hero{padding:18px;border-radius:20px;border:1px solid #24456e;background:radial-gradient(ellipse at 90% 0%,#173e67 0,transparent 48%),linear-gradient(135deg,#101d38,#0a1020);margin-bottom:12px}
+.gt-chat-hero h1{font-size:clamp(23px,4vw,32px);margin:8px 0}.gt-chat-hero p{color:#adbfdb;line-height:1.55;margin:6px 0 0}
+.gt-chat-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:12px;align-items:start}
+.gt-chat-side,.gt-chat-panel{border:1px solid #263c60;border-radius:18px;background:#0c1629;padding:13px;min-width:0}
+.gt-chat-status{padding:10px 11px;border-radius:12px;background:#10213a;color:#b9cbe6;font-size:12px;line-height:1.5;margin-bottom:10px}
+.gt-chat-thread-list{display:grid;gap:7px}.gt-chat-thread-button{width:100%;text-align:left;border:1px solid #273d60;background:#101e36;color:#e8f2ff;padding:11px;border-radius:12px}.gt-chat-thread-button.active{border-color:#38bdf8;background:#12304e}.gt-chat-thread-button strong{display:block;overflow-wrap:anywhere;font-size:13px}.gt-chat-thread-button small{display:block;color:#9fb0ce;margin-top:4px}
+.gt-chat-messages{height:min(52vh,520px);min-height:280px;overflow:auto;display:flex;flex-direction:column;gap:9px;padding:4px 1px 12px}
+.gt-live-message{max-width:88%;padding:11px 13px;border-radius:15px;background:#172742;border:1px solid #263c60;align-self:flex-start;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.5}
+.gt-live-message.mine{align-self:flex-end;background:linear-gradient(135deg,#075985,#1d4ed8);border-color:#3687cf;color:#fff}.gt-live-message small{display:block;opacity:.65;font-size:10px;margin-top:6px}
+.gt-chat-compose{display:flex;gap:8px;align-items:flex-end;border-top:1px solid #223652;padding-top:12px}.gt-chat-compose textarea{width:100%;resize:vertical;min-height:48px;max-height:140px;background:#091428;border:1px solid #294365;border-radius:13px;padding:12px;color:#f1f5ff;outline:none}.gt-chat-compose button{height:46px;white-space:nowrap}
+.gt-chat-empty{text-align:center;padding:35px 15px;color:#9fb0ce;line-height:1.6}.gt-chat-lock{padding:20px;border:1px solid #364766;border-radius:16px;background:#101e35;line-height:1.6;color:#bdcde5}
+#subscription .gt-sub-active{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}#subscription .gt-sub-active .pill{background:#123c36;color:#6ee7b7;border:1px solid #1c6256}
+@media(max-width:640px){.gt-chat-layout{grid-template-columns:1fr}.gt-chat-side{padding:10px}.gt-chat-thread-list{grid-template-columns:repeat(2,minmax(0,1fr))}.gt-chat-thread-button{padding:9px}.gt-calendar-day{border-radius:9px;font-size:12px}.gt-calendar-weekdays,.gt-calendar-grid{gap:3px}.gt-calendar-selected{align-items:flex-start;flex-direction:column}}
+</style>
+<script id="gt-live-coach-calendar-profile">
+(function(){
+ 'use strict';
+ const $=id=>document.getElementById(id);
+ const tr=(uk,en)=>((document.documentElement.lang||'uk').startsWith('en')?en:uk);
+ const state={plus:false,coach:false,subscription:null,role:null,currentThread:null,channel:null,accessMessage:'',calendarMonth:new Date(new Date().getFullYear(),new Date().getMonth(),1),calendarSelected:dateKey(new Date()),messages:[],busy:false};
+ function dateKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+ function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+ function client(){try{return typeof gtSupabase!=='undefined'?gtSupabase:null}catch(e){return null}}
+ function currentUser(){try{return typeof gtUser!=='undefined'?gtUser:null}catch(e){return null}}
+ function schedule(){try{return typeof gtSchedule!=='undefined'&&Array.isArray(gtSchedule)?gtSchedule:[]}catch(e){return []}}
+ function msgStatus(id,text){const n=$(id);if(n)n.textContent=text}
+ function addNavButton(id,label,icon,action){let b=document.querySelector(`#nav [data-page="${id}"]`);if(b)return b;b=document.createElement('button');b.dataset.page=id;b.type='button';b.innerHTML=`<span>${icon}</span><i>${label}</i>`;b.addEventListener('click',action);$('nav')?.appendChild(b);return b}
+ function renderAccessNav(){
+  const nav=$('nav');if(!nav)return;
+  addNavButton('calendar',tr('Календар','Calendar'),'▦',()=>window.showPage('calendar'));
+  let live=document.querySelector('#nav [data-page="coach-live"]'),inbox=document.querySelector('#nav [data-page="coach-inbox"]');
+  if(state.plus&&!state.coach){if(!live)live=addNavButton('coach-live',tr('Тренер','Coach'),'✉',()=>window.showPage('coach-live'));live.querySelector('i').textContent=tr('Тренер','Coach');}
+  else if(live)live.remove();
+  if(state.coach){if(!inbox)inbox=addNavButton('coach-inbox',tr('Клієнти','Clients'),'◉',()=>window.showPage('coach-inbox'));inbox.querySelector('i').textContent=tr('Клієнти','Clients');}
+  else if(inbox)inbox.remove();
+  document.querySelectorAll('#nav [data-page]').forEach(b=>{b.style.minWidth='0';b.style.flex='1 1 0'});
+ }
+ function activeNav(id){
+  const map={recommend:'training',library:'training',coach:'training',session:'training',calendar:'calendar','coach-live':'coach-live','coach-inbox':'coach-inbox',subscription:'subscription'};
+  const target=map[id]||id;
+  document.querySelectorAll('#nav [data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===target));
+ }
+ function mountChatPages(){
+  const main=document.querySelector('main');if(!main)return;
+  if(!$('coach-live')){const sec=document.createElement('section');sec.id='coach-live';sec.className='page';sec.innerHTML=`<div class="gt-chat-hero"><span class="eyebrow">GYMCOACH PLUS · LIVE COACHING</span><h1>${tr('Чат із живим тренером','Live coach chat')}</h1><p>${tr('Пиши мені щодо техніки вправ, розкладу та змін у плані. Я відповідаю особисто, коли переглядаю повідомлення.','Message me about exercise technique, schedule and plan adjustments. I reply personally when I review messages.')}</p></div><div class="gt-chat-layout"><aside class="gt-chat-side"><h3>${tr('Твій тренер','Your coach')}</h3><div class="gt-chat-status" id="gtLiveCoachStatus">${tr('Перевіряємо доступ…','Checking access…')}</div><p class="hint">${tr('Не надсилай паролі чи приватні дані. Відповідь може надійти не миттєво.','Do not send passwords or private data. Replies may not be immediate.')}</p></aside><div class="gt-chat-panel"><div class="gt-chat-messages" id="gtLiveCoachMessages"><div class="gt-chat-empty">${tr('Повідомлення з’являться тут.','Messages will appear here.')}</div></div><form id="gtLiveCoachForm" class="gt-chat-compose"><textarea id="gtLiveCoachInput" maxlength="2000" placeholder="${tr('Напиши тренеру…','Message your coach…')}" aria-label="${tr('Повідомлення тренеру','Message your coach')}"></textarea><button class="btn" id="gtLiveCoachSend" type="submit">${tr('Надіслати','Send')} ➤</button></form></div></div>`;main.insertBefore(sec,main.querySelector('.footer'));}
+  if(!$('coach-inbox')){const sec=document.createElement('section');sec.id='coach-inbox';sec.className='page';sec.innerHTML=`<div class="gt-chat-hero"><span class="eyebrow">GYMCOACH PLUS · COACH DESK</span><h1>${tr('Клієнти та повідомлення','Clients & messages')}</h1><p>${tr('Відкривай діалоги активних Plus-клієнтів і персонально коригуй їхні плани.','Open conversations from active Plus members and guide their plans personally.')}</p></div><div class="gt-chat-layout"><aside class="gt-chat-side"><h3>${tr('Діалоги','Conversations')}</h3><div class="gt-chat-status" id="gtCoachInboxStatus">${tr('Завантажуємо діалоги…','Loading conversations…')}</div><div class="gt-chat-thread-list" id="gtCoachThreads"></div></aside><div class="gt-chat-panel"><div id="gtCoachThreadTitle"><h3>${tr('Обери клієнта','Choose a client')}</h3></div><div class="gt-chat-messages" id="gtCoachMessages"><div class="gt-chat-empty">${tr('Тут буде листування з клієнтом.','Client messages will appear here.')}</div></div><form id="gtCoachReplyForm" class="gt-chat-compose"><textarea id="gtCoachReplyInput" maxlength="2000" placeholder="${tr('Відповідь клієнту…','Reply to client…')}" aria-label="${tr('Відповідь клієнту','Reply to client')}"></textarea><button class="btn" id="gtCoachReplySend" type="submit">${tr('Відповісти','Reply')} ➤</button></form></div></div>`;main.insertBefore(sec,main.querySelector('.footer'));}
+  $('gtLiveCoachForm')?.addEventListener('submit',e=>{e.preventDefault();sendLiveMessage()});
+  $('gtCoachReplyForm')?.addEventListener('submit',e=>{e.preventDefault();sendCoachReply()});
+ }
+ async function refreshAccess(){
+  const sb=client(),u=currentUser();
+  state.plus=false;state.coach=false;state.subscription=null;state.role=null;
+  if(!sb||!u){state.accessMessage=tr('Увійди в акаунт, щоб перевірити доступ до Plus.','Sign in to check Plus access.');renderAccessNav();renderCoachAccess();renderSubscriptionState();return;}
+  try{
+   const [subRes,roleRes]=await Promise.all([
+    sb.from('gt_subscriptions').select('user_id,status,plan,expires_at,starts_at').eq('user_id',u.id).maybeSingle(),
+    sb.from('gt_user_roles').select('user_id,role').eq('user_id',u.id).maybeSingle()
+   ]);
+   if(subRes.error)throw subRes.error;if(roleRes.error)throw roleRes.error;
+   state.subscription=subRes.data||null;state.role=roleRes.data||null;state.coach=state.role?.role==='coach';
+   const end=state.subscription?.expires_at?new Date(state.subscription.expires_at).getTime():Infinity;
+   const start=state.subscription?.starts_at?new Date(state.subscription.starts_at).getTime():0;
+   state.plus=(state.subscription?.status==='active'&&end>Date.now()&&start<=Date.now())||state.coach;
+   state.accessMessage=state.plus?tr('Доступ активний. Тут ти можеш напряму спілкуватися з тренером.','Access active. You can message your coach here.'):tr('Чат відкривається для активної підписки GymCoach Plus.','Live coach chat is available to active GymCoach Plus members.');
+  }catch(err){
+   state.accessMessage=tr('Не вдалося перевірити підписку. Переконайся, що застосовано файл SQL налаштування чату й підписок.','Could not check membership. Apply the chat/subscription SQL setup first.');
+   console.warn('GymCoach Plus access check:',err?.message||err);
+  }
+  renderAccessNav();renderCoachAccess();renderSubscriptionState();
+  if(state.plus||state.coach)connectRealtime();else disconnectRealtime();
+  if(state.coach)await renderInbox();else await loadLiveThread();
+ }
+ function renderCoachAccess(){
+  msgStatus('gtLiveCoachStatus',state.accessMessage||'');
+  const form=$('gtLiveCoachForm');if(form)form.style.display=state.plus&&!state.coach?'flex':'none';
+  const live=$('coach-live');if(live){let lock=$('gtCoachLock');if(!state.plus&&!lock){lock=document.createElement('div');lock.id='gtCoachLock';lock.className='gt-chat-lock';live.appendChild(lock)}if(lock){lock.style.display=state.plus?'none':'block';lock.innerHTML=tr('Потрібна активна підписка GymCoach Plus. Після підтвердження підписки тут з’явиться особистий чат із живим тренером.','An active GymCoach Plus membership is required. Once your subscription is confirmed, your personal live coach chat appears here.')}}
+  const compose=$('gtCoachReplyForm');if(compose)compose.style.display=state.coach?'flex':'none';
+  if($('gtCoachInboxStatus'))$('gtCoachInboxStatus').textContent=state.coach?tr('Показано діалоги активних Plus-клієнтів.','Showing conversations for active Plus members.'):tr('Цей розділ доступний тренеру.','This area is available to the coach account.');
+ }
+ function renderSubscriptionState(){
+  const page=$('subscription');if(!page||!page.innerHTML)return;
+  const pill=page.querySelector('.gt-sub-hero .pill');if(pill)pill.textContent=state.plus?tr('Поточний план: GymCoach Plus','Current plan: GymCoach Plus'):tr('Поточний план: Безкоштовний','Current plan: Free');
+  const premium=page.querySelector('.gt-sub-plan.featured .gt-sub-price');if(premium&&state.plus)premium.textContent=tr('АКТИВНА','ACTIVE');
+  const action=page.querySelector('.gt-sub-plan.featured button');if(action&&state.plus){action.textContent=tr('Відкрити чат із тренером →','Open live coach chat →');action.onclick=()=>window.showPage(state.coach?'coach-inbox':'coach-live')}
+  const note=page.querySelector('.gt-sub-note');if(note&&state.plus)note.textContent=tr('Підписка підтверджена в базі даних. Доступ до живого тренера відкритий.','Subscription confirmed in the database. Live coach access is enabled.');
+  page.querySelectorAll('.gt-sub-details').forEach(x=>x.remove());
+  const plusPlan=page.querySelector('.gt-sub-plan.featured ul');if(plusPlan&&!plusPlan.dataset.coachAdded){const li=document.createElement('li');li.textContent=tr('Особистий чат із живим тренером — прямі відповіді та коригування плану','Personal live coach chat — direct replies and plan adjustments');plusPlan.appendChild(li);plusPlan.dataset.coachAdded='1';}
+ }
+ async function loadLiveThread(){
+  const sb=client(),u=currentUser();const root=$('gtLiveCoachMessages');if(!root)return;
+  if(!state.plus||state.coach){root.innerHTML=`<div class="gt-chat-empty">${esc(tr('Особистий чат доступний користувачам Plus.','Personal chat is available to Plus members.'))}</div>`;return}
+  if(!sb||!u){root.innerHTML=`<div class="gt-chat-empty">${esc(tr('Увійди в акаунт, щоб написати тренеру.','Sign in to message your coach.'))}</div>`;return}
+  root.innerHTML=`<div class="gt-chat-empty">${esc(tr('Завантажуємо листування…','Loading conversation…'))}</div>`;
+  const {data,error}=await sb.from('gt_coach_messages').select('id,user_id,sender_id,sender_name,sender_email,body,created_at').eq('user_id',u.id).order('created_at',{ascending:true}).limit(300);
+  if(error){root.innerHTML=`<div class="gt-chat-empty">${esc(tr('Чат поки не підключено. Застосуй SQL-файл і перевір політики Supabase.','Chat is not connected yet. Apply the SQL file and check Supabase policies.'))}<br><small>${esc(error.message)}</small></div>`;return}
+  state.messages=data||[];renderMessages('gtLiveCoachMessages',state.messages,u.id);
+ }
+ function renderMessages(rootId,messages,customerId){
+  const root=$(rootId);if(!root)return;
+  const me=currentUser();
+  if(!messages?.length){root.innerHTML=`<div class="gt-chat-empty">${esc(tr('Поки немає повідомлень. Напиши, над чим хочеш попрацювати, або постав запитання про свій план.','No messages yet. Tell your coach what you want to work on or ask about your plan.'))}</div>`;return;}
+  root.innerHTML=messages.map(m=>{const mine=String(m.sender_id)===String(me?.id);const date=m.created_at?new Date(m.created_at):new Date();const sender=(m.sender_name|| (mine?tr('Ти','You'):tr('Тренер','Coach')));return `<div class="gt-live-message ${mine?'mine':''}">${esc(m.body)}<small>${esc(sender)} · ${esc(date.toLocaleString((document.documentElement.lang||'uk').startsWith('en')?'en-US':'uk-UA',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}))}</small></div>`}).join('');
+  root.scrollTop=root.scrollHeight;
+ }
+ async function sendLiveMessage(){
+  const sb=client(),u=currentUser(),input=$('gtLiveCoachInput'),btn=$('gtLiveCoachSend'),body=String(input?.value||'').trim();
+  if(!state.plus||state.coach||!sb||!u||!body||state.busy)return;
+  state.busy=true;if(btn)btn.disabled=true;
+  const row={user_id:u.id,sender_id:u.id,sender_name:profile?.name||u.email?.split('@')[0]||tr('Клієнт','Member'),sender_email:u.email||'',body:body.slice(0,2000)};
+  const {error}=await sb.from('gt_coach_messages').insert(row);
+  if(error){msgStatus('gtLiveCoachStatus',tr('Не вдалося надіслати. Перевір підписку й політики бази: ','Could not send. Check membership and database policies: ')+error.message)}else{input.value='';await loadLiveThread()}
+  state.busy=false;if(btn)btn.disabled=false;
+ }
+ async function renderInbox(){
+  const sb=client(),u=currentUser(),list=$('gtCoachThreads');if(!list)return;
+  if(!state.coach||!sb||!u){list.innerHTML='';return}
+  const {data,error}=await sb.from('gt_coach_messages').select('id,user_id,sender_id,sender_name,sender_email,body,created_at').order('created_at',{ascending:false}).limit(1000);
+  if(error){list.innerHTML=`<p class="hint">${esc(tr('Не вдалося завантажити діалоги: ','Could not load conversations: ')+error.message)}</p>`;return}
+  const groups=new Map();(data||[]).forEach(m=>{if(!groups.has(m.user_id))groups.set(m.user_id,{user_id:m.user_id,name:m.sender_name||m.sender_email||tr('Клієнт','Member'),email:m.sender_email||'',last:m,items:[]});const g=groups.get(m.user_id);g.items.push(m);if(m.sender_id===m.user_id){g.name=m.sender_name||g.name;g.email=m.sender_email||g.email;}});
+  state.inboxData=[...groups.values()].sort((a,b)=>String(b.last.created_at).localeCompare(String(a.last.created_at)));
+  list.innerHTML=state.inboxData.length?state.inboxData.map(g=>`<button class="gt-chat-thread-button ${String(state.currentThread)===String(g.user_id)?'active':''}" onclick="gtOpenCoachThread('${esc(g.user_id)}')"><strong>${esc(g.name)}</strong><small>${esc(g.email)}<br>${esc(String(g.last.body||'').slice(0,58))}</small></button>`).join(''):`<div class="gt-chat-empty">${esc(tr('Ще немає повідомлень від Plus-клієнтів.','No messages from Plus members yet.'))}</div>`;
+  if(state.currentThread)await loadCoachThread(state.currentThread);
+ }
+ window.gtOpenCoachThread=async function(id){state.currentThread=String(id);await renderInbox();};
+ async function loadCoachThread(id){
+  const sb=client(),root=$('gtCoachMessages'),u=currentUser();if(!sb||!state.coach||!root)return;
+  const info=(state.inboxData||[]).find(g=>String(g.user_id)===String(id));if($('gtCoachThreadTitle'))$('gtCoachThreadTitle').innerHTML=`<h3>${esc(info?.name||tr('Клієнт','Member'))}</h3><p class="hint">${esc(info?.email||'')}</p>`;
+  const {data,error}=await sb.from('gt_coach_messages').select('id,user_id,sender_id,sender_name,sender_email,body,created_at').eq('user_id',id).order('created_at',{ascending:true}).limit(300);
+  if(error){root.innerHTML=`<div class="gt-chat-empty">${esc(error.message)}</div>`;return}
+  state.messages=data||[];renderMessages('gtCoachMessages',state.messages,id);
+ }
+ async function sendCoachReply(){
+  const sb=client(),u=currentUser(),input=$('gtCoachReplyInput'),btn=$('gtCoachReplySend'),body=String(input?.value||'').trim();
+  if(!state.coach||!state.currentThread||!sb||!u||!body||state.busy)return;
+  state.busy=true;if(btn)btn.disabled=true;
+  const row={user_id:state.currentThread,sender_id:u.id,sender_name:tr('Живий тренер GymCoach','GymCoach live coach'),sender_email:u.email||'',body:body.slice(0,2000)};
+  const {error}=await sb.from('gt_coach_messages').insert(row);
+  if(error)msgStatus('gtCoachInboxStatus',tr('Не вдалося відповісти: ','Could not reply: ')+error.message);else{input.value='';await renderInbox()}
+  state.busy=false;if(btn)btn.disabled=false;
+ }
+ function connectRealtime(){
+  const sb=client(),u=currentUser();if(!sb||!u||!sb.channel)return;
+  disconnectRealtime();
+  const filter=state.coach?undefined:{filter:`user_id=eq.${u.id}`};
+  let channel=sb.channel('gt-coach-'+u.id+'-'+Date.now());
+  channel=channel.on('postgres_changes',{event:'*',schema:'public',table:'gt_coach_messages',...(filter||{})},async()=>{if(state.coach)await renderInbox();else await loadLiveThread()});
+  state.channel=channel.subscribe();
+ }
+ function disconnectRealtime(){const sb=client();if(sb&&state.channel){try{sb.removeChannel(state.channel)}catch(e){}state.channel=null}}
+ function mountModernCalendar(){
+  const sec=$('calendar');if(!sec||$('gtModernCalendar'))return;
+  const box=document.createElement('div');box.id='gtModernCalendar';box.className='gt-calendar-shell';
+  const titleCard=sec.querySelector('.section-head');if(titleCard)titleCard.insertAdjacentElement('afterend',box);else sec.prepend(box);
+  renderModernCalendar();
+ }
+ function renderModernCalendar(){
+  const root=$('gtModernCalendar');if(!root)return;
+  const en=(document.documentElement.lang||'uk').startsWith('en'),fmt=new Intl.DateTimeFormat(en?'en-US':'uk-UA',{month:'long',year:'numeric'});
+  const y=state.calendarMonth.getFullYear(),m=state.calendarMonth.getMonth();
+  const first=new Date(y,m,1),offset=(first.getDay()+6)%7,start=new Date(y,m,1-offset);
+  const tasks=schedule();const byDate=new Map();tasks.forEach(x=>{const k=String(x.date||'').slice(0,10);if(!byDate.has(k))byDate.set(k,[]);byDate.get(k).push(x)});
+  const selected=new Date(state.calendarSelected+'T12:00:00');const sessions=byDate.get(state.calendarSelected)||[];
+  const weekdays=en?['Mon','Tue','Wed','Thu','Fri','Sat','Sun']:['Пн','Вт','Ср','Чт','Пт','Сб','Нд'];
+  let days='';for(let i=0;i<42;i++){const d=new Date(start);d.setDate(start.getDate()+i);const k=dateKey(d),other=d.getMonth()!==m;days+=`<button type="button" class="gt-calendar-day ${other?'outside':''} ${k===dateKey(new Date())?'today':''} ${k===state.calendarSelected?'selected':''} ${byDate.has(k)?'has-workout':''}" data-cal-date="${k}" aria-label="${esc(d.toLocaleDateString(en?'en-US':'uk-UA',{weekday:'long',day:'numeric',month:'long'}))}"><span>${d.getDate()}</span>${byDate.has(k)?'<i class="gt-cal-dot"></i>':''}</button>`}
+  const selectedLabel=selected.toLocaleDateString(en?'en-US':'uk-UA',{weekday:'long',day:'numeric',month:'long'});
+  const sessionLabel=sessions.length?`${sessions.length} ${en?'scheduled session(s)':'запланованих занять'}`:(en?'No workout scheduled for this day':'На цей день тренувань поки немає');
+  const agendaHtml=sessions.length?sessions.map(x=>`<div class="gt-agenda-item"><span class="gt-agenda-marker"></span><div class="gt-agenda-copy"><strong>${esc(x.title|| (en?'Workout':'Тренування'))}</strong><small>${esc(x.details?.source==='plan'?(en?'From your plan':'Із твого плану'):(en?'Custom workout':'Власне тренування'))}</small></div></div>`).join(''):`<div class="hint" style="padding:8px 2px">${en?'Select another date or plan a workout for this day.':'Обери іншу дату або заплануй заняття на цей день.'}</div>`;
+  root.innerHTML=`<div class="gt-calendar-top"><div><div class="eyebrow">${en?'YOUR SCHEDULE':'ТВІЙ РОЗКЛАД'}</div><div class="gt-calendar-month">${esc(fmt.format(first))}</div></div><div class="gt-calendar-arrows"><button type="button" id="gtCalPrev" aria-label="Previous month">‹</button><button type="button" id="gtCalToday" aria-label="Today">•</button><button type="button" id="gtCalNext" aria-label="Next month">›</button></div></div><div class="gt-calendar-weekdays">${weekdays.map(d=>`<span>${d}</span>`).join('')}</div><div class="gt-calendar-grid">${days}</div><div class="gt-calendar-selected"><div><strong>${esc(selectedLabel)}</strong><small>${esc(sessionLabel)}</small></div><button type="button" class="btn" id="gtCalAdd">＋ ${en?'Plan a workout':'Запланувати тренування'}</button></div><div class="gt-day-agenda">${agendaHtml}</div>`;
+  $('gtCalPrev').onclick=()=>{state.calendarMonth=new Date(y,m-1,1);renderModernCalendar()};$('gtCalNext').onclick=()=>{state.calendarMonth=new Date(y,m+1,1);renderModernCalendar()};$('gtCalToday').onclick=()=>{const now=new Date();state.calendarMonth=new Date(now.getFullYear(),now.getMonth(),1);state.calendarSelected=dateKey(now);renderModernCalendar()};
+  root.querySelectorAll('[data-cal-date]').forEach(b=>b.addEventListener('click',()=>{state.calendarSelected=b.dataset.calDate;const d=new Date(state.calendarSelected+'T12:00:00');state.calendarMonth=new Date(d.getFullYear(),d.getMonth(),1);renderModernCalendar()}));
+  $('gtCalAdd').onclick=()=>{const date=$('gtScheduleDate');if(date)date.value=state.calendarSelected;const title=$('gtScheduleTitle');title?.focus();title?.scrollIntoView({behavior:'smooth',block:'center'})};
+ }
+ function improveProfile(){
+  const sec=$('profile'),card=sec?.querySelector('.card');if(!card||card.dataset.gtProfileStyled)return;
+  card.dataset.gtProfileStyled='1';
+  const overview=document.createElement('div');overview.className='gt-profile-overview';overview.innerHTML=`<div class="gt-profile-avatar">♙</div><div><strong id="gtProfileOverviewName">${esc(profile?.name||tr('Твій профіль','Your profile'))}</strong><small id="gtProfileOverviewMeta">${esc(profile?[`${profile.goal||''}`,`${profile.days||3} ${tr('днів/тиждень','days/week')}`,`${profile.duration||30} ${tr('хв','min')}`].filter(Boolean).join(' · '):tr('Персональні дані та умови тренувань','Personal details and training setup'))}</small></div>`;card.prepend(overview);
+  let current=null;const children=[...card.children];
+  children.forEach(node=>{
+   if(node===overview)return;
+   if(node.classList?.contains('profile-group-title')){current=document.createElement('section');current.className='gt-profile-section';card.insertBefore(current,node);current.appendChild(node);return;}
+   if(current&&node.tagName!=='BUTTON'&&node.classList?.contains('field')===true||current&&node.classList?.contains('grid')){current.appendChild(node);}
+  });
+  const sessionCard=sec.querySelectorAll(':scope > .card')[1];
+  if(sessionCard){const p=sessionCard.querySelector('p');if(p)p.textContent=tr('Керуй своїм входом до GymCoach. Дані синхронізуються з акаунтом, якщо хмарне сховище підключене.','Manage your GymCoach sign-in. Data syncs with your account when cloud storage is connected.');const h=sessionCard.querySelector('h3');if(h)h.textContent=tr('Акаунт','Account')}
+  const dataCard=sec.querySelectorAll(':scope > .card')[2];if(dataCard){const note=dataCard.querySelector('[data-i="dataNote"]');if(note)note.textContent=tr('Можеш експортувати копію своїх даних або скинути профіль і локальні дані цього браузера.','Export a copy of your data or reset the profile and local data in this browser.')}
+ }
+ function updateProfileOverview(){const n=$('gtProfileOverviewName'),m=$('gtProfileOverviewMeta');if(n)n.textContent=profile?.name||tr('Твій профіль','Your profile');if(m)m.textContent=profile?[profile.goal||'',`${profile.days||3} ${tr('днів/тиждень','days/week')}`,`${profile.duration||30} ${tr('хв','min')}`,profile.place||''].filter(Boolean).join(' · '):tr('Персональні дані та умови тренувань','Personal details and training setup')}
+ const oldFill=window.fillEditProfile;if(typeof oldFill==='function'&&!oldFill.__gtProfileOverview){const wrapped=function(){oldFill();updateProfileOverview()};wrapped.__gtProfileOverview=true;window.fillEditProfile=wrapped}
+ const oldGenerate=window.gtGenerateSchedule;if(typeof oldGenerate==='function'&&!oldGenerate.__gtOptimizedSchedule){const wrapped=async function(){if(!profile){window.showPage('setup');return}const plan=window.gtGetOptimizedPlan?.()||buildPlan();const start=new Date();start.setHours(12,0,0,0);const days=plan.days||[];if(!days.length){await oldGenerate();return}const made=[];let offset=1;for(let i=0;i<days.length;i++){const d=new Date(start);d.setDate(d.getDate()+offset);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);const date=gtTodayFrom(d);const item={title:String(days[i].title||`Workout ${i+1}`).replace(/^\d+\.\s*/,''),date,details:{source:'plan',dayIndex:i,exercises:(days[i].items||[]).map(x=>x[0])}};if(gtSupabase&&gtUser){const {data,error}=await gtSupabase.from('workout_schedule').insert({user_id:gtUser.id,title:item.title,scheduled_for:date,details:item.details}).select().single();if(error){alert('Не вдалося зберегти розклад: '+error.message);return}item.id=data.id}else item.id='local-'+Date.now()+'-'+i;made.push(item);offset+=Math.max(1,Math.floor(7/days.length))}gtSchedule=[...gtSchedule,...made];gtSaveLocalSchedule();gtRenderSchedule()};wrapped.__gtOptimizedSchedule=true;window.gtGenerateSchedule=wrapped}
+ const oldSchedule=window.gtRenderSchedule;if(typeof oldSchedule==='function'&&!oldSchedule.__gtModernCalendar){const wrapped=function(){oldSchedule();renderModernCalendar()};wrapped.__gtModernCalendar=true;window.gtRenderSchedule=wrapped}
+ const oldShow=window.showPage;if(typeof oldShow==='function'&&!oldShow.__gtCoachRoutes){const wrapped=function(id){if((id==='coach-live'&&!state.plus)||(id==='coach-inbox'&&!state.coach)){id='subscription'}oldShow(id);activeNav(id);if(id==='calendar'){mountModernCalendar();renderModernCalendar()}if(id==='subscription')refreshAccess();if(id==='coach-live'){renderCoachAccess();loadLiveThread()}if(id==='coach-inbox'){renderCoachAccess();renderInbox()}if(id==='profile'){improveProfile();updateProfileOverview()}};wrapped.__gtCoachRoutes=true;window.showPage=wrapped}
+ const oldSubscription=window.gtRenderSubscription;if(typeof oldSubscription==='function'&&!oldSubscription.__gtAccessWrapped){const wrapped=function(){oldSubscription();renderSubscriptionState()};wrapped.__gtAccessWrapped=true;window.gtRenderSubscription=wrapped}
+ function boot(){mountChatPages();mountModernCalendar();improveProfile();renderAccessNav();renderCoachAccess();
+  const sb=client();if(sb?.auth){sb.auth.getSession().then(({data})=>{if(data?.session)setTimeout(refreshAccess,0);else{state.plus=false;state.coach=false;renderAccessNav();renderCoachAccess()}}).catch(()=>{});sb.auth.onAuthStateChange((_event,session)=>{if(session)setTimeout(refreshAccess,0);else{disconnectRealtime();state.plus=false;state.coach=false;renderAccessNav();renderCoachAccess()}})}
+  else {state.accessMessage=tr('Система акаунтів не налаштована.','Account service is not configured.');renderCoachAccess()}
+  if($('subscription')?.classList.contains('active'))renderSubscriptionState();
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+ window.gtRefreshPlusAccess=refreshAccess;
 })();
 </script>
 
