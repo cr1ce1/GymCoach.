@@ -3857,12 +3857,12 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
     });
   }
   function scheduleWorkoutEnhancements(){
-    if(suggestionRepaintPending)return;suggestionRepaintPending=true;setTimeout(()=>{suggestionRepaintPending=false;decorateEffortFields();decorateRestTimeControls();renderProgressionSuggestions();patchDraftMetadata();},0);
+    if(suggestionRepaintPending)return;suggestionRepaintPending=true;setTimeout(()=>{suggestionRepaintPending=false;decorateEffortFields();renderProgressionSuggestions();patchDraftMetadata();},0);
   }
 
   // Hands-free training: auto-rest on a completed set, optional sound/vibration, screen wake lock.
   function hfKey(){return `gtai_handsfree_v1:${ownerKey()}`}
-  function getHF(){return {...{sound:true,vibrate:true,wake:true,autoRest:true},...readJSON(hfKey(),{})}}
+  function getHF(){return {...{sound:true,vibrate:true,wake:true,autoRest:false},...readJSON(hfKey(),{}),autoRest:false}}
   function saveHF(p){writeJSON(hfKey(),p)}
   function beep(){try{const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)return;const ctx=new Ctx();const osc=ctx.createOscillator(),gain=ctx.createGain();osc.type='sine';osc.frequency.value=880;gain.gain.value=.08;osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+.25);osc.onended=()=>ctx.close()}catch(_){} }
   async function requestWakeLock(){
@@ -3872,7 +3872,7 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
   async function releaseWakeLock(){try{if(wakeLock){await wakeLock.release();wakeLock=null}}catch(_){}}
   function ensureHandsFreePanel(){
     const timerCard=$('session')?.querySelector('.timer');if(!timerCard||$('gtV4HandsFree'))return;
-    const p=getHF();const box=document.createElement('div');box.id='gtV4HandsFree';box.className='gt-v4-handsfree';box.innerHTML=`<label><input type="checkbox" data-hf="autoRest" ${p.autoRest?'checked':''}> ${T('Автовідпочинок','Auto-rest')}</label><label><input type="checkbox" data-hf="sound" ${p.sound?'checked':''}> ${T('Звук','Sound')}</label><label><input type="checkbox" data-hf="vibrate" ${p.vibrate?'checked':''}> ${T('Вібрація','Vibration')}</label><button type="button" class="gt-v4-button" id="gtV4WakeLock">${T('Екран активний','Keep screen awake')}</button><small id="gtV4WakeStatus" class="hint" role="status">${T('Натисни кнопку, щоб дозволити утримання екрана (якщо підтримується).','Press to request an awake screen (if supported).')}</small>`;
+    const p=getHF();const box=document.createElement('div');box.id='gtV4HandsFree';box.className='gt-v4-handsfree';box.innerHTML=`<label><input type="checkbox" data-hf="sound" ${p.sound?'checked':''}> ${T('Звук','Sound')}</label><label><input type="checkbox" data-hf="vibrate" ${p.vibrate?'checked':''}> ${T('Вібрація','Vibration')}</label><button type="button" class="gt-v4-button" id="gtV4WakeLock">${T('Екран активний','Keep screen awake')}</button><small id="gtV4WakeStatus" class="hint" role="status">${T('Натисни кнопку, щоб дозволити утримання екрана (якщо підтримується).','Press to request an awake screen (if supported).')}</small>`;
     timerCard.appendChild(box);box.querySelectorAll('[data-hf]').forEach(inp=>inp.addEventListener('change',()=>{const next=getHF();next[inp.dataset.hf]=inp.checked;saveHF(next)}));$('gtV4WakeLock').addEventListener('click',async()=>{const ok=await requestWakeLock();$('gtV4WakeStatus').textContent=ok?T('Екран активний під час тренування.','Screen wake lock is active.'):T('Режим недоступний або не дозволений браузером.','Unavailable or denied by the browser.')});
   }
   function restCompletionFeedback(){const p=getHF();if(p.sound)beep();if(p.vibrate&&navigator.vibrate)try{navigator.vibrate([120,60,120])}catch(_){}toast(T('Відпочинок завершено. Можна починати наступний підхід.','Rest finished. You can begin the next set.'),'success')}
