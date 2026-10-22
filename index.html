@@ -1711,6 +1711,7 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
     const n=Number(value);
     if(field==='reps')e.setLogs[j].reps=Math.max(1,Math.min(100,Number.isFinite(n)?Math.round(n):1));
     else if(field==='weight')e.setLogs[j].weight=Math.max(0,Math.min(500,Number.isFinite(n)?n:0));
+    else if(field==='type'&&['warmup','working','backoff','dropset'].includes(String(value)))e.setLogs[j].type=String(value);
     syncExerciseLegacy(e);
   };
   window.gtWorkoutSetCount=function(i,value){
@@ -1719,7 +1720,7 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
     const n=Math.max(1,Math.min(10,Math.round(Number(value)||1)));
     const logs=Array.isArray(e.setLogs)?e.setLogs.slice():[];
     const avg=logs.length?Math.round(logs.reduce((s,x)=>s+(Number(x.reps)||0),0)/logs.length):10;
-    while(logs.length<n)logs.push({reps:avg,weight:logs.length?Number(logs[logs.length-1].weight)||0:0});
+    while(logs.length<n)logs.push({reps:avg,weight:logs.length?Number(logs[logs.length-1].weight)||0:0,type:'working'});
     logs.length=n;e.setLogs=logs;syncExerciseLegacy(e);renderExerciseLoggerPreserveData();
   };
   function renderExerciseLoggerPreserveData(){
@@ -3195,12 +3196,12 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
     if(!normalized.length){alert(T('У цьому тренуванні немає вправ.','There are no exercises in this workout.'));return false;}
     try{window.GT_FORCE_SESSION_ITEMS=null;window.startWorkout?.(name);}catch(err){console.warn('Existing workout launcher could not start:',err?.message||err)}
     currentWorkout=String(name||T('Тренування','Workout'));currentExercises=normalized.map(e=>[e.name,e.prescription]);window.GTEditingTemplateId=editingTemplateId;
-    const detailed=window.GT_PLUS_ACCESS===true;
+    const detailed=true; // Per-set reps and weight entry is available to every user.
     gtSessionExerciseData=normalized.map(e=>{const d=parseRepsPrescription(e.prescription);const setLogs=detailed?Array.from({length:d.sets},()=>({reps:d.reps,weight:0,completed:false,edited:false})):[];return {...e,sets:d.sets,reps:d.reps,weight:0,completed:false,notes:'',setLogs};});
     const host=$('exerciseList');if(!host)return false;
     host.innerHTML=gtSessionExerciseData.map((e,i)=>{
-      const rows=(e.setLogs||[]).map((set,j)=>`<div class="gt-set-row"><span class="gt-set-number">${T('Підхід','Set')} ${j+1}</span><label>${T('Повторення','Reps')}<input type="number" inputmode="numeric" min="1" max="100" value="${set.reps}" onchange="gtWorkoutSetChange(${i},${j},'reps',this.value)"></label><label>${T('Вага, кг','Weight, kg')}<input type="number" inputmode="decimal" min="0" max="500" step="0.5" value="${set.weight}" onchange="gtWorkoutSetChange(${i},${j},'weight',this.value)"></label></div>`).join('');
-      return `<div class="session-row gt-logged-exercise" data-session-index="${i}" data-exercise="${esc(e.name)}"><div class="session-main"><div class="gt-session-exercise-heading"><input class="gt-session-completion" type="checkbox" aria-label="${T('Вправу виконано','Exercise completed')}" onchange="gtToggleExerciseDone(${i},this.checked)"><div class="details"><b class="session-ex-name">${esc(e.name)}</b><small style="display:block;color:var(--muted);margin-top:4px">${esc(e.prescription)}</small></div></div><div class="gt-set-count-row">${detailed?`<label>${T('Кількість підходів','Number of sets')}<input type="number" min="1" max="10" value="${e.setLogs.length}" onchange="gtWorkoutSetCount(${i},this.value)"></label>`:''}<button type="button" class="chip" onclick="gtSubstitute(${i})">↻ ${T('Замінити вправу','Substitute exercise')}</button></div><div class="gt-set-log-panel">${detailed?`<h4>${T('Результат кожного підходу','Each set result')}</h4>${rows}`:''}</div></div></div>`;
+      const rows=(e.setLogs||[]).map((set,j)=>`<div class="gt-set-row"><span class="gt-set-number">${T('Підхід','Set')} ${j+1}</span><label>${T('Повторення','Reps')}<input aria-label="${T('Повторення','Reps')}" type="number" inputmode="numeric" min="1" max="100" value="${set.reps}" onchange="gtWorkoutSetChange(${i},${j},'reps',this.value)"></label><label>${T('Вага, кг','Weight, kg')}<input aria-label="${T('Вага в кілограмах','Weight in kilograms')}" type="number" inputmode="decimal" min="0" max="500" step="0.5" value="${set.weight||''}" placeholder="0" onchange="gtWorkoutSetChange(${i},${j},'weight',this.value)"></label><label class="gt-set-type-label">${T('Тип підходу','Set type')}<select aria-label="${T('Тип підходу','Set type')}" onchange="gtWorkoutSetChange(${i},${j},'type',this.value)"><option value="warmup" ${(set.type||'working')==='warmup'?'selected':''}>${T('Розминка','Warm-up')}</option><option value="working" ${(set.type||'working')==='working'?'selected':''}>${T('Робочий','Working')}</option></select></label></div>`).join('');
+      return `<div class="session-row gt-logged-exercise" data-session-index="${i}" data-exercise="${esc(e.name)}"><div class="session-main"><div class="gt-session-exercise-heading"><input class="gt-session-completion" type="checkbox" aria-label="${T('Вправу виконано','Exercise completed')}" onchange="gtToggleExerciseDone(${i},this.checked)"><div class="details"><b class="session-ex-name">${esc(e.name)}</b><small style="display:block;color:var(--muted);margin-top:4px">${esc(e.prescription)}</small></div></div><div class="gt-set-count-row">${detailed?`<label>${T('Кількість підходів','Number of sets')}<input type="number" min="1" max="10" value="${e.setLogs.length}" onchange="gtWorkoutSetCount(${i},this.value)"></label>`:''}<button type="button" class="chip" onclick="gtSubstitute(${i})">↻ ${T('Замінити вправу','Substitute exercise')}</button></div><div class="gt-set-log-panel">${detailed?`<h4>${T('Вага та повторення для кожного підходу','Weight and reps for each set')}</h4><p class="gt-weight-help">${T('Введи вагу в кг навпроти кожного підходу. Обери «Розминка» або «Робочий»; дані збережуться разом із тренуванням.','Enter the load in kg for each set. Choose “Warm-up” or “Working”; the values are saved with the workout.')}</p>${rows}`:''}</div></div></div>`;
     }).join('');
     if($('sessionTitle'))$('sessionTitle').textContent=currentWorkout;
     window.showPage?.('session');try{setTimer(90)}catch(_){};renderSessionExtras();installDragReorder();persistDraftNow();return true;
@@ -3283,7 +3284,7 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
   function workoutSummary(w){
     const exercises=Array.isArray(w?.exercises)?w.exercises:[];
     const marked=exercises.filter(e=>e.completed||(e.setLogs||[]).some(s=>s.completed)).length;
-    const detailed=window.GT_PLUS_ACCESS===true;
+    const detailed=true; // Per-set reps and weight entry is available to every user.
     const sets=detailed?allSetRows(w,null):[];
     return {date:w?.date||'',name:w?.name||T('Тренування','Workout'),minutes:Math.max(0,Number(w?.duration_minutes||w?.minutes)||0),exercises:marked,sets:sets.length,reps:sets.reduce((a,s)=>a+s.reps,0),volume:sets.reduce((a,s)=>a+s.volume,0),detailed};
   }
@@ -3979,6 +3980,11 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
 #session .gt-set-row{grid-template-columns:76px minmax(0,1fr) minmax(0,1fr)!important;gap:10px!important;padding:11px 0!important;border-color:rgba(190,220,170,.11)!important}
 #session .gt-set-row input,#session .gt-set-count-row input,#session .gt-v4-effort input,#session .gt-v4-effort select{border-radius:12px!important;min-height:42px!important;background:#101811!important;border:1px solid rgba(190,220,170,.22)!important;color:#f4f7f2!important;font-size:15px!important}
 #session .gt-set-number{padding-bottom:13px;font-size:13px;color:#d6e4cf}
+#session .gt-set-row{grid-template-columns:64px minmax(85px,1fr) minmax(95px,1fr) minmax(110px,1fr)!important;align-items:end!important}
+#session .gt-set-row label{display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--gt-modern-muted)}
+#session .gt-set-row select{width:100%;min-height:42px;border-radius:12px!important;background:#101811!important;color:#f4f7f2!important;border:1px solid rgba(190,220,170,.22)!important}
+#session .gt-weight-help{font-size:12px;line-height:1.5;color:var(--gt-modern-muted);margin:0 0 10px}
+@media(max-width:520px){#session .gt-set-row{grid-template-columns:48px minmax(0,1fr) minmax(0,1fr)!important}#session .gt-set-type-label{grid-column:2/4} }
 #session .gt-set-log-panel h4{font-size:13px;color:#d6e4cf;letter-spacing:.2px}
 #session .gt-v4-progression{border:1px solid rgba(184,243,75,.3)!important;border-radius:15px!important;background:linear-gradient(135deg,rgba(184,243,75,.09),rgba(184,243,75,.025))!important;padding:14px!important;margin:12px 0!important;line-height:1.6!important}
 #session .gt-v4-progression strong{display:block;font-size:14px;color:#d8f6a7;margin-bottom:6px}
@@ -4026,6 +4032,31 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
    document.addEventListener('visibilitychange',()=>{if(!document.hidden){addDayNote();enhanceLibrary()}});
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
+
+<style id="gt-profile-exercise-weight-style">
+#gtProfileWeightCard{margin-top:16px}#gtProfileWeightCard .gt-weight-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#gtProfileWeightCard .gt-weight-form .wide{grid-column:1/-1}#gtProfileWeightCard input,#gtProfileWeightCard select{width:100%;box-sizing:border-box}#gtProfileWeightCard .gt-weight-record{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px;border:1px solid var(--line,#26364a);border-radius:12px;margin-top:8px;background:var(--panel2,#101827)}#gtProfileWeightCard .gt-weight-record small{display:block;color:var(--muted,#9aa8b8);margin-top:4px}#gtProfileWeightCard .gt-weight-empty{color:var(--muted,#9aa8b8);padding:12px 0}@media(max-width:520px){#gtProfileWeightCard .gt-weight-form{grid-template-columns:1fr}}
+</style>
+<script id="gt-profile-exercise-weight-log-v9">
+(function(){
+ 'use strict'; if(window.__GT_PROFILE_WEIGHT_LOG_V9__)return;window.__GT_PROFILE_WEIGHT_LOG_V9__=true;
+ const KEY='gtai_profile_exercise_weights_v1'; const $=id=>document.getElementById(id);
+ const en=()=>String(document.documentElement.lang||'uk').toLowerCase().startsWith('en')||(typeof lang!=='undefined'&&lang==='en');
+ const t=(uk,eng)=>en()?eng:uk;
+ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const read=()=>{try{let x=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(x)?x:[]}catch(_){return []}};
+ const write=x=>{try{localStorage.setItem(KEY,JSON.stringify(x));return true}catch(_){return false}};
+ function mount(){const profile=$('profile');if(!profile||$('gtProfileWeightCard'))return;
+  const card=document.createElement('div');card.className='card';card.id='gtProfileWeightCard';
+  card.innerHTML=`<div class="profile-group-title">${t('Ваги для вправ','Exercise weights')}</div><p class="hint">${t('Записуй робочу або розминкову вагу для кожної вправи. Нижче можна шукати свої попередні записи.','Record working or warm-up weight for each exercise and search your saved entries below.')}</p><form id="gtProfileWeightForm" class="gt-weight-form"><div class="field wide"><label for="gtWeightExercise">${t('Назва вправи','Exercise name')}</label><input id="gtWeightExercise" required maxlength="100" placeholder="${t('Наприклад, жим лежачи','e.g. Bench press')}" /></div><div class="field"><label for="gtWeightKg">${t('Вага, кг','Weight, kg')}</label><input id="gtWeightKg" required type="number" min="0" max="500" step="0.5" placeholder="60" /></div><div class="field"><label for="gtWeightType">${t('Тип підходу','Set type')}</label><select id="gtWeightType"><option value="working">${t('Робоча','Working')}</option><option value="warmup">${t('Розминка','Warm-up')}</option></select></div><div class="field"><label for="gtWeightReps">${t('Повторення','Reps')}</label><input id="gtWeightReps" type="number" min="1" max="100" placeholder="10" /></div><div class="field"><label for="gtWeightDate">${t('Дата','Date')}</label><input id="gtWeightDate" type="date" value="${new Date().toISOString().slice(0,10)}" required /></div><div class="field wide"><label for="gtWeightSearch">${t('Знайти вправу в записах','Search exercise records')}</label><input id="gtWeightSearch" placeholder="${t('Почни вводити назву вправи…','Type an exercise name…')}" /></div><div class="wide"><button class="btn primary" type="submit">${t('＋ Зберегти вагу','＋ Save weight')}</button></div></form><div id="gtProfileWeightRecords" aria-live="polite"></div>`;
+  const anchor=profile.querySelector('.card'); if(anchor&&anchor.nextSibling)profile.insertBefore(card,anchor.nextSibling);else profile.appendChild(card);
+  $('gtProfileWeightForm').addEventListener('submit',e=>{e.preventDefault();const name=$('gtWeightExercise').value.trim(),weight=Number($('gtWeightKg').value);if(!name||!Number.isFinite(weight)||weight<0)return;const rows=read();rows.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),name,weight,type:$('gtWeightType').value,reps:$('gtWeightReps').value?Number($('gtWeightReps').value):null,date:$('gtWeightDate').value||new Date().toISOString().slice(0,10),savedAt:new Date().toISOString()});if(write(rows)){ $('gtWeightExercise').value='';$('gtWeightKg').value='';$('gtWeightReps').value='';render();} });
+  $('gtWeightSearch').addEventListener('input',render);render();
+ }
+ function render(){const root=$('gtProfileWeightRecords');if(!root)return;const q=($('gtWeightSearch')?.value||'').trim().toLocaleLowerCase();const rows=read().filter(r=>String(r.name||'').toLocaleLowerCase().includes(q));if(!rows.length){root.innerHTML=`<div class="gt-weight-empty">${t('Записів поки немає. Додай першу вагу вище.','No entries yet. Add your first weight above.')}</div>`;return;}root.innerHTML=rows.map(r=>`<div class="gt-weight-record"><div><strong>${esc(r.name)}</strong><small>${esc(r.date||'')} · ${r.type==='warmup'?t('Розминка','Warm-up'):t('Робоча','Working')}${r.reps?` · ${esc(r.reps)} ${t('повт.','reps')}`:''}</small></div><div><strong>${esc(r.weight)} ${t('кг','kg')}</strong><button type="button" class="btn secondary" data-gt-weight-delete="${esc(r.id)}" style="margin-left:8px;padding:6px 9px">${t('Видалити','Delete')}</button></div></div>`).join('');root.querySelectorAll('[data-gt-weight-delete]').forEach(b=>b.addEventListener('click',()=>{write(read().filter(r=>r.id!==b.dataset.gtWeightDelete));render()}));}
+ document.addEventListener('DOMContentLoaded',mount);if(document.readyState!=='loading')mount();
 })();
 </script>
 
