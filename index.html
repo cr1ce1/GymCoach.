@@ -3964,4 +3964,63 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
 })();
 
 </script>
+<style id="gt-modern-training-ui">
+:root{--gt-modern-ink:#f4f7f2;--gt-modern-muted:#a6b2a4;--gt-modern-line:rgba(190,220,170,.16);--gt-modern-card:linear-gradient(145deg,rgba(30,42,31,.96),rgba(17,25,19,.98));}
+#session .gt-logged-exercise{border:1px solid var(--gt-modern-line)!important;border-radius:20px!important;padding:16px!important;margin:14px 0!important;background:var(--gt-modern-card)!important;box-shadow:0 12px 32px rgba(0,0,0,.14)!important;overflow:hidden}
+#session .gt-session-exercise-heading b{font-size:16px;letter-spacing:-.2px;color:var(--gt-modern-ink)}
+#session .gt-session-exercise-heading small{font-size:12px;line-height:1.5}
+#session .gt-set-log-panel{background:rgba(4,10,6,.26)!important;border-color:var(--gt-modern-line)!important;border-radius:15px!important;padding:12px!important}
+#session .gt-set-row{grid-template-columns:76px minmax(0,1fr) minmax(0,1fr)!important;gap:10px!important;padding:11px 0!important;border-color:rgba(190,220,170,.11)!important}
+#session .gt-set-row input,#session .gt-set-count-row input,#session .gt-v4-effort input,#session .gt-v4-effort select{border-radius:12px!important;min-height:42px!important;background:#101811!important;border:1px solid rgba(190,220,170,.22)!important;color:#f4f7f2!important;font-size:15px!important}
+#session .gt-set-number{padding-bottom:13px;font-size:13px;color:#d6e4cf}
+#session .gt-set-log-panel h4{font-size:13px;color:#d6e4cf;letter-spacing:.2px}
+#session .gt-v4-progression{border:1px solid rgba(184,243,75,.3)!important;border-radius:15px!important;background:linear-gradient(135deg,rgba(184,243,75,.09),rgba(184,243,75,.025))!important;padding:14px!important;margin:12px 0!important;line-height:1.6!important}
+#session .gt-v4-progression strong{display:block;font-size:14px;color:#d8f6a7;margin-bottom:6px}
+#session .gt-v4-progression button,#session .gt-v4-button{border-radius:12px!important;min-height:40px;padding:10px 14px!important;font-weight:750!important}
+#gtWorkoutDayNote{margin:14px 0 18px;padding:16px;border-radius:19px;border:1px solid rgba(184,243,75,.24);background:linear-gradient(140deg,rgba(184,243,75,.08),rgba(25,38,27,.75));}
+#gtWorkoutDayNote .gt-note-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+#gtWorkoutDayNote .gt-note-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:13px;background:rgba(184,243,75,.13);font-size:19px}
+#gtWorkoutDayNote strong{font-size:15px;color:var(--gt-modern-ink)}
+#gtWorkoutDayNote p{margin:2px 0 10px;font-size:12px;color:var(--gt-modern-muted);line-height:1.5}
+#gtWorkoutDayNote textarea{width:100%;box-sizing:border-box;resize:vertical;min-height:94px;padding:13px 14px;border-radius:13px;border:1px solid rgba(190,220,170,.2);background:#101811;color:#f4f7f2;font:inherit;line-height:1.5;outline:none}
+#gtWorkoutDayNote textarea:focus{border-color:#b8f34b;box-shadow:0 0 0 3px rgba(184,243,75,.1)}
+#gtWorkoutDayNote .gt-note-status{display:block;min-height:16px;margin-top:6px;font-size:11px;color:#b8f34b}
+#gtCustomExerciseEditor{border:1px solid rgba(184,243,75,.3)!important;border-radius:20px!important;background:linear-gradient(145deg,rgba(184,243,75,.09),rgba(21,31,22,.96))!important;padding:20px!important;margin:16px 0!important;box-shadow:0 14px 35px rgba(0,0,0,.13)}
+#gtCustomExerciseEditor h3{font-size:20px!important;letter-spacing:-.4px;margin-top:0!important}
+#gtCustomExerciseEditor .gt-custom-save{border-radius:12px!important;padding:12px 16px!important;font-weight:800!important;min-height:44px}
+#gtCustomExerciseEditor input,#gtCustomExerciseEditor select,#gtCustomExerciseEditor textarea{border-radius:12px!important;min-height:42px}
+#gtLibraryAddExerciseJump{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 15px;margin:0 0 14px;border:1px solid rgba(184,243,75,.26);border-radius:15px;background:rgba(184,243,75,.07)}
+#gtLibraryAddExerciseJump span{font-size:13px;line-height:1.45;color:var(--gt-modern-ink)}
+#gtLibraryAddExerciseJump button{border:0;border-radius:11px;background:#b8f34b;color:#11190a;font-weight:800;padding:11px 14px;cursor:pointer}
+@media(max-width:520px){#session .gt-logged-exercise{padding:12px!important;border-radius:16px!important}#session .gt-set-row{grid-template-columns:56px minmax(0,1fr) minmax(0,1fr)!important;gap:7px!important}#session .gt-set-row input{padding:8px 6px!important}#gtWorkoutDayNote{padding:13px}}
+</style>
+<script id="gt-modern-training-ui-script">
+(()=>{
+ const $=id=>document.getElementById(id);
+ const tr=(uk,en)=>document.documentElement.lang?.toLowerCase().startsWith('en')?en:uk;
+ const owner=()=>{try{return window.gtUser?.id||window.GT_USER?.id||localStorage.getItem('gtai_user_id')||'local'}catch(_){return'local'}};
+ const noteKey=()=>`gtai_workout_day_note_v1:${owner()}:${String(window.currentWorkout||'Workout').trim().toLowerCase()}`;
+ let noteTimer=null;
+ function addDayNote(){
+   const session=$('session'),list=$('exerciseList');if(!session||!list||!session.classList.contains('active'))return;
+   let card=$('gtWorkoutDayNote');if(!card){card=document.createElement('section');card.id='gtWorkoutDayNote';card.innerHTML=`<div class="gt-note-head"><span class="gt-note-icon">✎</span><div><strong>${tr('Нотатка до тренування','Workout note')}</strong><p>${tr('Занотуй самопочуття, ціль або підказку на сьогодні. Збережеться автоматично.','Record how you feel, today’s goal, or a technique cue. Saves automatically.')}</p></div></div><textarea id="gtWorkoutDayNoteInput" maxlength="3000" placeholder="${tr('Наприклад: тримати техніку, не поспішати, плече без дискомфорту…','E.g. focus on form, keep a steady pace, shoulder feels comfortable…')}"></textarea><small class="gt-note-status" id="gtWorkoutDayNoteStatus" role="status"></small>`;
+     list.insertAdjacentElement('beforebegin',card);
+     const input=$('gtWorkoutDayNoteInput');input.addEventListener('input',()=>{if(noteTimer)clearTimeout(noteTimer);$('gtWorkoutDayNoteStatus').textContent=tr('Збереження…','Saving…');noteTimer=setTimeout(()=>{try{localStorage.setItem(noteKey(),input.value);$('gtWorkoutDayNoteStatus').textContent=tr('Збережено на цьому пристрої','Saved on this device')}catch(_){$('gtWorkoutDayNoteStatus').textContent=tr('Не вдалося зберегти нотатку','Could not save note')}},250)});
+   }
+   const input=$('gtWorkoutDayNoteInput');if(input&&document.activeElement!==input){try{input.value=localStorage.getItem(noteKey())||''}catch(_){}}
+ }
+ function enhanceLibrary(){
+   const page=$('library'),editor=$('gtCustomExerciseEditor');if(!page||!editor)return;
+   if(!$('gtLibraryAddExerciseJump')){const jump=document.createElement('div');jump.id='gtLibraryAddExerciseJump';jump.innerHTML=`<span><b>${tr('Не знайшов потрібну вправу?','Can’t find the exercise you need?')}</b><br>${tr('Створи власну та додай її до своєї бібліотеки.','Create your own and add it to your library.')}</span><button type="button">＋ ${tr('Додати вправу','Add exercise')}</button>`;editor.insertAdjacentElement('beforebegin',jump);jump.querySelector('button').addEventListener('click',()=>{editor.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>$('gtCustomExerciseName')?.focus({preventScroll:true}),250)})}
+ }
+ function init(){
+   const session=$('session');if(session){const mo=new MutationObserver(()=>{if(session.classList.contains('active'))addDayNote()});mo.observe(session,{attributes:true,attributeFilter:['class']});const list=$('exerciseList');if(list)new MutationObserver(()=>{if(session.classList.contains('active'))addDayNote()}).observe(list,{childList:true,subtree:false});if(session.classList.contains('active'))addDayNote()}
+   const lib=$('library');if(lib){new MutationObserver(()=>enhanceLibrary()).observe(lib,{childList:true,subtree:true});enhanceLibrary()}
+   const original=window.showPage;if(typeof original==='function'&&!original.__gtModernNoteHook){const wrapped=function(id,...args){const result=original.apply(this,[id,...args]);setTimeout(()=>{if(id==='session')addDayNote();if(id==='library')enhanceLibrary()},100);return result};wrapped.__gtModernNoteHook=true;window.showPage=wrapped;try{showPage=wrapped}catch(_){}}
+   document.addEventListener('visibilitychange',()=>{if(!document.hidden){addDayNote();enhanceLibrary()}});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+
 </body></html>
