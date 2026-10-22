@@ -212,6 +212,10 @@ body{background:radial-gradient(ellipse at 50% -20%,#14264a 0,transparent 48%),v
 @media(max-width:520px){#gtHomeBjuCard .gt-home-bju-grid{gap:6px}#gtHomeBjuCard .gt-home-bju-item{padding:8px}#gtHomeBjuCard .gt-home-bju-item small{font-size:10px}.th-template-actions button{flex-basis:100%}}
 </style>
 
+<style id="gtai-no-rest-after-exercise">
+/* User preference: remove the rest timer from the workout screen. */
+#session .timer, #session #gtV4HandsFree { display: none !important; }
+</style>
 </head>
 <body>
 <div aria-labelledby="authTitle" aria-modal="true" id="authGate" role="dialog">
@@ -3876,6 +3880,8 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
     if(window.__GTAI_V4_ALERT_WRAPPED)return;const original=window.alert.bind(window);window.__GTAI_V4_ALERT_WRAPPED=true;window.alert=function(message){const m=String(message||'');if(/rest time is over|час відпочинку завершено/i.test(m)){restCompletionFeedback();return}return original(message)};
   }
   function autoStartRestFromSet(event){
+    // Rest after a set/exercise is disabled per user request.
+    return;
     const cb=event.target;if(!cb?.matches?.('[data-gt-set-done]')||!cb.checked)return;
     const hf=getHF();if(!hf.autoRest)return;
     const bar=cb.closest('.gt-set-extra'),row=cb.closest('.gt-logged-exercise');if(!bar||!row)return;
