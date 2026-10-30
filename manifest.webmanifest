@@ -1,6 +1,6 @@
 {
-  "name": "GymCoach AI — персональний фітнес-помічник",
-  "short_name": "GymCoach AI",
+  "name": "GymCoach",
+  "short_name": "GymCoach",
   "description": "Тренування, харчування та прогрес в одному місці.",
   "start_url": "./",
   "scope": "./",
