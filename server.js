@@ -78,4 +78,17 @@ app.get('/api/health', (_req, res) => res.json({ ok: true, authConfigured: Boole
 app.get('/', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/index.html', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/config.js', (_req, res) => res.sendFile(path.join(__dirname, 'config.js')));
-app.listen(port, () => console.log(`GYM TRAINER AI listening on ${port}`));
+app.get('/manifest.webmanifest', (_req, res) => {
+  res.type('application/manifest+json');
+  res.sendFile(path.join(__dirname, 'manifest.webmanifest'));
+});
+app.get('/strenova-icon-512.png', (_req, res) => {
+  res.type('image/png');
+  res.sendFile(path.join(__dirname, 'strenova-icon-512.png'));
+});
+app.get('/sw.js', (_req, res) => {
+  res.set('Cache-Control', 'no-cache');
+  res.type('application/javascript');
+  res.sendFile(path.join(__dirname, 'sw.js'));
+});
+app.listen(port, () => console.log(`STRENOVA server listening on ${port}`));
