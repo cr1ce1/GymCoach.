@@ -5981,4 +5981,95 @@ body.st-app-shell #nav>button.st-nav-primary:focus-visible{outline:2px solid #D9
 }
 @media(max-width:360px){#stInstallGuide .st-install-dialog{padding-left:12px!important;padding-right:12px!important}.st-install-stage{padding:7px}.st-install-visual{min-height:190px;max-height:200px}.st-install-phone-svg{height:195px;max-height:195px}.st-install-controls{gap:7px}.st-install-controls button{font-size:12px}}
 </style>
+<script id="st-navigation-runtime-repair">
+(function(){
+  'use strict';
+  if (window.__stNavigationRuntimeRepair) return;
+  window.__stNavigationRuntimeRepair = true;
+
+  const nav = document.getElementById('nav');
+  const previousShowPage = window.showPage;
+
+  function markNavigation(id) {
+    if (!nav) return;
+    let key = id;
+    if (['recommend', 'session'].includes(id)) key = 'training';
+    if (['coach', 'coach-live', 'coach-inbox'].includes(id)) key = 'coach';
+    nav.querySelectorAll('button[data-page]').forEach(function(button) {
+      const active = button.dataset.page === key;
+      button.classList.toggle('active', active);
+      if (active) button.setAttribute('aria-current', 'page');
+      else button.removeAttribute('aria-current');
+    });
+  }
+
+  function activatePage(id) {
+    const target = document.getElementById(id);
+    if (!target) return false;
+
+    document.querySelectorAll('.page.active').forEach(function(page) {
+      page.classList.remove('active');
+    });
+
+    if (target.classList.contains('page')) {
+      target.classList.add('active');
+    } else {
+      const parentPage = target.closest('.page');
+      if (parentPage) parentPage.classList.add('active');
+    }
+
+    if (nav) nav.style.display = id === 'setup' ? 'none' : 'flex';
+    markNavigation(id);
+    return true;
+  }
+
+  window.showPage = function(id) {
+    const args = Array.prototype.slice.call(arguments, 1);
+    const route = id === 'training' ? 'recommend' : id;
+
+    if (id === 'calendar') {
+      let result;
+      try {
+        if (typeof previousShowPage === 'function') {
+          result = previousShowPage.apply(this, ['profile'].concat(args));
+        }
+      } catch (error) {
+        console.error('Navigation fallback: profile', error);
+      }
+      activatePage('profile');
+      const openCalendar = function() {
+        const calendar = document.getElementById('calendar');
+        if (calendar) {
+          markNavigation('calendar');
+          calendar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      };
+      requestAnimationFrame(function() {
+        requestAnimationFrame(openCalendar);
+      });
+      setTimeout(openCalendar, 220);
+      return result;
+    }
+
+    let result;
+    try {
+      if (typeof previousShowPage === 'function') {
+        result = previousShowPage.apply(this, [route].concat(args));
+      }
+    } catch (error) {
+      console.error('Navigation fallback:', route, error);
+    }
+
+    if (!activatePage(route)) {
+      console.warn('Navigation target does not exist:', route);
+      return result;
+    }
+
+    try {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (_) {}
+    return result;
+  };
+})();
+</script>
 </body></html>
