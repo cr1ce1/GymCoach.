@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cr1ce1.github.io/GymCoach./sitemap.xml
