@@ -1,7 +1,7 @@
 // STRENOVA service worker. Caches only same-origin static shell files.
 // Never caches Supabase / cross-origin requests, config.js, or any non-GET request.
-const CACHE = 'strenova-shell-v1';
-const SHELL = ['./', './index.html', './manifest.webmanifest', './assets/strenova-icon-512.png'];
+const CACHE = 'strenova-shell-v2';
+const SHELL = ['./', './index.html', './manifest.webmanifest', './strenova-icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).catch(() => {}));
 });
