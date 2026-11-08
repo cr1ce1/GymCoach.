@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 
 <html lang="uk">
-<head><script>(function(){try{if(navigator.serviceWorker)navigator.serviceWorker.getRegistrations().then(function(r){var h=r.length;r.forEach(function(x){x.unregister()});if(window.caches)caches.keys().then(function(k){k.forEach(function(n){caches.delete(n)})});if(h&&!sessionStorage.stR){sessionStorage.stR=1;location.reload()}})}catch(e){}})();</script>
-<link href="./manifest.webmanifest" rel="manifest"/>
+<head><link href="./manifest.webmanifest" rel="manifest"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
 <meta content="Strenova" name="apple-mobile-web-app-title"/>
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
-<meta content="#07100d" name="theme-color"/>
+<meta content="#090711" name="theme-color"/>
+<link href="./assets/strenova-icon-512.png" rel="apple-touch-icon"/>
 <meta content="Strenova — персональні плани тренувань за метою, рівнем підготовки та місцем занять, бібліотека вправ, щоденник харчування й відстеження прогресу." name="description"/>
 <meta content="index,follow" name="robots"/>
 <meta content="website" property="og:type"/>
@@ -4727,4 +4727,64 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,te
 <div class="st-fin"><h2>Твій наступний рівень починається сьогодні</h2><button class="st-b l" onclick="stEnter('signup')">Створити акаунт</button></div></div></div>
 <script>(function(){var o=window.gtShowGate;window.stEnter=function(m){window.__stAuth=1;document.getElementById('stLanding').hidden=true;o(true);if(window.gtSetAuthMode)gtSetAuthMode(m)};
 window.gtShowGate=function(show){var L=document.getElementById('stLanding');if(show&&!window.__stAuth){L.hidden=false;document.getElementById('authGate').hidden=true;document.body.style.overflow='hidden'}else{L.hidden=true;o(show)}}})();</script>
+<style id="strenova-purple-system">
+:root{--bg:#090711;--bg2:#110D1B;--panel:#191326;--panel2:#1f1830;--line:rgba(168,85,247,.18);--lime:#A855F7;--accent:#8B5CF6;--accent-deep:#6D28D9;--pink:#D946EF;--text:#fff;--muted:#B7ADC9;--sab:env(safe-area-inset-bottom,0px);--sat:env(safe-area-inset-top,0px)}
+html,body{background:var(--bg)!important;color:var(--text);overflow-x:hidden}
+body{background:radial-gradient(900px 500px at 85% -10%,rgba(139,92,246,.22),transparent 60%),var(--bg)!important;padding-top:var(--sat)}
+.top{padding-top:calc(18px + var(--sat))}
+.brand span{background:linear-gradient(90deg,#A855F7,#D946EF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero{background:radial-gradient(circle at 90% 0,rgba(168,85,247,.35),transparent 50%),linear-gradient(135deg,#1b1330,#110D1B)!important;border:1px solid var(--line)!important;box-shadow:0 20px 60px rgba(109,40,217,.25)}
+.lang,#strInstallBtn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;min-height:44px}
+.card,.panel{border-color:var(--line)!important}
+.nav{background:rgba(17,13,27,.88)!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--line)!important;padding-bottom:calc(8px + var(--sab))!important}
+.btn{background:linear-gradient(135deg,#8B5CF6,#D946EF)!important;color:#fff!important;border-radius:14px;min-height:48px;box-shadow:0 8px 28px rgba(139,92,246,.35)}
+#strInstallBtn{padding:0 14px;font-weight:800;cursor:pointer}
+#strInstallBtn[hidden]{display:none}
+#strInstallModal{position:fixed;inset:0;z-index:99999;display:none;align-items:flex-end;justify-content:center;background:rgba(5,3,10,.7);backdrop-filter:blur(6px)}
+#strInstallModal.open{display:flex}
+#strInstallModal .sheet{width:100%;max-width:480px;max-height:88vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:24px 24px 0 0;padding:22px 20px calc(22px + var(--sab));box-shadow:0 -20px 60px rgba(109,40,217,.35)}
+#strInstallModal h2{margin:0 0 6px;font-size:24px;letter-spacing:-.6px}
+#strInstallModal p{color:var(--muted);line-height:1.5;margin:0 0 14px}
+#strInstallModal ol{padding-left:20px;margin:0 0 16px;line-height:1.7}
+#strInstallModal .tabs{display:flex;gap:8px;margin-bottom:14px}
+#strInstallModal .tabs button{flex:1;min-height:44px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);color:var(--text);font-weight:800}
+#strInstallModal .tabs button.on{background:linear-gradient(135deg,#8B5CF6,#D946EF);border-color:transparent}
+#strInstallModal .go,#strInstallModal .close{width:100%;min-height:50px;border-radius:14px;border:0;font-weight:900;color:#fff;margin-top:6px}
+#strInstallModal .go{background:linear-gradient(135deg,#8B5CF6,#D946EF)}
+#strInstallModal .close{background:var(--bg2);border:1px solid var(--line)}
+#strInstallModal svg{display:block;margin:0 auto 14px;max-width:100%}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<script id="strenova-pwa">
+(function(){
+var T={uk:{btn:'Встановити',title:'Додати STRENOVA на головний екран',sub:'Твоє тренування — в один дотик. Встанови STRENOVA на головний екран і відкривай як застосунок.',ios:'iPhone',and:'Android',
+i:['Відкрий STRENOVA у Safari на iPhone.','Натисни кнопку «Поділитися» (Share).','Знайди пункт «На початковий екран» (Add to Home Screen).','Натисни «Додати» (Add).','Іконка STRENOVA з’явиться на головному екрані.','Відкривай STRENOVA безпосередньо з іконки.'],
+a:['Відкрий STRENOVA у Chrome.','Натисни меню з трьома крапками.','Обери «Встановити застосунок» або «Додати на головний екран».','Підтверди встановлення.','Іконка STRENOVA з’явиться серед застосунків або на головному екрані.'],go:'Встановити STRENOVA',close:'Закрити',done:'STRENOVA вже встановлено'},
+en:{btn:'Install',title:'Add STRENOVA to Home Screen',sub:'Your training. One tap away. Install STRENOVA on your home screen and open it like an app.',ios:'iPhone',and:'Android',
+i:['Open STRENOVA in Safari on iPhone.','Tap the Share button.','Find “Add to Home Screen”.','Tap Add.','The STRENOVA icon appears on your home screen.','Open STRENOVA straight from the icon.'],
+a:['Open STRENOVA in Chrome.','Tap the three-dot menu.','Choose Install App or Add to Home Screen.','Confirm the installation.','The STRENOVA icon appears among your apps or on the home screen.'],go:'Install STRENOVA',close:'Close',done:'STRENOVA is already installed'}};
+function L(){var l=(localStorage.getItem('str_lang')||localStorage.getItem('gtai_lang')||document.documentElement.lang||'uk').slice(0,2);return T[l]||T.en}
+var dp=null,ua=navigator.userAgent,isIOS=/iPad|iPhone|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+var standalone=function(){return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true};
+var tab=isIOS?'ios':'and';
+var modal=document.createElement('div');modal.id='strInstallModal';modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');document.body.appendChild(modal);
+var svgShare='<svg width="120" height="90" viewBox="0 0 120 90" fill="none" aria-hidden="true"><rect x="22" y="6" width="76" height="78" rx="12" fill="#110D1B" stroke="#A855F7" stroke-opacity=".5"/><path d="M60 52V22m0 0-9 9m9-9 9 9" stroke="#D946EF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M46 40h-4a4 4 0 0 0-4 4v26a4 4 0 0 0 4 4h36a4 4 0 0 0 4-4V44a4 4 0 0 0-4-4h-4" stroke="#8B5CF6" stroke-width="4" stroke-linecap="round"/></svg>';
+var svgMenu='<svg width="120" height="90" viewBox="0 0 120 90" fill="none" aria-hidden="true"><rect x="22" y="6" width="76" height="78" rx="12" fill="#110D1B" stroke="#A855F7" stroke-opacity=".5"/><circle cx="60" cy="26" r="4.5" fill="#D946EF"/><circle cx="60" cy="45" r="4.5" fill="#A855F7"/><circle cx="60" cy="64" r="4.5" fill="#8B5CF6"/></svg>';
+function render(){var t=L();var steps=(tab==='ios'?t.i:t.a).map(function(x){return '<li>'+x+'</li>'}).join('');
+modal.innerHTML='<div class="sheet"><h2>'+t.title+'</h2><p>'+t.sub+'</p><div class="tabs"><button data-t="ios" class="'+(tab==='ios'?'on':'')+'">'+t.ios+'</button><button data-t="and" class="'+(tab==='and'?'on':'')+'">'+t.and+'</button></div>'+(tab==='ios'?svgShare:svgMenu)+'<ol>'+steps+'</ol>'+(dp&&tab==='and'?'<button class="go">'+t.go+'</button>':'')+'<button class="close">'+t.close+'</button></div>';}
+function open(){render();modal.classList.add('open')}window.strOpenInstall=open;
+function close(){modal.classList.remove('open')}
+modal.addEventListener('click',function(e){var b=e.target.closest('button');if(e.target===modal||(b&&b.className==='close'))return close();if(!b)return;if(b.dataset.t){tab=b.dataset.t;render()}else if(b.className==='go'&&dp){dp.prompt();dp.userChoice.finally(function(){dp=null;close()})}});
+function mkBtn(){var b=document.createElement('button');b.type='button';b.className='strInstallBtn';b.id='strInstallBtn';b.textContent=L().btn;b.onclick=open;return b}
+function place(){document.querySelectorAll('.strInstallBtn').forEach(function(x){x.remove()});if(standalone())return;
+var langBtn=document.getElementById('langBtn');if(langBtn&&langBtn.parentNode){var b=mkBtn();b.style.marginRight='8px';langBtn.parentNode.insertBefore(b,langBtn)}
+var prof=document.getElementById('profile');if(prof){var c=document.createElement('div');c.className='strInstallBtn';c.style.cssText='margin:14px 0;padding:18px;border:1px solid var(--line);border-radius:20px;background:var(--panel)';c.innerHTML='<b style="font-size:18px">'+L().title+'</b><p style="color:var(--muted);margin:6px 0 12px">'+L().sub+'</p>';var bb=mkBtn();bb.id='';bb.className='btn';bb.textContent=L().go;c.appendChild(bb);prof.insertBefore(c,prof.firstChild)}}
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e});
+window.addEventListener('appinstalled',function(){dp=null;close();place()});
+if(document.readyState!=='loading')place();else document.addEventListener('DOMContentLoaded',place);
+document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#langBtn'))setTimeout(place,300)});
+if('serviceWorker' in navigator&&location.protocol==='https:'){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js',{scope:'./'}).then(function(r){r.addEventListener('updatefound',function(){var n=r.installing;n&&n.addEventListener('statechange',function(){if(n.state==='installed'&&navigator.serviceWorker.controller)n.postMessage('skipWaiting')})})}).catch(function(){})})}
+})();
+</script>
+<script id="strenova-seo">(function(){try{var c=document.querySelector('link[rel=canonical]');if(!c){c=document.createElement('link');c.rel='canonical';document.head.appendChild(c)}c.href=location.origin+location.pathname;var l=localStorage.getItem('str_lang');if(l)document.documentElement.lang=l;var m=document.createElement('meta');m.setAttribute('property','og:url');m.content=c.href;document.head.appendChild(m)}catch(e){}})();</script>
 </body></html>
