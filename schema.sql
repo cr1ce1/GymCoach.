@@ -117,6 +117,7 @@ as $$
   );
 $$;
 grant execute on function public.is_strenova_coach() to authenticated;
+grant usage on schema public to authenticated;
 
 drop policy if exists "Users manage own profile" on public.user_profiles;
 create policy "Users manage own profile" on public.user_profiles
@@ -164,5 +165,19 @@ grant select, insert, update, delete on public.user_custom_exercises to authenti
 grant select on public.gt_subscriptions to authenticated;
 grant select on public.gt_user_roles to authenticated;
 grant select, insert on public.gt_coach_messages to authenticated;
+
+do $
+begin
+  if exists (select 1 from pg_publication where pubname = 'supabase_realtime')
+     and not exists (
+       select 1 from pg_publication_tables
+       where pubname = 'supabase_realtime'
+         and schemaname = 'public'
+         and tablename = 'gt_coach_messages'
+     ) then
+    alter publication supabase_realtime add table public.gt_coach_messages;
+  end if;
+end
+$;
 
 notify pgrst, 'reload schema';
