@@ -10,7 +10,7 @@
   "background_color": "#090711",
   "theme_color": "#090711",
   "icons": [
-    {"src": "./strenova-icon-512.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "./strenova-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
     {"src": "./strenova-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
     {"src": "./strenova-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
   ]
