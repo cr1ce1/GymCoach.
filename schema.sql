@@ -91,6 +91,20 @@ create table if not exists public.gt_coach_messages (
   body text not null,
   created_at timestamptz not null default now()
 );
+-- Unique keys required by the frontend's Supabase upsert/maybeSingle calls.
+create unique index if not exists user_profiles_user_id_uidx
+  on public.user_profiles(user_id);
+create unique index if not exists workout_drafts_user_id_uidx
+  on public.workout_drafts(user_id);
+create unique index if not exists workout_templates_user_name_uidx
+  on public.workout_templates(user_id, name);
+create unique index if not exists user_custom_exercises_user_name_uidx
+  on public.user_custom_exercises(user_id, name);
+create unique index if not exists gt_subscriptions_user_id_uidx
+  on public.gt_subscriptions(user_id);
+create unique index if not exists gt_user_roles_user_id_uidx
+  on public.gt_user_roles(user_id);
+
 create index if not exists gt_coach_messages_user_created_idx
   on public.gt_coach_messages(user_id, created_at);
 
