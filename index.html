@@ -11,34 +11,21 @@
 <meta content="#090711" name="theme-color"/>
 <script id="st-refresh-deployed-build">
 (function(){
-  try {
-    document.documentElement.dataset.strenovaBuild = 'purple-dashboard-2026-11-08-c';
-    if (!('serviceWorker' in navigator)) return;
-    var path = location.pathname.toLowerCase();
-    // This cleanup is deliberately restricted to this GitHub Pages project path.
-    if (!path.includes('/gymcoach.')) return;
-    var key = 'st_sw_refresh_purple_dashboard_c';
-    if (sessionStorage.getItem(key)) return;
-    navigator.serviceWorker.getRegistrations().then(async function(registrations){
-      var projectPath = location.pathname.replace(/index\.html?$/i, '');
-      if (!projectPath.endsWith('/')) projectPath = projectPath.slice(0, projectPath.lastIndexOf('/') + 1);
-      var scoped = registrations.filter(function(reg){
-        try { return new URL(reg.scope).origin === location.origin && new URL(reg.scope).pathname.toLowerCase().startsWith(projectPath.toLowerCase()); }
-        catch (_) { return false; }
+  'use strict';
+  document.documentElement.dataset.strenovaBuild = 'purple-dashboard-2026-11-08-d';
+  if (!('serviceWorker' in navigator)) return;
+  window.addEventListener('load', async function(){
+    try {
+      const registration = await navigator.serviceWorker.register('./sw.js', {
+        scope: './',
+        updateViaCache: 'none'
       });
-      var changed = false;
-      for (var reg of scoped) { changed = (await reg.unregister()) || changed; }
-      if (window.caches && caches.keys) {
-        var names = await caches.keys();
-        var owned = names.filter(function(name){ return /strenova|gymcoach/i.test(name); });
-        for (var name of owned) changed = (await caches.delete(name)) || changed;
-      }
-      if (changed) {
-        sessionStorage.setItem(key, '1');
-        if (navigator.serviceWorker.controller) location.reload();
-      }
-    }).catch(function(){});
-  } catch (_) {}
+      await registration.update();
+      if (registration.waiting) registration.waiting.postMessage('skipWaiting');
+    } catch (error) {
+      console.error('STRENOVA service worker registration failed:', error);
+    }
+  }, { once: true });
 })();
 </script>
 <meta content="STRENOVA — a personal fitness workspace for workout plans, set tracking, exercise guidance, nutrition logging and progress history." name="description"/>
