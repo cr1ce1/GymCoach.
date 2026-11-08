@@ -10,6 +10,7 @@
 
 1. Відкрий https://supabase.com/ і створи проєкт.
 2. Відкрий **SQL Editor**, створи запит і виконай `schema.sql`.
+   - Якщо проєкт уже працює й у ньому є таблиці з даними, не запускай повну схему повторно. Для трьох відсутніх таблиць Strenova використовуй адитивний файл `supabase/patch_missing_app_tables.sql` — він не видаляє наявні таблиці чи записи.
 3. У **Project Settings → API** скопіюй Project URL і publishable/anon key.
 4. Встав їх у `config.js` замість `YOUR_PROJECT_ID` та `YOUR_SUPABASE_ANON_OR_PUBLISHABLE_KEY`. Це публічний браузерний ключ; захист забезпечує RLS. Ніколи не використовуй `service_role` у браузері.
 5. У Supabase **Authentication → URL Configuration** додай URL розгорнутого сайту в Site URL і Redirect URLs. Для першого тесту можна вимкнути email confirmation, але для публічного сайту краще залишити підтвердження адреси.
