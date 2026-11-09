@@ -76,7 +76,7 @@ app.post('/api/chat', requireUser, async (req, res) => {
 app.get('/api/health', (_req, res) => res.json({ ok: true, authConfigured: Boolean(supabase), aiConfigured: Boolean(openai) }));
 // Serve only the public frontend files; never expose server.js, SQL or environment files.
 app.get('/', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.get('/index.html', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/index.html', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));\napp.get('/owner-panel.html', (_req, res) => res.sendFile(path.join(__dirname, 'owner-panel.html')));
 app.get('/config.js', (_req, res) => res.sendFile(path.join(__dirname, 'config.js')));
 app.get('/manifest.webmanifest', (_req, res) => {
   res.type('application/manifest+json');
