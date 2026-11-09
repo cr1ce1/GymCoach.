@@ -6281,7 +6281,7 @@ body.st-app-shell #nav>button.st-nav-primary:focus-visible{outline:2px solid #D9
   const root=$('profile');if(!root)return;
   let box=$('gcReferralCard');if(!box){box=document.createElement('div');box.className='gc-platform-card';box.id='gcReferralCard';root.appendChild(box)}
   const link=new URL(location.href);link.searchParams.set('ref',code||'');
-  box.innerHTML='<h3>Моє реферальне посилання</h3><p class="muted">Код для запрошення друзів та відстеження реєстрацій.</p><div class="gc-platform-item"><div><strong>'+safe(code||'Готується')+'</strong><small>Успішні реєстрації: '+count+'</small></div><button class="btn secondary" type="button" onclick="gcCopyText('+JSON.stringify(link.toString())+')">Скопіювати</button></div>';
+  box.innerHTML='<h3>Моє реферальне посилання</h3><p class="muted">Код для запрошення друзів та відстеження реєстрацій.</p><div class="gc-platform-item"><div><strong>'+safe(code||'Готується')+'</strong><small>Успішні реєстрації: '+count+'</small></div><button class="btn secondary" type="button" onclick="gcCopyText('+JSON.stringify(link.toString()).replaceAll(String.fromCharCode(34),"&quot;")+')">Скопіювати</button></div>';
  }
  window.gcCopyText=async function(text){
   try{await navigator.clipboard.writeText(text);alert('Скопійовано.')}
@@ -6295,7 +6295,7 @@ body.st-app-shell #nav>button.st-nav-primary:focus-visible{outline:2px solid #D9
   if(s){const q=await s.from('athlete_coach_relationships').select('id,coach_id,status,created_at').eq('athlete_id',u.id).eq('status','active').maybeSingle();if(!q.error)rel=q.data}
   let coachName='';
   if(rel&&s){const p=await s.from('user_profiles').select('profile').eq('user_id',rel.coach_id).maybeSingle();coachName=p.data?.profile?.name||'Тренер'}
-  root.innerHTML='<div class="gc-platform-card"><h3>Підключення до тренера</h3>'+(rel?'<p>Ти підключений до: <strong>'+safe(coachName)+'</strong></p><button class="btn secondary" type="button" onclick="gcDisconnectCoach('+JSON.stringify(rel.id)+')">Від’єднати тренера</button>':'<p class="muted">Ще немає підтвердженого підключення.</p>')+'<div class="field"><label for="gcAcceptCoachCode">Код тренера</label><input id="gcAcceptCoachCode" value="'+safe(code)+'" maxlength="32" placeholder="COACH-XXXXXX"/></div><button class="btn" type="button" onclick="gcAcceptCoachInvite()">Підтвердити запрошення</button><p id="gcConnectStatus" class="gc-platform-status" role="status"></p></div>';
+  root.innerHTML='<div class="gc-platform-card"><h3>Підключення до тренера</h3>'+(rel?'<p>Ти підключений до: <strong>'+safe(coachName)+'</strong></p><button class="btn secondary" type="button" onclick="gcDisconnectCoach('+JSON.stringify(rel.id).replaceAll(String.fromCharCode(34),"&quot;")+')">Від’єднати тренера</button>':'<p class="muted">Ще немає підтвердженого підключення.</p>')+'<div class="field"><label for="gcAcceptCoachCode">Код тренера</label><input id="gcAcceptCoachCode" value="'+safe(code)+'" maxlength="32" placeholder="COACH-XXXXXX"/></div><button class="btn" type="button" onclick="gcAcceptCoachInvite()">Підтвердити запрошення</button><p id="gcConnectStatus" class="gc-platform-status" role="status"></p></div>';
   await loadAssignedWorkouts(u);
  }
  window.gcAcceptCoachInvite=async function(){
@@ -6303,7 +6303,7 @@ body.st-app-shell #nav>button.st-nav-primary:focus-visible{outline:2px solid #D9
   if(!s||!code){status('gcConnectStatus','Вкажи код тренера.');return}
   const {data,error}=await s.rpc('accept_coach_invite',{p_invite_code:code});
   status('gcConnectStatus',error?'Не вдалося підключитися: '+error.message:'Запрошення підтверджено. Тепер тренер бачить твій прогрес.');
-  if(!error){query.delete('invite');history.replaceState({},'',location.pathname+(query.toString()?'?'+query.toString():'')+location.hash);await loadAthleteDashboard(user())}
+  if(!error){query.delete('invite');window.history.replaceState({},'',location.pathname+(query.toString()?'?'+query.toString():'')+location.hash);await loadAthleteDashboard(user())}
  };
  window.gcDisconnectCoach=async function(id){
   if(!confirm('Від’єднати тренера від акаунта?'))return;
@@ -6343,7 +6343,7 @@ body.st-app-shell #nav>button.st-nav-primary:focus-visible{outline:2px solid #D9
   }
   const pmap=new Map(profiles.map(x=>[x.user_id,x.profile||{}]));
   const lmap=new Map();logs.forEach(x=>lmap.set(x.user_id,(lmap.get(x.user_id)||0)+1));
-  root.innerHTML='<div class="gc-platform-card"><div class="gc-platform-row"><div><span class="tag">COACH INVITE</span><h3>'+safe(code)+'</h3><small class="muted">'+safe(cp.data?.specialization||'')+' · '+safe(cp.data?.experience_years||0)+' років досвіду</small></div><button class="btn secondary" type="button" onclick="gcCopyText('+JSON.stringify(link.toString())+')">Скопіювати посилання</button></div></div><div class="gc-platform-grid"><div class="gc-platform-stat"><strong>'+(rels.data||[]).length+'</strong><small>Активних спортсменів</small></div><div class="gc-platform-stat"><strong>'+logs.length+'</strong><small>Останніх тренувальних записів</small></div></div><div class="gc-platform-card"><h3>Мої спортсмени</h3><div class="gc-platform-list">'+(ids.length?(rels.data||[]).map(x=>{const p=pmap.get(x.athlete_id)||{};return '<div class="gc-platform-item"><div><strong>'+safe(p.name||'Спортсмен')+'</strong><small>'+safe(p.sport||'')+' · '+(lmap.get(x.athlete_id)||0)+' тренувань у вибірці</small></div><button class="btn secondary" type="button" onclick="gcSelectAthlete('+JSON.stringify(x.athlete_id)+')">Обрати</button></div>'}).join(''):'<p class="muted">Поки немає підключених спортсменів. Поділися кодом або посиланням.</p>')+'</div></div><div class="gc-platform-card"><h3>Призначити програму</h3><p class="muted">Спочатку обери спортсмена. Поточну програму можна створити в конструкторі тренувань.</p><div class="field"><label for="gcAssignAthlete">Спортсмен</label><select id="gcAssignAthlete">'+(rels.data||[]).map(x=>'<option value="'+safe(x.athlete_id)+'">'+safe(pmap.get(x.athlete_id)?.name||x.athlete_id.slice(0,8))+'</option>').join('')+'</select></div><div class="field"><label for="gcProgramName">Назва програми</label><input id="gcProgramName" maxlength="120" value="'+safe(window.gcCurrentWorkoutName||'GymCoach program')+'"/></div><button class="btn" type="button" onclick="gcAssignCurrentWorkout()">Зберегти та призначити</button><p id="gcAssignStatus" class="gc-platform-status" role="status"></p></div>';
+  root.innerHTML='<div class="gc-platform-card"><div class="gc-platform-row"><div><span class="tag">COACH INVITE</span><h3>'+safe(code)+'</h3><small class="muted">'+safe(cp.data?.specialization||'')+' · '+safe(cp.data?.experience_years||0)+' років досвіду</small></div><button class="btn secondary" type="button" onclick="gcCopyText('+JSON.stringify(link.toString()).replaceAll(String.fromCharCode(34),"&quot;")+')">Скопіювати посилання</button></div></div><div class="gc-platform-grid"><div class="gc-platform-stat"><strong>'+(rels.data||[]).length+'</strong><small>Активних спортсменів</small></div><div class="gc-platform-stat"><strong>'+logs.length+'</strong><small>Останніх тренувальних записів</small></div></div><div class="gc-platform-card"><h3>Мої спортсмени</h3><div class="gc-platform-list">'+(ids.length?(rels.data||[]).map(x=>{const p=pmap.get(x.athlete_id)||{};return '<div class="gc-platform-item"><div><strong>'+safe(p.name||'Спортсмен')+'</strong><small>'+safe(p.sport||'')+' · '+(lmap.get(x.athlete_id)||0)+' тренувань у вибірці</small></div><button class="btn secondary" type="button" onclick="gcSelectAthlete('+JSON.stringify(x.athlete_id).replaceAll(String.fromCharCode(34),"&quot;")+')">Обрати</button></div>'}).join(''):'<p class="muted">Поки немає підключених спортсменів. Поділися кодом або посиланням.</p>')+'</div></div><div class="gc-platform-card"><h3>Призначити програму</h3><p class="muted">Спочатку обери спортсмена. Поточну програму можна створити в конструкторі тренувань.</p><div class="field"><label for="gcAssignAthlete">Спортсмен</label><select id="gcAssignAthlete">'+(rels.data||[]).map(x=>'<option value="'+safe(x.athlete_id)+'">'+safe(pmap.get(x.athlete_id)?.name||x.athlete_id.slice(0,8))+'</option>').join('')+'</select></div><div class="field"><label for="gcProgramName">Назва програми</label><input id="gcProgramName" maxlength="120" value="'+safe(window.gcCurrentWorkoutName||'GymCoach program')+'"/></div><button class="btn" type="button" onclick="gcAssignCurrentWorkout()">Зберегти та призначити</button><p id="gcAssignStatus" class="gc-platform-status" role="status"></p></div>';
  }
  window.gcSelectAthlete=function(id){window.gcSelectedAthlete=id;const s=$('gcAssignAthlete');if(s)s.value=id;alert('Спортсмен обраний.');};
  window.gcAssignCurrentWorkout=async function(){
@@ -6375,7 +6375,7 @@ body.st-app-shell #nav>button.st-nav-primary:focus-visible{outline:2px solid #D9
   const {data,error}=await s.rpc('admin_search_users',{p_search:q});
   if(error){status('gcAdminStatus','Помилка: '+error.message);return}
   const root=$('gcAdminUsers');
-  if(root)root.innerHTML=(data||[]).map(x=>'<div class="gc-platform-item"><div><strong>'+safe(x.display_name||'Користувач')+'</strong><small>'+safe(x.email)+' · '+safe(x.account_role)+' · Plus: '+safe(x.subscription_status)+'</small></div><button class="btn secondary" type="button" onclick="gcAdminSelectUser('+JSON.stringify(x.user_id)+','+JSON.stringify(x.email||'')+')">Обрати</button></div>').join('')||'<p class="muted">Нікого не знайдено.</p>';
+  if(root)root.innerHTML=(data||[]).map(x=>'<div class="gc-platform-item"><div><strong>'+safe(x.display_name||'Користувач')+'</strong><small>'+safe(x.email)+' · '+safe(x.account_role)+' · Plus: '+safe(x.subscription_status)+'</small></div><button class="btn secondary" type="button" onclick="gcAdminSelectUser('+JSON.stringify(x.user_id).replaceAll(String.fromCharCode(34),"&quot;")+','+JSON.stringify(x.email||"").replaceAll(String.fromCharCode(34),"&quot;")+')">Обрати</button></div>').join('')||'<p class="muted">Нікого не знайдено.</p>';
   status('gcAdminStatus','Знайдено: '+(data||[]).length);
  };
  window.gcAdminSelectUser=function(id,email){window.gcAdminTarget=id;status('gcAdminSelected',email+' · '+id)};
@@ -6394,6 +6394,7 @@ body.st-app-shell #nav>button.st-nav-primary:focus-visible{outline:2px solid #D9
  };
  async function hydrate(){
   const s=sb(),u=user();if(!s||!u)return;
+  if(window.gcHydratedUserId===u.id)return;
   mountPages();seedAuthQueryFields();
   let role='athlete';
   const rr=await s.from('user_roles').select('role').eq('user_id',u.id);
@@ -6406,7 +6407,9 @@ body.st-app-shell #nav>button.st-nav-primary:focus-visible{outline:2px solid #D9
   if(role==='coach')await loadCoachDashboard(u);
   else if(role==='admin')await loadAdminDashboard();
   else await loadAthleteDashboard(u);
+  window.gcHydratedUserId=u.id;
  }
+ window.addEventListener('load',()=>{if(user())hydrate().catch(e=>console.warn('GymCoach initial account hydration:',e?.message||e));},{once:true});
  const oldAfterLogin=window.gtAfterLogin;
  if(typeof oldAfterLogin==='function'&&!oldAfterLogin.__gcHydrate){
   const wrapped=async function(...args){const result=await oldAfterLogin.apply(this,args);try{await hydrate()}catch(e){console.warn('GymCoach account modules:',e?.message||e)}return result};
