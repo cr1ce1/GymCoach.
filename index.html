@@ -6480,4 +6480,263 @@ body.st-app-shell #nav>button.st-nav-primary:focus-visible{outline:2px solid #D9
  if(document.readyState!=='loading'){seedAuthQueryFields();mountPages();initWorkoutControls()}
 })();
 </script>
+
+<style id="gc-home-mobile-layout-fix-20261109">
+/* Mobile home fix: override the more-specific desktop #home.active grid. */
+@media (max-width: 767px) {
+  html, body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  body.st-app-shell main,
+  body.st-app-shell .page,
+  body.st-app-shell #home,
+  body.st-app-shell #home > * {
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  body.st-app-shell #home.active {
+    display: grid !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas:
+      "hero"
+      "features"
+      "stats"
+      "quickhead"
+      "quick"
+      "attention"
+      "progress"
+      "recent" !important;
+    grid-auto-flow: row !important;
+    column-gap: 0 !important;
+    row-gap: 0 !important;
+    align-items: stretch !important;
+  }
+
+  /* Restore the welcome panel and useful shortcuts on phones. */
+  body.st-app-shell #home > .hero {
+    display: block !important;
+    grid-area: hero !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 4px 0 14px !important;
+    padding: 20px !important;
+    position: relative !important;
+    overflow: hidden !important;
+    border-radius: 20px !important;
+    background:
+      radial-gradient(ellipse at 90% 0%, rgba(139,92,246,.20), transparent 45%),
+      linear-gradient(145deg, #211532, #110d1b 78%) !important;
+  }
+
+  body.st-app-shell #home > .hero::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  body.st-app-shell #home > .hero > * {
+    position: relative;
+    z-index: 1;
+    max-width: 100% !important;
+    overflow-wrap: anywhere;
+  }
+
+  body.st-app-shell #home > .hero h1 {
+    margin: 9px 0 8px !important;
+    font-size: clamp(27px, 7.2vw, 35px) !important;
+    line-height: 1.08 !important;
+    letter-spacing: -.7px !important;
+  }
+
+  body.st-app-shell #home > .hero p {
+    margin: 0 0 15px !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+  }
+
+  body.st-app-shell #home > .hero .btn {
+    width: 100% !important;
+    min-height: 46px !important;
+    white-space: normal !important;
+  }
+
+  body.st-app-shell #home > .gc-feature-strip {
+    display: grid !important;
+    grid-area: features !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 0 14px !important;
+  }
+
+  body.st-app-shell #home > .gc-feature-strip > .gc-feature {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    min-width: 0 !important;
+    min-height: 106px !important;
+    height: auto !important;
+    padding: 12px !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    border-radius: 15px !important;
+  }
+
+  body.st-app-shell #home > .gc-feature-strip > .gc-feature:last-child {
+    grid-column: 1 / -1 !important;
+    min-height: 82px !important;
+  }
+
+  body.st-app-shell #home .gc-feature b,
+  body.st-app-shell #home .gc-feature small {
+    max-width: 100% !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  body.st-app-shell #home > .st-home-stats {
+    grid-area: stats !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 7px !important;
+    margin: 0 0 15px !important;
+  }
+
+  body.st-app-shell #home > .st-home-stats .stat {
+    min-width: 0 !important;
+    min-height: 101px !important;
+    padding: 10px 4px !important;
+    gap: 6px !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  body.st-app-shell #home > .st-home-stats .stat:before {
+    width: 29px !important;
+    height: 29px !important;
+    font-size: 14px !important;
+  }
+
+  body.st-app-shell #home > .st-home-stats .stat strong {
+    font-size: 21px !important;
+    line-height: 1.05 !important;
+  }
+
+  body.st-app-shell #home > .st-home-stats .stat small {
+    font-size: 9px !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0 !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  body.st-app-shell #home > .st-home-quick-head {
+    grid-area: quickhead !important;
+    min-width: 0 !important;
+    margin: 7px 0 9px !important;
+  }
+
+  body.st-app-shell #home > .grid {
+    grid-area: quick !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  body.st-app-shell #home > .grid > .option,
+  body.st-app-shell #home > .grid > .option:nth-child(4) {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    min-width: 0 !important;
+    min-height: 108px !important;
+    height: auto !important;
+    padding: 13px 11px !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  body.st-app-shell #home > .grid > .option b,
+  body.st-app-shell #home > .grid > .option small {
+    max-width: 100% !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  body.st-app-shell #home > #stAttentionCard {
+    grid-area: attention !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 13px 0 0 !important;
+    padding: 16px !important;
+  }
+
+  body.st-app-shell #home > .st-home-progress-head {
+    grid-area: progress !important;
+    min-width: 0 !important;
+    margin: 22px 0 10px !important;
+  }
+
+  body.st-app-shell #home > #recent {
+    grid-area: recent !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 155px !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  body.st-app-shell #home > #gtHomeBjuCard,
+  body.st-app-shell #home > #gtRefreshTiles,
+  body.st-app-shell #home > #gtPersonalTemplatesPanel,
+  body.st-app-shell #home > #gtQuickActionsV3,
+  body.st-app-shell #home > #gtV4BackupCard,
+  body.st-app-shell #home > #gtHomeExtras {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+
+@media (max-width: 360px) {
+  body.st-app-shell main {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  body.st-app-shell #home > .hero {
+    padding: 16px !important;
+  }
+
+  body.st-app-shell #home > .gc-feature-strip {
+    gap: 7px !important;
+  }
+
+  body.st-app-shell #home > .gc-feature-strip > .gc-feature {
+    padding: 10px !important;
+  }
+
+  body.st-app-shell #home > .st-home-stats {
+    gap: 5px !important;
+  }
+
+  body.st-app-shell #home > .st-home-stats .stat {
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+  }
+}
+</style>
+
 </body></html>
