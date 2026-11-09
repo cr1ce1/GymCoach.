@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10131a"><title>Strenova — Owner Panel</title>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.0"></script>
+<style>
+:root{color-scheme:dark;--bg:#0b0e13;--panel:#141923;--line:#293241;--muted:#9aa6b7;--text:#f4f7fb;--accent:#9cf06b;--danger:#ff7272}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,Segoe UI,sans-serif}
+main{max-width:1180px;margin:auto;padding:28px 18px 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}
+h1{font-size:clamp(26px,4vw,36px);margin:0}h2{font-size:19px;margin:0 0 14px}.muted{color:var(--muted)}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:16px 0}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.stat{background:#1a2230;border:1px solid var(--line);border-radius:12px;padding:15px}.stat strong{display:block;font-size:25px}.stat span{color:var(--muted);font-size:13px}
+.controls{display:flex;gap:9px;flex-wrap:wrap}.controls input,.controls select,.controls textarea{background:#0e131b;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:11px;font:inherit;min-width:0}.controls input{flex:1;min-width:200px}
+button{border:0;border-radius:9px;padding:10px 14px;font:600 14px inherit;cursor:pointer;background:var(--accent);color:#11180d}button.secondary{background:#263244;color:var(--text)}button.danger{background:#51272c;color:#ffd9d9}
+table{width:100%;border-collapse:collapse;min-width:760px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);vertical-align:middle}th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.table-wrap{overflow:auto}.actions{display:flex;gap:6px;flex-wrap:wrap}.actions button{padding:7px 9px;font-size:12px}.status{display:inline-block;border-radius:99px;padding:3px 8px;background:#263244;font-size:12px}
+.notice{padding:12px;border-radius:10px;background:#1b2734;color:#dce9f8;margin:12px 0}.error{background:#3a2025;color:#ffd4d4}.hidden{display:none!important}
+#login{max-width:520px;margin:12vh auto}.field{display:flex;flex-direction:column;gap:6px;min-width:180px;flex:1}.field label{font-size:12px;color:var(--muted)}
+@media(max-width:760px){main{padding:18px 12px 40px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.top{align-items:flex-start;flex-direction:column}.panel{padding:14px}}
+</style></head>
+<body><main>
+<section id="login" class="panel hidden"><h1>Strenova Owner</h1><p class="muted">Увійди у свій акаунт на основному сайті, потім відкрий цю сторінку знову.</p><a href="./" style="color:var(--accent)">Перейти до Strenova</a><div id="loginMsg" class="notice"></div></section>
+<section id="app" class="hidden">
+<header class="top"><div><div class="muted">STRENOVA / CONTROL CENTER</div><h1>Панель власника</h1><div class="muted" id="ownerEmail"></div></div><button class="secondary" id="refresh">Оновити дані</button></header>
+<div id="message" class="notice hidden" role="status"></div>
+<div class="grid" id="stats"></div>
+<section class="panel"><h2>Користувачі</h2><div class="controls"><input id="search" placeholder="Пошта, ім'я або UUID"><button id="searchBtn">Знайти</button></div><div class="table-wrap" style="margin-top:14px"><table><thead><tr><th>Користувач</th><th>Тип</th><th>Реєстрація</th><th>Підписка</th><th>До</th><th>Дії</th></tr></thead><tbody id="users"><tr><td colspan="6" class="muted">Завантаження…</td></tr></tbody></table></div></section>
+<section class="panel"><h2>Керування Plus</h2><p class="muted">Вибери користувача у списку вище. «Видати/продовжити» додає строк до активної підписки; «Замінити строк» встановлює новий строк від поточного моменту.</p><div class="controls"><div class="field"><label for="target">UUID користувача</label><input id="target" placeholder="UUID користувача"></div><div class="field"><label for="duration">Тривалість</label><select id="duration"><option value="7">7 днів</option><option value="30">30 днів</option><option value="90">90 днів</option><option value="180">180 днів</option><option value="365">365 днів</option><option value="0">Назавжди (Lifetime)</option></select></div><div class="field"><label for="reason">Причина (необов'язково)</label><input id="reason" maxlength="500" placeholder="Наприклад, промоакція"></div></div><div class="controls" style="margin-top:12px"><button id="grant">Видати / продовжити</button><button class="secondary" id="set">Замінити строк</button><button class="danger" id="cancel">Скасувати Plus</button></div></section>
+<section class="panel"><div class="top"><div><h2>Історія підписок</h2><p class="muted">Останні 100 операцій. У полі пошуку можна відкрити історію конкретного користувача.</p></div><button class="secondary" id="historyBtn">Оновити історію</button></div><div class="table-wrap"><table><thead><tr><th>Дата</th><th>User UUID</th><th>Операція</th><th>Термін</th><th>Хто видав</th><th>Причина</th></tr></thead><tbody id="history"><tr><td colspan="6" class="muted">Завантаження…</td></tr></tbody></table></div></section>
+</section></main>
+<script>
+(() => {
+ const OWNER_ID='bd340729-7dd9-4d57-a170-ebb7b22e1a49';
+ const cfg=window.GTAI_CONFIG||{};
+ const root=document.getElementById('app'), login=document.getElementById('login');
+ const message=document.getElementById('message');
+ if(!window.supabase||!cfg.SUPABASE_URL||!cfg.SUPABASE_ANON_KEY){login.classList.remove('hidden');document.getElementById('loginMsg').textContent='Не вдалося завантажити конфігурацію Supabase.';return;}
+ const client=window.supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_ANON_KEY);
+ let session=null;
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const date=s=>s?new Date(s).toLocaleString('uk-UA'):'—';
+ function notify(text,error=false){message.textContent=text;message.classList.remove('hidden','error');if(error)message.classList.add('error');}
+ async function api(action,method='GET',body=null,params={}){
+   const qs=new URLSearchParams({action,...params});
+   const response=await fetch(cfg.SUPABASE_URL+'/functions/v1/owner-admin?'+qs.toString(),{
+     method,headers:{Authorization:'Bearer '+session.access_token,apikey:cfg.SUPABASE_ANON_KEY,'Content-Type':'application/json'},
+     body:body?JSON.stringify(body):undefined
+   });
+   const data=await response.json().catch(()=>({error:'Некоректна відповідь сервера'}));
+   if(!response.ok)throw new Error(data.error||'Помилка запиту');
+   return data;
+ }
+ async function loadStats(){
+   const {stats}=await api('stats');
+   const items=[['Усього користувачів',stats.users_total],['Athletes',stats.athletes],['Coaches',stats.coaches],['Plus активна',stats.plus_active],['Реєстрації за 7 днів',stats.signups_7d],['Реферали',stats.referrals]];
+   document.getElementById('stats').innerHTML=items.map(([label,value])=>'<div class="stat"><strong>'+esc(value??0)+'</strong><span>'+esc(label)+'</span></div>').join('');
+ }
+ async function loadUsers(q=''){
+   const body=document.getElementById('users');body.innerHTML='<tr><td colspan="6">Завантаження…</td></tr>';
+   const {users}=await api('users','GET',null,{q});
+   body.innerHTML=users.length?users.map(u=>'<tr><td><strong>'+esc(u.display_name)+'</strong><br><span class="muted">'+esc(u.email)+'</span><br><small class="muted">'+esc(u.user_id)+'</small></td><td>'+esc(u.account_role)+'</td><td>'+esc(date(u.created_at))+'</td><td><span class="status">'+esc(u.subscription_status)+'</span></td><td>'+esc(date(u.subscription_expires_at))+'</td><td><div class="actions"><button data-select="'+esc(u.user_id)+'" class="secondary">Обрати</button><button data-history="'+esc(u.user_id)+'" class="secondary">Історія</button></div></td></tr>').join(''):'<tr><td colspan="6" class="muted">Користувачів не знайдено</td></tr>';
+ }
+ async function loadHistory(userId=''){
+   const {history}=await api('history','GET',null,userId?{user_id:userId}:{});
+   document.getElementById('history').innerHTML=history.length?history.map(h=>'<tr><td>'+esc(date(h.created_at))+'</td><td>'+esc(h.user_id)+'</td><td>'+esc(h.event_type)+'</td><td>'+esc(h.duration_days===0?'Lifetime':h.duration_days==null?'—':h.duration_days+' днів')+'</td><td>'+esc(h.changed_by||'—')+'</td><td>'+esc(h.reason||'—')+'</td></tr>').join(''):'<tr><td colspan="6" class="muted">Історія порожня</td></tr>';
+ }
+ async function refresh(){try{await Promise.all([loadStats(),loadUsers(document.getElementById('search').value),loadHistory()]);notify('Дані оновлено.');}catch(e){notify(e.message,true);}}
+ async function subscription(action){
+   const user_id=document.getElementById('target').value.trim();
+   if(!user_id){notify('Спочатку вибери користувача або введи його UUID.',true);return;}
+   if(action==='cancel'&&!confirm('Скасувати підписку Plus для цього користувача?'))return;
+   try{
+     await api(action,'POST',{user_id,duration_days:Number(document.getElementById('duration').value),reason:document.getElementById('reason').value});
+     notify(action==='cancel'?'Підписку скасовано.':'Операцію з підпискою виконано.');
+     await refresh();await loadHistory(user_id);
+   }catch(e){notify(e.message,true);}
+ }
+ document.getElementById('searchBtn').onclick=()=>loadUsers(document.getElementById('search').value).catch(e=>notify(e.message,true));
+ document.getElementById('search').onkeydown=e=>{if(e.key==='Enter')document.getElementById('searchBtn').click();};
+ document.getElementById('refresh').onclick=refresh;
+ document.getElementById('historyBtn').onclick=()=>loadHistory(document.getElementById('target').value.trim()).catch(e=>notify(e.message,true));
+ document.getElementById('grant').onclick=()=>subscription('grant');
+ document.getElementById('set').onclick=()=>subscription('set');
+ document.getElementById('cancel').onclick=()=>subscription('cancel');
+ document.getElementById('users').onclick=e=>{
+   const pick=e.target.closest('[data-select]');if(pick)document.getElementById('target').value=pick.dataset.select;
+   const hist=e.target.closest('[data-history]');if(hist){document.getElementById('target').value=hist.dataset.history;loadHistory(hist.dataset.history).catch(err=>notify(err.message,true));}
+ };
+ (async()=>{
+   const {data,error}=await client.auth.getSession();
+   session=data?.session;
+   if(error||!session){login.classList.remove('hidden');return;}
+   const {data:userData,error:userError}=await client.auth.getUser();
+   if(userError||!userData.user){login.classList.remove('hidden');return;}
+   if(userData.user.id!==OWNER_ID){login.classList.remove('hidden');document.getElementById('loginMsg').textContent='Доступ заборонено. Цей акаунт не є власником.';return;}
+   document.getElementById('ownerEmail').textContent=userData.user.email||'Owner';
+   root.classList.remove('hidden');await refresh();
+ })().catch(e=>{login.classList.remove('hidden');document.getElementById('loginMsg').textContent=e.message;});
+})();
+</script></body></html>
