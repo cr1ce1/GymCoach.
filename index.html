@@ -525,7 +525,7 @@ function toggleLang(){lang=lang==='uk'?'en':'uk';localStorage.setItem('gtai_lang
 function applyLang(){document.documentElement.lang=lang;document.querySelectorAll('[data-i]').forEach(el=>{const key=el.dataset.i;if(translations[lang][key])el.textContent=translations[lang][key]});document.querySelectorAll('[data-placeholder]').forEach(el=>el.placeholder=t(el.dataset.placeholder));$('langBtn').textContent=lang==='uk'?'EN 🇬🇧':'УКР 🇺🇦';if(profile){renderHome();renderPlan();renderHistory();renderCustomSessionText();}}
 function pickDays(n){daysChosen=n;document.querySelectorAll('[data-days]').forEach(b=>b.classList.toggle('selected',+b.dataset.days===n));}
 function showPage(id){/* Navigation is available while the account profile is loading or has not been created yet. */if(!$(id))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');const tab=id==='home'?'home':(['recommend','library','coach','stats','calendar','history'].includes(id)?'training':id==='nutrition'?'nutrition':id==='profile'?'profile':id);document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===tab));$('nav').style.display=id==='setup'?'none':'flex';if(id==='home')renderHome();if(id==='recommend')renderPlan();if(id==='history')renderHistory();if(id==='profile')fillEditProfile();if(id==='library')renderLibrary();window.scrollTo({top:0,behavior:'smooth'})}
-function readProfile(prefix='p'){return {email:$(prefix+'Email')?$(prefix+'Email').value.trim():(profile?.email||''),name:$(prefix+'Name').value.trim(),age:Number($(prefix+'Age').value),height:Number($(prefix+'Height')?.value)||null,weight:Number($(prefix+'Weight')?.value)||null,targetWeight:Number($(prefix+'TargetWeight')?.value)||null,sex:$(prefix+'Sex')?.value||'unspecified',activity:$(prefix+'Activity')?.value||'moderate',level:$(prefix+'Level').value,goal:$(prefix+'Goal').value,place:$(prefix+'Place').value,days:prefix==='p'?daysChosen:Number($(prefix+'Days').value),duration:Number($(prefix+'Duration').value),notes:$(prefix+'Notes').value.trim()}}
+function readProfile(prefix='p'){return {email:$(prefix+'Email')?$(prefix+'Email').value.trim():(profile?.email||''),name:$(prefix+'Name').value.trim(),age:Number($(prefix+'Age').value),height:Number($(prefix+'Height')?.value)||null,weight:Number($(prefix+'Weight')?.value)||null,targetWeight:Number($(prefix+'TargetWeight')?.value)||null,sex:$(prefix+'Sex')?.value||'unspecified',activity:$(prefix+'Activity')?.value||'moderate',level:$(prefix+'Level').value,goal:$(prefix+'Goal').value,place:$(prefix+'Place').value,days:prefix==='p'?daysChosen:Number($(prefix+'Days').value),duration:Number($(prefix+'Duration').value),notes:$(prefix+'Notes').value.trim(),sport:profile?.sport||'',accountType:profile?.accountType||'athlete'}}
 function saveProfile(){const p=readProfile();if(['lose','muscle'].includes(p.goal)&&(!p.targetWeight||p.targetWeight<25||p.targetWeight>300)){alert(lang==='uk'?'Вкажи бажану вагу від 25 до 300 кг для обраної мети.':'Enter a target weight from 25 to 300 kg for the selected goal.');$('pTargetWeight')?.focus();return}if(!p.email||!/^\S+@\S+\.\S+$/.test(p.email)){alert('Введи коректну електронну пошту.');return}if(!p.name){alert(t('noName'));return}if(!p.age||p.age<13||p.age>100){alert(t('badAge'));return}if((p.height&&(p.height<100||p.height>230))||(p.weight&&(p.weight<25||p.weight>300))){alert('Перевір зріст і вагу: введи реалістичні значення або залиш поля порожніми.');return}profile=p;localStorage.setItem('gtai_profile',JSON.stringify(profile));showPage('home');if(typeof gtEstimateNutrition==='function')gtEstimateNutrition()}
 function fillEditProfile(){if(!profile)return;for(const k of ['Email','Name','Age','Height','Weight','TargetWeight','Sex','Activity','Level','Goal','Place','Days','Duration','Notes']){const el=$('edit'+k);const prop=k==='TargetWeight'?'targetWeight':k.toLowerCase();if(el)el.value=profile[prop]??(k==='Days'?2:k==='Duration'?30:k==='Sex'?'unspecified':k==='Activity'?'moderate':'')}if(window.gtToggleTargetWeightFields)window.gtToggleTargetWeightFields()}
 function saveEditedProfile(){const p=readProfile('edit');if(['lose','muscle'].includes(p.goal)&&(!p.targetWeight||p.targetWeight<25||p.targetWeight>300)){alert(lang==='uk'?'Вкажи бажану вагу від 25 до 300 кг для обраної мети.':'Enter a target weight from 25 to 300 kg for the selected goal.');$('editTargetWeight')?.focus();return}if(!p.name||!p.age||p.age<13||p.age>100){alert(t('badAge'));return}if((p.height&&(p.height<100||p.height>230))||(p.weight&&(p.weight<25||p.weight>300))){alert('Перевір зріст і вагу: введи реалістичні значення або залиш поля порожніми.');return}profile=p;localStorage.setItem('gtai_profile',JSON.stringify(profile));alert(t('profileSaved'));renderHome();renderPlan();showPage('recommend');if(typeof gtEstimateNutrition==='function')gtEstimateNutrition()}
@@ -1587,7 +1587,7 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
    console.warn('Strenova Plus access check:',err?.message||err);
   }
   renderAccessNav();renderCoachAccess();renderSubscriptionState();
-  if(state.plus||state.coach)connectRealtime();else disconnectRealtime();
+  connectRealtime();
   if(state.coach)await renderInbox();else await loadLiveThread();
  }
  function renderCoachAccess(){
@@ -1662,9 +1662,12 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
  function connectRealtime(){
   const sb=client(),u=currentUser();if(!sb||!u||!sb.channel)return;
   disconnectRealtime();
-  const filter=state.coach?undefined:{filter:`user_id=eq.${u.id}`};
-  let channel=sb.channel('gt-coach-'+u.id+'-'+Date.now());
-  channel=channel.on('postgres_changes',{event:'*',schema:'public',table:'gt_coach_messages',...(filter||{})},async()=>{if(state.coach)await renderInbox();else await loadLiveThread()});
+  let channel=sb.channel('gt-user-'+u.id+'-'+Date.now());
+  if(state.coach||state.plus){
+   const filter=state.coach?undefined:{filter:`user_id=eq.${u.id}`};
+   channel=channel.on('postgres_changes',{event:'*',schema:'public',table:'gt_coach_messages',...(filter||{})},async()=>{if(state.coach)await renderInbox();else await loadLiveThread()});
+  }
+  channel=channel.on('postgres_changes',{event:'*',schema:'public',table:'gt_subscriptions',filter:`user_id=eq.${u.id}`},async()=>{await refreshAccess()});
   state.channel=channel.subscribe();
  }
  function disconnectRealtime(){const sb=client();if(sb&&state.channel){try{sb.removeChannel(state.channel)}catch(e){}state.channel=null}}
@@ -1717,6 +1720,7 @@ async function gtGoogleSignIn(){const btn=document.getElementById('gtGoogleLogin
   if($('subscription')?.classList.contains('active'))renderSubscriptionState();
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+ window.addEventListener('focus',()=>{if(currentUser())refreshAccess()});
  window.gtRefreshPlusAccess=refreshAccess;
 })();
 </script>
