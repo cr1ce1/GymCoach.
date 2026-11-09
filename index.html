@@ -6345,10 +6345,62 @@ body.st-app-shell #nav>button.st-nav-primary:focus-visible{outline:2px solid #D9
    ]);
    profiles=pr.data||[];logs=lg.data||[];
   }
+  const [programRows,assignedRows]=await Promise.all([
+   s.from('workout_programs').select('id,name,category,updated_at').eq('coach_id',u.id).order('updated_at',{ascending:false}).limit(100),
+   s.from('assigned_workouts').select('id,program_id,athlete_user_id,status,due_date').eq('coach_id',u.id).neq('status','cancelled').order('assigned_at',{ascending:false}).limit(100)
+  ]);
+  const programs=programRows.error?[]:(programRows.data||[]);
+  const assignments=assignedRows.error?[]:(assignedRows.data||[]);
+  const programMap=new Map(programs.map(p=>[p.id,p]));
   const pmap=new Map(profiles.map(x=>[x.user_id,x.profile||{}]));
   const lmap=new Map();logs.forEach(x=>lmap.set(x.user_id,(lmap.get(x.user_id)||0)+1));
-  root.innerHTML='<div class="gc-platform-card"><div class="gc-platform-row"><div><span class="tag">COACH INVITE</span><h3>'+safe(code)+'</h3><small class="muted">'+safe(cp.data?.specialization||'')+' · '+safe(cp.data?.experience_years||0)+' років досвіду</small></div><button class="btn secondary" type="button" onclick="gcCopyText('+JSON.stringify(link.toString()).replaceAll(String.fromCharCode(34),"&quot;")+')">Скопіювати посилання</button></div></div><div class="gc-platform-grid"><div class="gc-platform-stat"><strong>'+(rels.data||[]).length+'</strong><small>Активних спортсменів</small></div><div class="gc-platform-stat"><strong>'+logs.length+'</strong><small>Останніх тренувальних записів</small></div></div><div class="gc-platform-card"><h3>Мої спортсмени</h3><div class="gc-platform-list">'+(ids.length?(rels.data||[]).map(x=>{const p=pmap.get(x.athlete_id)||{};return '<div class="gc-platform-item"><div><strong>'+safe(p.name||'Спортсмен')+'</strong><small>'+safe(p.sport||'')+' · '+(lmap.get(x.athlete_id)||0)+' тренувань у вибірці</small></div><button class="btn secondary" type="button" onclick="gcSelectAthlete('+JSON.stringify(x.athlete_id).replaceAll(String.fromCharCode(34),"&quot;")+')">Обрати</button></div>'}).join(''):'<p class="muted">Поки немає підключених спортсменів. Поділися кодом або посиланням.</p>')+'</div></div><div class="gc-platform-card"><h3>Призначити програму</h3><p class="muted">Спочатку обери спортсмена. Поточну програму можна створити в конструкторі тренувань.</p><div class="field"><label for="gcAssignAthlete">Спортсмен</label><select id="gcAssignAthlete">'+(rels.data||[]).map(x=>'<option value="'+safe(x.athlete_id)+'">'+safe(pmap.get(x.athlete_id)?.name||x.athlete_id.slice(0,8))+'</option>').join('')+'</select></div><div class="field"><label for="gcProgramName">Назва програми</label><input id="gcProgramName" maxlength="120" value="'+safe(window.gcCurrentWorkoutName||'GymCoach program')+'"/></div><button class="btn" type="button" onclick="gcAssignCurrentWorkout()">Зберегти та призначити</button><p id="gcAssignStatus" class="gc-platform-status" role="status"></p></div>';
+  root.innerHTML=`
+   <div class="gc-platform-card">
+    <div class="gc-platform-row"><div><span class="tag">COACH INVITE</span><h3>${safe(code)}</h3><small class="muted">${safe(cp.data?.specialization||'')} · ${safe(cp.data?.experience_years||0)} років досвіду</small></div><button class="btn secondary" type="button" onclick="gcCopyText(${JSON.stringify(link.toString()).replaceAll(String.fromCharCode(34),'&quot;')})">Скопіювати посилання</button></div>
+   </div>
+   <div class="gc-platform-grid">
+    <div class="gc-platform-stat"><strong>${(rels.data||[]).length}</strong><small>Активних спортсменів</small></div>
+    <div class="gc-platform-stat"><strong>${logs.length}</strong><small>Тренувальних записів</small></div>
+    <div class="gc-platform-stat"><strong>${programs.length}</strong><small>Мої програми</small></div>
+   </div>
+   <div class="gc-platform-card"><h3>Мої спортсмени</h3><div class="gc-platform-list">
+    ${ids.length?(rels.data||[]).map(x=>{const p=pmap.get(x.athlete_id)||{};return '<div class="gc-platform-item"><div><strong>'+safe(p.name||'Спортсмен')+'</strong><small>'+safe(p.sport||'')+' · '+(lmap.get(x.athlete_id)||0)+' тренувань у вибірці</small></div><button class="btn secondary" type="button" onclick="gcSelectAthlete(\''+safe(x.athlete_id)+'\')">Обрати</button></div>'}).join(''):'<p class="muted">Поки немає підключених спортсменів. Поділися кодом або посиланням.</p>'}
+   </div></div>
+   <div class="gc-platform-card"><h3>Призначити програму</h3><p class="muted">Створи тренування в конструкторі, обери підключеного спортсмена та признач програму.</p>
+    <div class="field"><label for="gcAssignAthlete">Спортсмен</label><select id="gcAssignAthlete">${(rels.data||[]).map(x=>'<option value="'+safe(x.athlete_id)+'">'+safe(pmap.get(x.athlete_id)?.name||x.athlete_id.slice(0,8))+'</option>').join('')}</select></div>
+    <div class="field"><label for="gcProgramName">Назва програми</label><input id="gcProgramName" maxlength="120" value="${safe(window.gcCurrentWorkoutName||'GymCoach workout')}"/></div>
+    <button class="btn" type="button" onclick="gcAssignCurrentWorkout()">Зберегти та призначити</button><p id="gcAssignStatus" class="gc-platform-status" role="status"></p>
+   </div>
+   <div class="gc-platform-card"><h3>Мої програми</h3><div class="gc-platform-list">
+    ${programs.length?programs.map(p=>'<div class="gc-platform-item"><div><strong>'+safe(p.name)+'</strong><small>'+safe(p.category)+' · оновлено '+safe(new Date(p.updated_at).toLocaleDateString('uk-UA'))+'</small></div><div class="gc-platform-actions"><button class="btn secondary" type="button" onclick="gcCoachRenameProgram(\''+safe(p.id)+'\')">Перейменувати</button><button class="btn secondary" type="button" onclick="gcCoachDeleteProgram(\''+safe(p.id)+'\')">Видалити</button></div></div>').join(''):'<p class="muted">Збережених програм ще немає.</p>'}
+   </div></div>
+   <div class="gc-platform-card"><h3>Призначені програми</h3><div class="gc-platform-list">
+    ${assignments.length?assignments.map(a=>'<div class="gc-platform-item"><div><strong>'+safe(programMap.get(a.program_id)?.name||'Програма')+'</strong><small>'+safe(pmap.get(a.athlete_user_id)?.name||'Спортсмен')+' · '+safe(a.status)+'</small></div><button class="btn secondary" type="button" onclick="gcCoachCancelAssignment(\''+safe(a.id)+'\')">Прибрати</button></div>').join(''):'<p class="muted">Активних призначень ще немає.</p>'}
+   </div></div>`;
+
  }
+
+ window.gcCoachRenameProgram=async function(id){
+  const s=sb(),u=user();if(!s||!u)return;
+  const current=prompt('Нова назва програми:');const name=String(current||'').trim().slice(0,120);if(!name)return;
+  const {error}=await s.from('workout_programs').update({name,updated_at:new Date().toISOString()}).eq('id',id).eq('coach_id',u.id);
+  if(error){alert('Не вдалося оновити програму: '+error.message);return}
+  await loadCoachDashboard(u);
+ };
+ window.gcCoachDeleteProgram=async function(id){
+  const s=sb(),u=user();if(!s||!u)return;
+  if(!confirm('Видалити програму та її призначення спортсменам?'))return;
+  const {error}=await s.from('workout_programs').delete().eq('id',id).eq('coach_id',u.id);
+  if(error){alert('Не вдалося видалити програму: '+error.message);return}
+  await loadCoachDashboard(u);
+ };
+ window.gcCoachCancelAssignment=async function(id){
+  const s=sb(),u=user();if(!s||!u)return;
+  if(!confirm('Прибрати призначення цієї програми?'))return;
+  const {error}=await s.from('assigned_workouts').update({status:'cancelled',updated_at:new Date().toISOString()}).eq('id',id).eq('coach_id',u.id);
+  if(error){alert('Не вдалося змінити призначення: '+error.message);return}
+  await loadCoachDashboard(u);
+ };
  window.gcSelectAthlete=function(id){window.gcSelectedAthlete=id;const s=$('gcAssignAthlete');if(s)s.value=id;alert('Спортсмен обраний.');};
  window.gcAssignCurrentWorkout=async function(){
   const s=sb(),u=user(),athlete=$('gcAssignAthlete')?.value,items=window.gcCurrentWorkout||[];
@@ -6363,7 +6415,7 @@ body.st-app-shell #nav>button.st-nav-primary:focus-visible{outline:2px solid #D9
  };
  async function loadAdminDashboard(){
   const root=$('admin-dashboardContent'),s=sb();if(!root||!s)return;
-  root.innerHTML='<div class="gc-platform-card"><div class="gc-platform-row"><h3>Статистика сайту</h3><button class="btn secondary" type="button" onclick="gcAdminLoadStats()">Оновити</button></div><div id="gcAdminStats" class="gc-platform-grid"></div></div><div class="gc-platform-card"><h3>Користувачі</h3><div class="field"><label for="gcAdminSearch">Пошук за ім’ям або email</label><input id="gcAdminSearch" placeholder="Введи ім’я або email"/></div><button class="btn" type="button" onclick="gcAdminSearchUsers()">Знайти</button><div id="gcAdminUsers" class="gc-platform-list"></div><div id="gcAdminStatus" class="gc-platform-status" role="status"></div><div class="gc-platform-card"><h3>Керування Plus</h3><p id="gcAdminSelected" class="muted">Спочатку обери користувача зі списку.</p><div class="field"><label for="gcPlusDuration">Термін</label><select id="gcPlusDuration"><option value="7">7 днів</option><option value="30" selected>30 днів</option><option value="90">90 днів</option><option value="180">180 днів</option><option value="365">365 днів</option><option value="0">Назавжди</option></select></div><div class="field"><label for="gcPlusReason">Причина (необов’язково)</label><input id="gcPlusReason" maxlength="500" placeholder="Подарунок, підтримка…"/></div><div class="gc-platform-actions"><button class="btn" type="button" onclick="gcAdminGrantPlus()">Видати / продовжити Plus</button><button class="btn secondary" type="button" onclick="gcAdminCancelPlus()">Скасувати Plus</button></div></div></div>';
+  root.innerHTML='<div class="gc-platform-card"><div class="gc-platform-row"><h3>Статистика сайту</h3><button class="btn secondary" type="button" onclick="gcAdminLoadStats()">Оновити</button></div><div id="gcAdminStats" class="gc-platform-grid"></div></div><div class="gc-platform-card"><h3>Користувачі</h3><div class="field"><label for="gcAdminSearch">Пошук за ім’ям або email</label><input id="gcAdminSearch" placeholder="Введи ім’я або email"/></div><div class="gc-platform-grid"><div class="field"><label for="gcAdminRoleFilter">Тип акаунта</label><select id="gcAdminRoleFilter"><option value="all">Усі</option><option value="athlete">Athlete</option><option value="coach">Coach</option><option value="admin">Admin</option></select></div><div class="field"><label for="gcAdminSubFilter">Підписка</label><select id="gcAdminSubFilter"><option value="all">Усі статуси</option><option value="active">Активна</option><option value="inactive">Без Plus</option><option value="cancelled">Скасована</option><option value="expired">Завершена</option></select></div></div><button class="btn" type="button" onclick="gcAdminSearchUsers()">Знайти</button><div id="gcAdminUsers" class="gc-platform-list"></div><div id="gcAdminStatus" class="gc-platform-status" role="status"></div><div class="gc-platform-card"><h3>Керування Plus</h3><p id="gcAdminSelected" class="muted">Спочатку обери користувача зі списку.</p><div class="field"><label for="gcPlusDuration">Термін</label><select id="gcPlusDuration"><option value="7">7 днів</option><option value="30" selected>30 днів</option><option value="90">90 днів</option><option value="180">180 днів</option><option value="365">365 днів</option><option value="0">Назавжди</option></select></div><div class="field"><label for="gcPlusReason">Причина (необов’язково)</label><input id="gcPlusReason" maxlength="500" placeholder="Подарунок, підтримка…"/></div><div class="gc-platform-actions"><button class="btn" type="button" onclick="gcAdminGrantPlus()">Видати / продовжити Plus</button><button class="btn secondary" type="button" onclick="gcAdminCancelPlus()">Скасувати Plus</button></div></div></div>';
   await window.gcAdminLoadStats();
  }
  window.gcAdminLoadStats=async function(){
@@ -6378,9 +6430,11 @@ body.st-app-shell #nav>button.st-nav-primary:focus-visible{outline:2px solid #D9
   status('gcAdminStatus','Шукаємо…');
   const {data,error}=await s.rpc('admin_search_users',{p_search:q});
   if(error){status('gcAdminStatus','Помилка: '+error.message);return}
+  const roleFilter=$('gcAdminRoleFilter')?.value||'all',subFilter=$('gcAdminSubFilter')?.value||'all';
+  const filtered=(data||[]).filter(x=>(roleFilter==='all'||x.account_role===roleFilter)&&(subFilter==='all'||x.subscription_status===subFilter));
   const root=$('gcAdminUsers');
-  if(root)root.innerHTML=(data||[]).map(x=>'<div class="gc-platform-item"><div><strong>'+safe(x.display_name||'Користувач')+'</strong><small>'+safe(x.email)+' · '+safe(x.account_role)+' · Plus: '+safe(x.subscription_status)+'</small></div><button class="btn secondary" type="button" onclick="gcAdminSelectUser('+JSON.stringify(x.user_id).replaceAll(String.fromCharCode(34),"&quot;")+','+JSON.stringify(x.email||"").replaceAll(String.fromCharCode(34),"&quot;")+')">Обрати</button></div>').join('')||'<p class="muted">Нікого не знайдено.</p>';
-  status('gcAdminStatus','Знайдено: '+(data||[]).length);
+  if(root)root.innerHTML=filtered.map(x=>'<div class="gc-platform-item"><div><strong>'+safe(x.display_name||'Користувач')+'</strong><small>'+safe(x.email)+' · '+safe(x.account_role)+' · Plus: '+safe(x.subscription_status)+' · Реєстрація: '+safe(new Date(x.created_at).toLocaleDateString('uk-UA'))+'</small></div><button class="btn secondary" type="button" onclick="gcAdminSelectUser('+JSON.stringify(x.user_id).replaceAll(String.fromCharCode(34),'&quot;')+','+JSON.stringify(x.email||'').replaceAll(String.fromCharCode(34),'&quot;')+')">Обрати</button></div>').join('')||'<p class="muted">Нікого не знайдено за цими фільтрами.</p>';
+  status('gcAdminStatus','Знайдено: '+filtered.length);
  };
  window.gcAdminSelectUser=function(id,email){window.gcAdminTarget=id;status('gcAdminSelected',email+' · '+id)};
  window.gcAdminGrantPlus=async function(){
