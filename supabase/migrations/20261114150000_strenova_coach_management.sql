@@ -267,6 +267,27 @@ begin
 end;
 $$;
 
+
+-- Preserve the legacy public RPC name for old clients, but require coach approval.
+-- Old clients receive the pending state instead of silently activating a relationship.
+create or replace function public.accept_coach_invite(p_invite_code text)
+returns jsonb
+language plpgsql
+security definer
+set search_path = ''
+as $
+declare
+  v_result jsonb;
+begin
+  if auth.uid() is null then raise exception 'Authentication required' using errcode='28000'; end if;
+  select public.request_coach_connection(p_invite_code) into v_result;
+  return v_result;
+end;
+$;
+
+revoke all on function public.accept_coach_invite(text) from public, anon, authenticated;
+grant execute on function public.accept_coach_invite(text) to authenticated;
+
 create or replace function public.review_coach_connection(p_relationship_id uuid,p_action text)
 returns jsonb
 language plpgsql
