@@ -227,7 +227,7 @@ language sql
 stable
 security definer
 set search_path = ''
-as $
+as $$
   select private.has_role((select auth.uid()),'coach')
      and exists (
        select 1 from public.athlete_coach_relationships r
@@ -235,7 +235,7 @@ as $
          and r.athlete_id = p_athlete_id
          and r.status = 'active'
      );
-$;
+$$;
 
 drop policy if exists workout_programs_update_owner on public.workout_programs;
 create policy workout_programs_update_owner
