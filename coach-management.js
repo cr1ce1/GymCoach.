@@ -196,7 +196,7 @@ async function renderClient(id) {
   const p = results[0].data || {};
   const logHtml = results[1].error ? '<p class="cm-muted">Історія тренувань недоступна.</p>' :
     (results[1].data || []).map(row=>'<div class="cm-item"><div><strong>'+val(row.title)+'</strong><small>'+val(new Date(row.created_at).toLocaleDateString('uk-UA'))+'</small></div>'+val(row.completed_exercises)+' вправ</div>').join('') || '<p class="cm-muted">Записів поки немає.</p>';
-  holder.innerHTML = '<div class="cm-card"><h3>'+val(p.name || 'Профіль спортсмена')+'</h3><div class="cm-grid"><div>Вік<strong>'+val(p.age)+'</strong></div><div>Зріст<strong>'+val(p.height)+' см</strong></div><div>Вага<strong>'+val(p.weight)+' кг</strong></div><div>Мета<strong>'+val(p.goal)+'</strong></div><div>Рівень<strong>'+val(p.level)+'</strong></div><div>Місце<strong>'+val(p.place)+'</strong></div></div><h4>Останні тренування</h4><div class="cm-list">'+logHtml+'</div><div class="cm-actions">'+btn('КБЖВ','tab','data-tab="nutrition"')+btn('Програма','tab','data-tab="programs"',true)+btn('Календар','tab','data-tab="schedule"',true)+'</div></div>';
+  holder.innerHTML = '<div class="cm-card"><h3>'+val(p.name || 'Профіль спортсмена')+'</h3><div class="cm-grid"><div>Вік<strong>'+val(p.age)+'</strong></div><div>Зріст<strong>'+val(p.height)+' см</strong></div><div>Вага<strong>'+val(p.weight)+' кг</strong></div><div>Мета<strong>'+val(p.goal)+'</strong></div><div>Рівень<strong>'+val(p.level)+'</strong></div><div>Місце<strong>'+val(p.place)+'</strong></div></div><h4>Останні тренування</h4><div class="cm-list">'+logHtml+'</div><div class="cm-actions">'+btn('КБЖВ','tab','data-tab="nutrition"')+btn('Програма','tab','data-tab="programs"',true)+btn('Календар','tab','data-tab="schedule"',true)+(state.clients.find(row=>row.user_id===id)?.relationship_id ? btn('Завершити співпрацю','remove-client','data-id="'+esc(state.clients.find(row=>row.user_id===id).relationship_id)+'"',true) : '')+'</div></div>';
 }
 function clientSelect(id) {
   return '<div class="field"><label for="'+id+'">Спортсмен</label><select id="'+id+'">'+state.clients.map(row=>'<option value="'+esc(row.user_id)+'" '+(row.user_id===state.selected?'selected':'')+'>'+esc(row.name || 'Спортсмен')+'</option>').join('')+'</select></div>';
@@ -417,6 +417,16 @@ async function deleteSchedule(id) {
   if (result.error) throw result.error;
   await loadSchedule();
 }
+async function removeClient(relationshipId) {
+  if (!confirm('Завершити співпрацю з цим спортсменом? Програми, календар та історія залишаться збереженими, але тренер втратить доступ до даних.')) return;
+  const result = await client().rpc('disconnect_coach_relationship',{p_relationship_id:relationshipId});
+  if (result.error) throw result.error;
+  if (result.data !== true) throw new Error('Зв’язок уже неактивний або недоступний.');
+  state.selected = null;
+  cache.invalidate('rel:');
+  await renderTab('clients');
+}
+
 async function renderStats(content) {
   await loadLists(0);
   const ids = state.clients.map(row=>row.user_id);
@@ -458,6 +468,7 @@ async function coachClick(event) {
       state.page=Math.max(0,Number(action.dataset.page)||0);
       await renderTab('clients');
     } else if (kind==='tab') await renderTab(action.dataset.tab);
+    else if (kind==='remove-client') await removeClient(action.dataset.id);
     else if (kind==='calculate-macros') await calculateNutrition();
     else if (kind==='copy-invite') await copyInviteLink();
     else if (kind==='save-nutrition') await saveNutrition();
