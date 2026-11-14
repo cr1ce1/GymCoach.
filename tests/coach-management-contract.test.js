@@ -129,7 +129,7 @@ test('program deletion refuses to cascade away assignment history', () => {
 
 
 test('legacy table-level program DELETE policy cannot cascade assignment rows', () => {
-  const start = sql.indexOf('create policy workout_programs_delete_owner');
+  const start = sql.lastIndexOf('create policy workout_programs_delete_owner');
   const end = sql.indexOf(';', start);
   const policy = sql.slice(start, end + 1);
   assert.match(policy, /private\.has_role/i);
