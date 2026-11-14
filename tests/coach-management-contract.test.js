@@ -105,3 +105,24 @@ test('completed program history cannot be overwritten through the coach editor',
   assert.match(fn, /historical and cannot be overwritten/i);
   assert.match(fn, /a\.athlete_user_id\s*<>\s*p_athlete_id/i);
 });
+
+
+test('program editor mirrors existing day and exercise constraints', () => {
+  const start = sql.indexOf('create or replace function public.coach_save_program');
+  const end = sql.indexOf('revoke all on function public.coach_save_program', start);
+  const fn = sql.slice(start, end);
+  assert.match(fn, /jsonb_array_length\(p_days\)<2 or jsonb_array_length\(p_days\)>5/i);
+  assert.match(fn, /jsonb_array_length\(v_day->'exercises'\)<2 or jsonb_array_length\(v_day->'exercises'\)>4/i);
+  assert.match(fn, /v_sets>6/i);
+  assert.match(fn, /v_rest>600/i);
+  assert.match(fn, /exercise_count=v_first_day_count/i);
+  assert.match(fn, /exercises=v_first_day_exercises/i);
+});
+
+test('program deletion refuses to cascade away assignment history', () => {
+  const start = sql.indexOf('create or replace function public.coach_delete_program');
+  const end = sql.indexOf('revoke all on function public.coach_delete_program', start);
+  const fn = sql.slice(start, end);
+  assert.match(fn, /exists \(select 1 from public\.assigned_workouts a where a\.program_id=p_program_id\)/i);
+  assert.match(fn, /assigned programs cannot be deleted without losing history/i);
+});
