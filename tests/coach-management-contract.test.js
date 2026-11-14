@@ -53,3 +53,45 @@ test('pending connection requests can only be reviewed by their target coach', (
   assert.match(fn, /v_status\s*<>\s*'pending'/i);
   assert.match(fn, /p_action\s+not in\s*\('accept','reject'\)/i);
 });
+
+
+test('migration keeps every dollar-quoted SQL body complete', () => {
+  const cmQuotes = sql.split('$cm$').length - 1;
+  const standardQuotes = sql.split('$$').length - 1;
+  assert.equal(cmQuotes % 2, 0);
+  assert.equal(standardQuotes % 2, 0);
+  assert.equal(cmQuotes, 8);
+  const malformed = sql.split('\n').filter(line =>
+    ['as $', 'do $', '$;'].includes(line.trim())
+  );
+  assert.deepEqual(malformed, []);
+});
+
+test('legacy invite RPC creates a pending request and cannot auto-approve', () => {
+  const start = sql.indexOf('create or replace function public.accept_coach_invite');
+  const end = sql.indexOf('create or replace function public.review_coach_connection', start);
+  const fn = sql.slice(start, end);
+  assert.match(fn, /request_coach_connection\(p_invite_code\)/i);
+  assert.doesNotMatch(fn, /status\s*=\s*'active'/i);
+});
+
+test('pending request profiles are limited to the current coach and pending relationships', () => {
+  const start = sql.indexOf('create or replace function public.coach_pending_request_profiles');
+  const end = sql.indexOf('revoke all on function public.coach_pending_request_profiles', start);
+  const fn = sql.slice(start, end);
+  assert.match(fn, /r\.coach_id\s*=\s*v_uid/i);
+  assert.match(fn, /r\.status\s*=\s*'pending'/i);
+  assert.match(fn, /Request no more than 25/i);
+  assert.doesNotMatch(fn, /email/i);
+});
+
+test('program save RPC writes day/exercise rows and assignment atomically', () => {
+  const start = sql.indexOf('create or replace function public.coach_save_program');
+  const end = sql.indexOf('revoke all on function public.coach_save_program', start);
+  const fn = sql.slice(start, end);
+  assert.match(fn, /private\.is_active_coach_for_athlete\(p_athlete_id\)/i);
+  assert.match(fn, /insert into public\.workout_days/i);
+  assert.match(fn, /insert into public\.workout_exercises/i);
+  assert.match(fn, /insert into public\.assigned_workouts/i);
+  assert.match(fn, /another active athlete/i);
+});
