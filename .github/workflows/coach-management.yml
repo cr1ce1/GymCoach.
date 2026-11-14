@@ -1,0 +1,27 @@
+name: Strenova coach management checks
+
+on:
+  push:
+    branches:
+      - feat/strenova-coach-management
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  node-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run unit and contract tests
+        run: npm test
+      - name: Check browser module syntax
+        run: npm run check:coach
