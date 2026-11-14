@@ -544,7 +544,10 @@ async function coachClick(event) {
 }
 async function coachChange(event) {
   if (event.target.id==='cm-nutrition-client') await loadNutritionTarget(event.target.value);
-  if (event.target.id==='cm-schedule-client') await loadSchedule();
+  if (event.target.id==='cm-schedule-client') {
+    state.scheduleId = null;
+    await loadSchedule();
+  }
   if (event.target.id==='cm-program-client') state.selected=event.target.value;
 }
 
