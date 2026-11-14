@@ -136,3 +136,79 @@ export function createTtlCache({ ttlMs = 30000, maxEntries = 100 } = {}) {
     }
   };
 }
+
+/**
+ * Normalize coach-authored program data before sending it to the database.
+ * Keeps the UI contract small and mirrors the limits enforced by the SQL RPC.
+ */
+export function normalizeProgramDays(days) {
+  if (!Array.isArray(days) || days.length < 1 || days.length > 7) {
+    throw new RangeError('A program must contain between 1 and 7 training days.');
+  }
+
+  return days.map((rawDay, dayIndex) => {
+    if (!rawDay || typeof rawDay !== 'object' || Array.isArray(rawDay)) {
+      throw new TypeError('Each training day must be an object.');
+    }
+
+    const name = String(rawDay.name ?? '').trim();
+    const focus = String(rawDay.focus ?? '').trim();
+    if (!name || name.length > 80) {
+      throw new RangeError('Training day names must contain 1-80 characters.');
+    }
+    if (focus.length > 120) {
+      throw new RangeError('Training day focus must contain no more than 120 characters.');
+    }
+
+    if (!Array.isArray(rawDay.exercises) || rawDay.exercises.length < 1 || rawDay.exercises.length > 20) {
+      throw new RangeError('Each training day must contain between 1 and 20 exercises.');
+    }
+
+    const exercises = rawDay.exercises.map((rawExercise, exerciseIndex) => {
+      if (!rawExercise || typeof rawExercise !== 'object' || Array.isArray(rawExercise)) {
+        throw new TypeError('Each exercise must be an object.');
+      }
+
+      const exerciseName = String(rawExercise.name ?? '').trim();
+      const reps = String(rawExercise.reps ?? '8-12').trim();
+      const sets = Number(rawExercise.sets ?? 3);
+      const restSeconds = Number(rawExercise.rest_seconds ?? 60);
+      const rawWeight = rawExercise.working_weight;
+      const workingWeight = rawWeight === undefined || rawWeight === null || rawWeight === ''
+        ? null
+        : Number(rawWeight);
+      const coachComment = String(rawExercise.coach_comment ?? '').trim();
+
+      if (!exerciseName || exerciseName.length > 120) {
+        throw new RangeError('Exercise names must contain 1-120 characters.');
+      }
+      if (!reps || reps.length > 40) {
+        throw new RangeError('Reps must contain 1-40 characters.');
+      }
+      if (!Number.isInteger(sets) || sets < 1 || sets > 20) {
+        throw new RangeError('Sets must be a whole number between 1 and 20.');
+      }
+      if (!Number.isInteger(restSeconds) || restSeconds < 0 || restSeconds > 1800) {
+        throw new RangeError('Rest must be a whole number between 0 and 1800 seconds.');
+      }
+      if (workingWeight !== null && (!Number.isFinite(workingWeight) || workingWeight < 0 || workingWeight > 1500)) {
+        throw new RangeError('Working weight must be between 0 and 1500.');
+      }
+      if (coachComment.length > 500) {
+        throw new RangeError('Exercise notes must be 500 characters or fewer.');
+      }
+
+      return {
+        name: exerciseName,
+        sets,
+        reps,
+        rest_seconds: restSeconds,
+        working_weight: workingWeight === null ? null : Math.round(workingWeight * 100) / 100,
+        coach_comment: coachComment,
+        sort_order: exerciseIndex + 1
+      };
+    });
+
+    return { name, focus, day_number: dayIndex + 1, exercises };
+  });
+}
