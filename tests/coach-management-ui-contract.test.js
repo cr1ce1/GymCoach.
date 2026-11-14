@@ -63,3 +63,11 @@ test('coach can end only the displayed relationship without deleting history', (
   assert.match(adapter, /disconnect_coach_relationship/);
   assert.match(adapter, /Програми, календар та історія залишаться збереженими/);
 });
+
+
+test('program editor defaults to 2 days with 2 exercises and deletes through guarded RPC', () => {
+  assert.match(adapter, /День 2/);
+  assert.match(adapter, /2–5 тренувальних днів/);
+  assert.match(adapter, /rpc\('coach_delete_program'/);
+  assert.doesNotMatch(adapter, /from\('workout_programs'\)\.delete\(\)/);
+});
