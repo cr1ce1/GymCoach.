@@ -912,11 +912,11 @@ language sql
 stable
 security definer
 set search_path = ''
-as $
+as $cm$
   select exists (
     select 1 from public.assigned_workouts a where a.program_id=p_program_id
   );
-$;
+$cm$;
 revoke all on function private.has_workout_program_assignments(uuid) from public,anon;
 grant execute on function private.has_workout_program_assignments(uuid) to authenticated;
 
