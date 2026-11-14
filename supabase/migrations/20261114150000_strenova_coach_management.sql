@@ -759,6 +759,42 @@ create policy workout_exercises_coach_delete
         and private.has_role((select auth.uid()),'coach'))
   );
 
+create or replace function public.coach_pending_request_profiles(p_relationship_ids uuid[])
+returns jsonb language plpgsql stable security definer set search_path = ''
+as $cm$
+declare
+  v_uid uuid := auth.uid();
+  v_count integer;
+  v_result jsonb;
+begin
+  if v_uid is null then raise exception 'Authentication required' using errcode='28000'; end if;
+  if not private.has_role(v_uid,'coach') then raise exception 'Coach access required' using errcode='42501'; end if;
+  select count(distinct x) into v_count from unnest(coalesce(p_relationship_ids,'{}'::uuid[])) x;
+  if v_count > 25 then raise exception 'Request no more than 25 pending requests at once' using errcode='22023'; end if;
+  if exists (
+    select 1 from unnest(coalesce(p_relationship_ids,'{}'::uuid[])) requested(id)
+    left join public.athlete_coach_relationships r
+      on r.id=requested.id and r.coach_id=v_uid and r.status='pending'
+    where r.id is null
+  ) then raise exception 'Every request must belong to this coach and still be pending' using errcode='42501'; end if;
+  select coalesce(jsonb_agg(jsonb_build_object(
+    'relationship_id',r.id,
+    'athlete_id',r.athlete_id,
+    'name',up.profile->>'name',
+    'sport',up.profile->>'sport'
+  ) order by r.created_at desc),'[]'::jsonb)
+    into v_result
+    from public.athlete_coach_relationships r
+    left join public.user_profiles up on up.user_id=r.athlete_id
+   where r.id=any(coalesce(p_relationship_ids,'{}'::uuid[]))
+     and r.coach_id=v_uid and r.status='pending';
+  return v_result;
+end;
+$cm$;
+
+revoke all on function public.coach_pending_request_profiles(uuid[]) from public,anon,authenticated;
+grant execute on function public.coach_pending_request_profiles(uuid[]) to authenticated;
+
 -- Keep grants restricted; there is no direct browser write path to role history or audit history.
 revoke all on public.coach_nutrition_target_history from anon,authenticated;
 grant select on public.coach_nutrition_target_history to authenticated;
