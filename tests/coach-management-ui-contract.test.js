@@ -46,3 +46,13 @@ test('schedule edits preserve existing JSON details instead of replacing unknown
   assert.match(fn, /select\('details'\)/);
   assert.match(fn, /Object\.assign\(\{\},existingDetails/);
 });
+
+
+test('coach UI exposes a personal invite link and bounded role-safe macro calculator', () => {
+  assert.match(adapter, /coach_profiles'\)\.select\('coach_code'\)/);
+  assert.match(adapter, /cm-invite-link/);
+  assert.match(adapter, /copyInviteLink/);
+  assert.match(adapter, /calculateMacrosFromCalories/);
+  assert.match(adapter, /age < 18/);
+  assert.match(adapter, /coach_athlete_profile/);
+});
