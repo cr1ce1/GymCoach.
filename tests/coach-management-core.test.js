@@ -67,27 +67,54 @@ test('invalidates cached entries by prefix and evicts old entries at capacity', 
   assert.equal(cache.size, 1);
 });
 
-test('normalizes program days and ordered exercises', () => {
-  const days = normalizeProgramDays([{
-    name: 'Верх тіла',
-    focus: 'Верх',
-    exercises: [{
-      name: 'Тяга блока', sets: 3, reps: '8-12', rest_seconds: 90,
-      working_weight: 25.5, coach_comment: 'Контроль руху'
-    }]
-  }]);
-  assert.equal(days.length, 1);
+test('normalizes 2-5 training days with 2-4 exercises per day', () => {
+  const days = normalizeProgramDays([
+    {
+      name: 'Верх тіла', focus: 'Верх',
+      exercises: [
+        { name: 'Тяга блока', sets: 3, reps: '8-12', rest_seconds: 90, working_weight: 25.5, coach_comment: 'Контроль руху' },
+        { name: 'Жим гантелей', sets: 3, reps: '8-12', rest_seconds: 90 }
+      ]
+    },
+    {
+      name: 'Низ тіла', focus: 'Низ',
+      exercises: [
+        { name: 'Присідання', sets: 3, reps: '8-10', rest_seconds: 90 },
+        { name: 'Розгинання ніг', sets: 2, reps: '10-12', rest_seconds: 60 }
+      ]
+    }
+  ]);
+  assert.equal(days.length, 2);
   assert.equal(days[0].exercises[0].working_weight, 25.5);
   assert.equal(days[0].exercises[0].sort_order, 1);
-  assert.throws(() => normalizeProgramDays([{
-    name: 'День 1', exercises: [{ name: 'Вправа', working_weight: -1 }]
-  }]), RangeError);
+  assert.equal(days[1].day_number, 2);
 });
 
-test('rejects empty or oversized programs', () => {
+test('rejects invalid day counts, exercise counts, sets, rest and weights', () => {
   assert.throws(() => normalizeProgramDays([]), RangeError);
-  const eightDays = Array.from({ length: 8 }, (_, i) => ({
-    name: 'Day ' + (i + 1), exercises: [{ name: 'Exercise' }]
+  assert.throws(() => normalizeProgramDays([{ name: 'Only one day', exercises: [] }]), RangeError);
+  const oneExercise = [
+    { name: 'Day 1', exercises: [{ name: 'A' }, { name: 'B' }] },
+    { name: 'Day 2', exercises: [{ name: 'A' }] }
+  ];
+  assert.throws(() => normalizeProgramDays(oneExercise), RangeError);
+  const invalidSets = [
+    { name: 'Day 1', exercises: [{ name: 'A', sets: 7 }, { name: 'B' }] },
+    { name: 'Day 2', exercises: [{ name: 'A' }, { name: 'B' }] }
+  ];
+  assert.throws(() => normalizeProgramDays(invalidSets), RangeError);
+  const invalidRest = [
+    { name: 'Day 1', exercises: [{ name: 'A', rest_seconds: 601 }, { name: 'B' }] },
+    { name: 'Day 2', exercises: [{ name: 'A' }, { name: 'B' }] }
+  ];
+  assert.throws(() => normalizeProgramDays(invalidRest), RangeError);
+  const invalidWeight = [
+    { name: 'Day 1', exercises: [{ name: 'A', working_weight: -1 }, { name: 'B' }] },
+    { name: 'Day 2', exercises: [{ name: 'A' }, { name: 'B' }] }
+  ];
+  assert.throws(() => normalizeProgramDays(invalidWeight), RangeError);
+  const sixDays = Array.from({ length: 6 }, (_, i) => ({
+    name: 'Day ' + (i + 1), exercises: [{ name: 'A' }, { name: 'B' }]
   }));
-  assert.throws(() => normalizeProgramDays(eightDays), RangeError);
+  assert.throws(() => normalizeProgramDays(sixDays), RangeError);
 });
