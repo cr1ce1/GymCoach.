@@ -44,7 +44,7 @@ test('schedule edits preserve existing JSON details instead of replacing unknown
   const end = adapter.indexOf('async function editSchedule', start);
   const fn = adapter.slice(start, end);
   assert.match(fn, /select\('details'\)/);
-  assert.match(fn, /Object\.assign\(\{\},existingDetails/);
+  assert.match(fn, /Object\.assign\(\{\},previousDetails,detailsPatch/);
 });
 
 
