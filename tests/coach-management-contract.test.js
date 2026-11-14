@@ -60,7 +60,7 @@ test('migration keeps every dollar-quoted SQL body complete', () => {
   const standardQuotes = sql.split('$$').length - 1;
   assert.equal(cmQuotes % 2, 0);
   assert.equal(standardQuotes % 2, 0);
-  assert.equal(cmQuotes, 10);
+  assert.equal(cmQuotes, 12);
   const malformed = sql.split('\n').filter(line =>
     ['as $', 'do $', '$;'].includes(line.trim())
   );
