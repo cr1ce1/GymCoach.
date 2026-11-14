@@ -327,7 +327,17 @@ async function saveSchedule() {
   const date = $('cm-event-date').value;
   const notes = $('cm-event-notes').value.trim();
   if (!athlete || !title || title.length>120 || !date || notes.length>1000) return note($('cm-schedule-message'),'Заповни спортсмена, назву та дату.','error');
-  const payload = {user_id:athlete,title,scheduled_for:date,details:{time:$('cm-event-time').value || null,status:$('cm-event-status').value,notes}};
+  let existingDetails = {};
+  if (state.scheduleId) {
+    const existing = await client().from('workout_schedule').select('details')
+      .eq('id',state.scheduleId).eq('user_id',athlete).maybeSingle();
+    if (existing.error) return note($('cm-schedule-message'),existing.error.message,'error');
+    existingDetails = existing.data && existing.data.details && typeof existing.data.details === 'object'
+      ? existing.data.details : {};
+  }
+  const payload = {user_id:athlete,title,scheduled_for:date,details:Object.assign({},existingDetails,{
+    time:$('cm-event-time').value || null,status:$('cm-event-status').value,notes
+  })};
   const query = state.scheduleId
     ? client().from('workout_schedule').update(payload).eq('id',state.scheduleId).eq('user_id',athlete)
     : client().from('workout_schedule').insert(payload);
