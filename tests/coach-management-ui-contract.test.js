@@ -8,7 +8,8 @@ const adapter = await readFile(new URL('../coach-management.js', import.meta.url
 test('existing Strenova app loads the isolated coach adapter without replacing layout', () => {
   assert.match(html, /<script[^>]+src=["']\.\/coach-management\.js["'][^>]+type=["']module["']/i);
   assert.match(html, /id=["']profile["']/i);
-  assert.match(html, /id=["']coach-dashboardContent["']/i);
+  assert.match(html, /mountSection\(['"]coach-dashboard['"]/i);
+  assert.match(html, /coach-dashboardContent/i);
 });
 
 test('role controls use the authenticated self-service RPC', () => {
