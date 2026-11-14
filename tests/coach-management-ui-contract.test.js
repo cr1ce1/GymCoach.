@@ -37,3 +37,12 @@ test('client lists are bounded and profile data uses the allow-list RPC', () => 
   assert.match(adapter, /\.range\(/);
   assert.match(adapter, /\.limit\(/);
 });
+
+
+test('schedule edits preserve existing JSON details instead of replacing unknown fields', () => {
+  const start = adapter.indexOf('async function saveSchedule()');
+  const end = adapter.indexOf('async function editSchedule', start);
+  const fn = adapter.slice(start, end);
+  assert.match(fn, /select\('details'\)/);
+  assert.match(fn, /Object\.assign\(\{\},existingDetails/);
+});
