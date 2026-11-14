@@ -126,3 +126,13 @@ test('program deletion refuses to cascade away assignment history', () => {
   assert.match(fn, /exists \(select 1 from public\.assigned_workouts a where a\.program_id=p_program_id\)/i);
   assert.match(fn, /assigned programs cannot be deleted without losing history/i);
 });
+
+
+test('legacy table-level program DELETE policy cannot cascade assignment rows', () => {
+  const start = sql.indexOf('create policy workout_programs_delete_owner');
+  const end = sql.indexOf(';', start);
+  const policy = sql.slice(start, end + 1);
+  assert.match(policy, /private\.has_role/i);
+  assert.match(policy, /not exists/i);
+  assert.match(policy, /public\.assigned_workouts/i);
+});
