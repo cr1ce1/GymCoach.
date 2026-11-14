@@ -15,7 +15,7 @@ begin
   if v_uid is null then
     raise exception 'Authentication required' using errcode = '42501';
   end if;
-  if p_role not in ('athlete','coach') then
+  if p_role is null or p_role not in ('athlete','coach') then
     raise exception 'Unsupported account type' using errcode = '22023';
   end if;
   if exists (
@@ -219,5 +219,62 @@ create index if not exists workout_schedule_user_date_idx
 on public.workout_schedule(user_id,scheduled_for);
 create index if not exists athlete_nutrition_history_athlete_changed_idx
 on public.athlete_nutrition_history(athlete_id,changed_at desc);
+
+-- A role change must immediately revoke coach-only access while keeping the relationship rows.
+create or replace function private.is_active_coach_for_athlete(p_athlete_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $
+  select private.has_role((select auth.uid()),'coach')
+     and exists (
+       select 1 from public.athlete_coach_relationships r
+       where r.coach_id = (select auth.uid())
+         and r.athlete_id = p_athlete_id
+         and r.status = 'active'
+     );
+$;
+
+drop policy if exists workout_programs_update_owner on public.workout_programs;
+create policy workout_programs_update_owner
+on public.workout_programs for update to authenticated
+using (
+  (coach_id = (select auth.uid()) and private.has_role((select auth.uid()),'coach'))
+  or private.is_admin()
+)
+with check (
+  (coach_id = (select auth.uid()) and private.has_role((select auth.uid()),'coach'))
+  or private.is_admin()
+);
+
+drop policy if exists workout_programs_delete_owner on public.workout_programs;
+create policy workout_programs_delete_owner
+on public.workout_programs for delete to authenticated
+using (
+  (coach_id = (select auth.uid()) and private.has_role((select auth.uid()),'coach'))
+  or private.is_admin()
+);
+
+drop policy if exists assigned_workouts_update_owner on public.assigned_workouts;
+create policy assigned_workouts_update_owner
+on public.assigned_workouts for update to authenticated
+using (
+  (coach_id = (select auth.uid()) and private.has_role((select auth.uid()),'coach'))
+  or private.is_admin()
+)
+with check (
+  (coach_id = (select auth.uid()) and private.has_role((select auth.uid()),'coach'))
+  or private.is_admin()
+);
+
+drop policy if exists assigned_workouts_delete_owner on public.assigned_workouts;
+create policy assigned_workouts_delete_owner
+on public.assigned_workouts for delete to authenticated
+using (
+  (coach_id = (select auth.uid()) and private.has_role((select auth.uid()),'coach'))
+  or private.is_admin()
+);
 
 commit;
