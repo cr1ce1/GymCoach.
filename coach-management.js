@@ -85,7 +85,7 @@ async function switchRole() {
 }
 async function relationships(status, page) {
   const bounds = pageBounds(page || 0, 25);
-  const key = 'rel:' + status + ':' + bounds.page;
+  const key = 'rel:' + state.user.id + ':' + status + ':' + bounds.page;
   if (cache.get(key)) return cache.get(key);
   const result = await client().from('athlete_coach_relationships').select('id,athlete_id,status,created_at')
     .eq('coach_id', state.user.id).eq('status', status).order('created_at',{ascending:false}).range(bounds.from,bounds.to);
@@ -620,6 +620,13 @@ async function init() {
   try {
     const user=await resolveUser();
     if(!user || !client()) return;
+    if (state.user && state.user.id !== user.id) {
+      cache.invalidate();
+      state.clients = [];
+      state.pending = [];
+      state.selected = null;
+      state.page = 0;
+    }
     state.user=user;
     state.role=await loadRole();
     addStyles();
