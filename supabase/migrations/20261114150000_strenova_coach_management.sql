@@ -906,6 +906,20 @@ $cm$;
 revoke all on function public.coach_delete_program(uuid) from public,anon,authenticated;
 grant execute on function public.coach_delete_program(uuid) to authenticated;
 
+create or replace function private.has_workout_program_assignments(p_program_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $
+  select exists (
+    select 1 from public.assigned_workouts a where a.program_id=p_program_id
+  );
+$;
+revoke all on function private.has_workout_program_assignments(uuid) from public,anon;
+grant execute on function private.has_workout_program_assignments(uuid) to authenticated;
+
 drop policy if exists workout_programs_delete_owner on public.workout_programs;
 create policy workout_programs_delete_owner
   on public.workout_programs for delete to authenticated
@@ -914,9 +928,7 @@ create policy workout_programs_delete_owner
       (coach_id=(select auth.uid()) and private.has_role((select auth.uid()),'coach'))
       or private.is_admin()
     )
-    and not exists (
-      select 1 from public.assigned_workouts a where a.program_id=workout_programs.id
-    )
+    and not private.has_workout_program_assignments(workout_programs.id)
   );
 
 -- Keep grants restricted; there is no direct browser write path to role history or audit history.
