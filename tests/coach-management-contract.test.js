@@ -95,3 +95,13 @@ test('program save RPC writes day/exercise rows and assignment atomically', () =
   assert.match(fn, /insert into public\.assigned_workouts/i);
   assert.match(fn, /another active athlete/i);
 });
+
+
+test('completed program history cannot be overwritten through the coach editor', () => {
+  const start = sql.indexOf('create or replace function public.coach_save_program');
+  const end = sql.indexOf('revoke all on function public.coach_save_program', start);
+  const fn = sql.slice(start, end);
+  assert.match(fn, /a\.status\s*=\s*'completed'/i);
+  assert.match(fn, /historical and cannot be overwritten/i);
+  assert.match(fn, /a\.athlete_user_id\s*<>\s*p_athlete_id/i);
+});
