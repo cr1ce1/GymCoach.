@@ -826,8 +826,11 @@ begin
     perform 1 from public.workout_programs p where p.id=v_program_id and p.coach_id=v_uid and p.is_library=false for update;
     if not found then raise exception 'Program not found or not owned by this coach' using errcode='42501'; end if;
     if exists (select 1 from public.assigned_workouts a where a.program_id=v_program_id
-      and a.athlete_user_id<>p_athlete_id and a.status in ('assigned','in_progress')) then
-      raise exception 'This program is assigned to another active athlete. Save a copy for this athlete instead.' using errcode='22023';
+      and a.athlete_user_id<>p_athlete_id and a.status<>'cancelled') then
+      raise exception 'This program belongs to another athlete assignment. Save a separate program for this athlete.' using errcode='22023';
+    end if;
+    if exists (select 1 from public.assigned_workouts a where a.program_id=v_program_id and a.status='completed') then
+      raise exception 'A completed program is historical and cannot be overwritten. Create a new program.' using errcode='22023';
     end if;
     delete from public.workout_exercises e using public.workout_days d where e.workout_day_id=d.id and d.program_id=v_program_id;
     delete from public.workout_days where program_id=v_program_id;
