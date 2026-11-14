@@ -20,63 +20,81 @@
     node.style.color = bad ? 'var(--danger, #ff8d82)' : '';
   };
 
+  let roleMountPromise = null;
+
   async function mountRoleCard() {
-    const profilePage = byId('profile');
-    const client = getClient();
-    if (!profilePage || !client) return;
-    const user = await getUser();
-    if (!user) return;
-    const roleResult = await client.from('user_roles').select('role').eq('user_id', user.id);
-    const roles = roleResult.data || [];
-    const role = roles.some((r) => r.role === 'admin') ? 'admin' : roles.some((r) => r.role === 'coach') ? 'coach' : 'athlete';
-    window.gcCurrentRole = role;
-    const existing = byId('gcAccountRoleCard');
-    if (existing) {
-      const existingSelect = existing.querySelector('#gcAccountRoleSelect');
-      if (existingSelect) existingSelect.value = role;
-      return;
-    }
-    const card = document.createElement('section');
-    card.className = 'gc-platform-card';
-    card.id = 'gcAccountRoleCard';
-    if (role === 'admin') {
-      card.innerHTML = '<h3>Тип акаунта</h3><p class="muted">Адміністративні права захищені й не можуть змінюватися через цей перемикач.</p>';
-    } else {
-      card.innerHTML = `
-        <h3>Тип акаунта</h3>
-        <p class="muted">Можна перемкнутися між спортсменом і тренером. Історія, профіль, підписка та зв’язки зберігаються.</p>
-        <div class="field">
-          <label for="gcAccountRoleSelect">Мій тип</label>
-          <select id="gcAccountRoleSelect">
-            <option value="athlete">Спортсмен</option>
-            <option value="coach">Тренер</option>
-          </select>
-        </div>
-        <button class="btn secondary" id="gcAccountRoleSave" type="button">Змінити тип акаунта</button>
-        <p class="gc-platform-status" id="gcAccountRoleStatus" role="status"></p>`;
-      const select = card.querySelector('#gcAccountRoleSelect');
-      select.value = role === 'coach' ? 'coach' : 'athlete';
-      card.querySelector('#gcAccountRoleSave').addEventListener('click', async () => {
-        const nextRole = select.value;
-        if (!['athlete', 'coach'].includes(nextRole) || nextRole === (window.gcCurrentRole || 'athlete')) return;
-        const message = nextRole === 'coach'
-          ? 'Перемкнути акаунт на тренера? Твої дані та історія залишаться.'
-          : 'Перемкнути акаунт на спортсмена? Активні зв’язки з учнями збережуться, але керування ними буде недоступне до повернення ролі тренера.';
-        if (!window.confirm(message)) return;
-        const button = card.querySelector('#gcAccountRoleSave');
-        button.disabled = true;
-        status(byId('gcAccountRoleStatus'), 'Змінюємо тип акаунта…');
-        const { error } = await client.rpc('set_my_account_role', { p_role: nextRole });
-        if (error) {
-          button.disabled = false;
-          status(byId('gcAccountRoleStatus'), 'Не вдалося змінити тип: ' + error.message, true);
-          return;
-        }
-        status(byId('gcAccountRoleStatus'), 'Тип змінено. Оновлюємо кабінет…');
-        window.location.reload();
-      });
-    }
-    profilePage.appendChild(card);
+    if (roleMountPromise) return roleMountPromise;
+    roleMountPromise = (async () => {
+      const profilePage = byId('profile');
+      const client = getClient();
+      if (!profilePage || !client) return;
+      const user = await getUser();
+      if (!user) return;
+
+      // Older accounts may have only a legacy role record or no role row yet.
+      const [roleResult, legacyResult, profileResult] = await Promise.all([
+        client.from('user_roles').select('role').eq('user_id', user.id),
+        client.from('gt_user_roles').select('role').eq('user_id', user.id).maybeSingle(),
+        client.from('user_profiles').select('profile').eq('user_id', user.id).maybeSingle()
+      ]);
+      const roles = roleResult.data || [];
+      const profileRole = profileResult.data?.profile?.accountType;
+      const role = roles.some((r) => r.role === 'admin')
+        ? 'admin'
+        : (roles.some((r) => r.role === 'coach') || legacyResult.data?.role === 'coach' || profileRole === 'coach')
+          ? 'coach' : 'athlete';
+      window.gcCurrentRole = role;
+
+      let card = byId('gcAccountRoleCard');
+      if (!card) {
+        card = document.createElement('section');
+        card.className = 'gc-platform-card';
+        card.id = 'gcAccountRoleCard';
+        profilePage.appendChild(card);
+      }
+      if (role === 'admin') {
+        card.innerHTML = '<h3>Тип акаунта</h3><p class="muted">Адміністративні права захищені й не можуть змінюватися через цей перемикач.</p>';
+        return;
+      }
+      if (!card.querySelector('#gcAccountRoleSelect')) {
+        card.innerHTML = `
+          <h3>Тип акаунта</h3>
+          <p class="muted">Вибери, як використовувати Strenova. Роль можна змінювати будь-коли; профіль, історія та Plus залишаються.</p>
+          <div class="field">
+            <label for="gcAccountRoleSelect">Мій тип</label>
+            <select id="gcAccountRoleSelect">
+              <option value="athlete">Атлет</option>
+              <option value="coach">Тренер</option>
+            </select>
+          </div>
+          <button class="btn secondary" id="gcAccountRoleSave" type="button">Зберегти роль</button>
+          <p class="gc-platform-status" id="gcAccountRoleStatus" role="status"></p>`;
+        const select = card.querySelector('#gcAccountRoleSelect');
+        card.querySelector('#gcAccountRoleSave').addEventListener('click', async () => {
+          const nextRole = select.value;
+          const currentRole = window.gcCurrentRole || 'athlete';
+          if (!['athlete', 'coach'].includes(nextRole) || nextRole === currentRole) return;
+          const message = nextRole === 'coach'
+            ? 'Перемкнути акаунт на тренера? Твої дані та Plus залишаться.'
+            : 'Перемкнути акаунт на атлета? Дані та зв’язки збережуться, але керування учнями буде призупинено.';
+          if (!window.confirm(message)) return;
+          const button = card.querySelector('#gcAccountRoleSave');
+          button.disabled = true;
+          status(byId('gcAccountRoleStatus'), 'Змінюємо роль…');
+          const { error } = await client.rpc('set_my_account_role', { p_role: nextRole });
+          if (error) {
+            button.disabled = false;
+            status(byId('gcAccountRoleStatus'), 'Не вдалося змінити роль: ' + error.message, true);
+            return;
+          }
+          status(byId('gcAccountRoleStatus'), 'Роль змінено. Оновлюємо кабінет…');
+          window.location.reload();
+        });
+      }
+      card.querySelector('#gcAccountRoleSelect').value = role;
+    })();
+    try { await roleMountPromise; }
+    finally { roleMountPromise = null; }
   }
 
   function createCoachTools(root) {
@@ -345,8 +363,17 @@
     mountRoleCard();
     watchCoachDashboard();
   }
+  function observeProfileMount() {
+    if (!document.documentElement || document.documentElement.dataset.gcRoleObserver === '1') return;
+    document.documentElement.dataset.gcRoleObserver = '1';
+    const observer = new MutationObserver(() => {
+      if (byId('profile') && getClient()) mountRoleCard();
+    });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+  }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
   else boot();
+  observeProfileMount();
   window.addEventListener('load', boot, { once: true });
   if (getClient()) getClient().auth.onAuthStateChange(() => {
     setTimeout(() => { mountRoleCard(); watchCoachDashboard(); }, 250);
