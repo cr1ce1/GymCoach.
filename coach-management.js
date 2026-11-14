@@ -1,4 +1,4 @@
-import { createTtlCache, escapeHtml, normalizeProgramDays, pageBounds, validateNutritionTarget } from './coach-management-core.js';
+import { calculateMacrosFromCalories, createTtlCache, escapeHtml, normalizeProgramDays, pageBounds, validateNutritionTarget } from './coach-management-core.js';
 
 const $ = id => document.getElementById(id);
 const cache = createTtlCache({ ttlMs: 20000, maxEntries: 80 });
@@ -130,6 +130,17 @@ async function updateStats() {
   if ($('cm-active-count')) $('cm-active-count').textContent = result[0].count || 0;
   if ($('cm-pending-count')) $('cm-pending-count').textContent = result[1].count || 0;
   if ($('cm-program-count')) $('cm-program-count').textContent = result[2].count || 0;
+  const invite = await client().from('coach_profiles').select('coach_code').eq('user_id',uid).maybeSingle();
+  if (invite.error) throw invite.error;
+  const code = invite.data && invite.data.coach_code;
+  if ($('cm-invite-code')) $('cm-invite-code').textContent = code || 'Код ще не створено';
+  if ($('cm-invite-link')) {
+    const url = new URL(window.location.href);
+    url.search = '';
+    url.searchParams.set('invite', code || '');
+    url.hash = '';
+    $('cm-invite-link').value = code ? url.toString() : '';
+  }
 }
 function mountCoach() {
   const root = $('coach-dashboardContent');
@@ -137,7 +148,7 @@ function mountCoach() {
   const panel = document.createElement('div');
   panel.id = 'cm-coach-panel';
   panel.className = 'cm-panel';
-  panel.innerHTML = '<div class="cm-card"><div class="cm-grid"><div class="cm-stat"><strong id="cm-active-count">—</strong>Активні клієнти</div><div class="cm-stat"><strong id="cm-pending-count">—</strong>Нові запити</div><div class="cm-stat"><strong id="cm-program-count">—</strong>Мої програми</div></div></div><div class="cm-tabs">' +
+  panel.innerHTML = '<div class="cm-card"><div class="cm-grid"><div class="cm-stat"><strong id="cm-active-count">—</strong>Активні клієнти</div><div class="cm-stat"><strong id="cm-pending-count">—</strong>Нові запити</div><div class="cm-stat"><strong id="cm-program-count">—</strong>Мої програми</div></div></div><div id="cm-invite-card" class="cm-card"><h3>Запрошення спортсменів</h3><p class="cm-muted">Твій персональний код і посилання для підключення клієнтів.</p><div id="cm-invite-code" class="cm-pill">Завантажуємо код…</div><div class="field"><label for="cm-invite-link">Посилання-запрошення</label><input id="cm-invite-link" readonly></div>'+btn('Копіювати посилання','copy-invite')+'<p id="cm-invite-message" class="cm-message" role="status"></p></div><div class="cm-tabs">' +
     ['clients','nutrition','programs','schedule','stats'].map((tab,i)=>'<button type="button" class="btn secondary" data-cm-tab="'+tab+'">'+['Клієнти','КБЖВ','Програми','Календар','Статистика'][i]+'</button>').join('') +
     '</div><div id="cm-content" class="cm-card"><p class="cm-muted">Завантажуємо…</p></div>';
   root.appendChild(panel);
@@ -193,14 +204,14 @@ function clientSelect(id) {
 async function renderNutrition(content) {
   await loadLists(0);
   content.innerHTML = '<h3>Керування КБЖВ</h3>'+clientSelect('cm-nutrition-client')+
-    '<p class="cm-muted">Ручне введення значень. Автоматичний розрахунок макросів для клієнтів до 18 років вимкнений.</p><div class="cm-form">'+
+    '<p class="cm-muted">Ручне введення значень. Автоматичний розподіл макросів доступний лише для повнолітніх клієнтів; для неповнолітніх показники слід узгоджувати з кваліфікованим фахівцем.</p><div class="cm-form">'+
     '<div class="field"><label for="cm-kcal">Калорії, ккал</label><input id="cm-kcal" type="number" min="0" max="15000" step="1"></div>'+
     '<div class="field"><label for="cm-protein">Білки, г</label><input id="cm-protein" type="number" min="0" max="2000" step="0.1"></div>'+
     '<div class="field"><label for="cm-fat">Жири, г</label><input id="cm-fat" type="number" min="0" max="2000" step="0.1"></div>'+
     '<div class="field"><label for="cm-carbs">Вуглеводи, г</label><input id="cm-carbs" type="number" min="0" max="2000" step="0.1"></div>'+
     '<div class="field"><label for="cm-water">Вода, мл</label><input id="cm-water" type="number" min="0" max="15000" step="1"></div>'+
     '<div class="field"><label for="cm-notes">Примітка</label><input id="cm-notes" maxlength="1000"></div></div>'+
-    btn('Зберегти КБЖВ','save-nutrition')+btn('Відновити попередні','restore-nutrition','',true)+
+    btn('Розрахувати БЖВ для повнолітнього клієнта','calculate-macros','',true)+btn('Зберегти КБЖВ','save-nutrition')+btn('Відновити попередні','restore-nutrition','',true)+
     '<p id="cm-nutrition-message" class="cm-message" role="status"></p><h3>Історія змін</h3><div id="cm-nutrition-history" class="cm-list"></div>';
   await loadNutritionTarget($('#cm-nutrition-client').value);
 }
@@ -216,6 +227,47 @@ async function loadNutritionTarget(id) {
   const history = $('cm-nutrition-history');
   if (history) history.innerHTML = (result[1].data || []).map(row=>'<div class="cm-item"><div><strong>'+esc(new Date(row.changed_at).toLocaleString('uk-UA'))+'</strong><small>Ккал '+val(row.snapshot.calories_kcal)+' · Б '+val(row.snapshot.protein_g)+' · Ж '+val(row.snapshot.fat_g)+' · В '+val(row.snapshot.carbs_g)+'</small></div></div>').join('') || '<p class="cm-muted">Історія порожня.</p>';
 }
+async function calculateNutrition() {
+  const athleteId = $('cm-nutrition-client') && $('cm-nutrition-client').value;
+  const status = $('cm-nutrition-message');
+  const calories = $('cm-kcal') && $('cm-kcal').value;
+  if (!athleteId) return note(status,'Спочатку обери клієнта.','error');
+  const profile = await client().rpc('coach_athlete_profile',{p_athlete_id:athleteId});
+  if (profile.error) return note(status,profile.error.message || 'Не вдалося перевірити вік клієнта.','error');
+  const age = Number(profile.data && profile.data.age);
+  if (!Number.isFinite(age) || age < 18) {
+    return note(status,'Автоматичний розрахунок вимкнений: для клієнтів до 18 років або з невідомим віком КБЖВ має узгодити кваліфікований фахівець.','error');
+  }
+  try {
+    const result = calculateMacrosFromCalories(calories,{age});
+    if (!result.available) return note(status,result.message,'error');
+    $('cm-protein').value = result.protein_g;
+    $('cm-fat').value = result.fat_g;
+    $('cm-carbs').value = result.carbs_g;
+    note(status,'БЖВ розраховано за заданою калорійністю. Перевір значення перед збереженням.','success');
+  } catch(error) {
+    note(status,error.message || 'Перевір калорійність.','error');
+  }
+}
+
+async function copyInviteLink() {
+  const input = $('cm-invite-link');
+  const status = $('cm-invite-message');
+  if (!input || !input.value) return note(status,'Персональне посилання ще не створено.','error');
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(input.value);
+    } else {
+      input.focus();
+      input.select();
+      if (!document.execCommand('copy')) throw new Error('Браузер не дозволив копіювання.');
+    }
+    note(status,'Посилання скопійовано.','success');
+  } catch(error) {
+    note(status,error.message || 'Не вдалося скопіювати посилання.','error');
+  }
+}
+
 async function saveNutrition() {
   const id = $('cm-nutrition-client').value;
   const valid = validateNutritionTarget({
@@ -406,6 +458,8 @@ async function coachClick(event) {
       state.page=Math.max(0,Number(action.dataset.page)||0);
       await renderTab('clients');
     } else if (kind==='tab') await renderTab(action.dataset.tab);
+    else if (kind==='calculate-macros') await calculateNutrition();
+    else if (kind==='copy-invite') await copyInviteLink();
     else if (kind==='save-nutrition') await saveNutrition();
     else if (kind==='restore-nutrition') await restoreNutrition();
     else if (kind==='save-program') await saveProgram();
