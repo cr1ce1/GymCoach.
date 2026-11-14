@@ -83,3 +83,10 @@ test('regular schedule creates selected weekdays for a bounded number of weeks a
   assert.match(fn, /datesToCreate/);
   assert.match(fn, /weeksValue>12/);
 });
+
+
+test('cached client lists are scoped to the current authenticated account', () => {
+  assert.match(adapter, /'rel:' \+ state\.user\.id \+ ':' \+ status/);
+  assert.match(adapter, /state\.user\.id !== user\.id/);
+  assert.match(adapter, /cache\.invalidate\(\)/);
+});
