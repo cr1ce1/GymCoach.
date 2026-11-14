@@ -93,7 +93,7 @@ test('program save RPC writes day/exercise rows and assignment atomically', () =
   assert.match(fn, /insert into public\.workout_days/i);
   assert.match(fn, /insert into public\.workout_exercises/i);
   assert.match(fn, /insert into public\.assigned_workouts/i);
-  assert.match(fn, /another active athlete/i);
+  assert.match(fn, /another athlete assignment/i);
 });
 
 
