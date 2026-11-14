@@ -56,3 +56,10 @@ test('coach UI exposes a personal invite link and bounded role-safe macro calcul
   assert.match(adapter, /age < 18/);
   assert.match(adapter, /coach_athlete_profile/);
 });
+
+
+test('coach can end only the displayed relationship without deleting history', () => {
+  assert.match(adapter, /remove-client/);
+  assert.match(adapter, /disconnect_coach_relationship/);
+  assert.match(adapter, /Програми, календар та історія залишаться збереженими/);
+});
