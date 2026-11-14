@@ -71,3 +71,15 @@ test('program editor defaults to 2 days with 2 exercises and deletes through gua
   assert.match(adapter, /rpc\('coach_delete_program'/);
   assert.doesNotMatch(adapter, /from\('workout_programs'\)\.delete\(\)/);
 });
+
+
+test('regular schedule creates selected weekdays for a bounded number of weeks and avoids duplicates', () => {
+  const start = adapter.indexOf('async function saveSchedule()');
+  const end = adapter.indexOf('async function editSchedule', start);
+  const fn = adapter.slice(start, end);
+  assert.match(fn, /cm-repeat-days/);
+  assert.match(fn, /weeksValue\*7/);
+  assert.match(fn, /in\('scheduled_for',dates\)/);
+  assert.match(fn, /datesToCreate/);
+  assert.match(fn, /weeksValue>12/);
+});
