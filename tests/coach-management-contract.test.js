@@ -133,6 +133,7 @@ test('legacy table-level program DELETE policy cannot cascade assignment rows', 
   const end = sql.indexOf(';', start);
   const policy = sql.slice(start, end + 1);
   assert.match(policy, /private\.has_role/i);
-  assert.match(policy, /not exists/i);
-  assert.match(policy, /public\.assigned_workouts/i);
+  assert.match(policy, /not private\.has_workout_program_assignments/i);
+  assert.match(sql, /create or replace function private\.has_workout_program_assignments/i);
+  assert.match(sql, /security definer[\s\S]*?set search_path = ''[\s\S]*?public\.assigned_workouts/i);
 });
