@@ -114,6 +114,9 @@ begin
       update public.athlete_coach_relationships
          set status='suspended', updated_at=now()
        where athlete_id=v_uid and status='active';
+      update public.athlete_coach_relationships
+         set status='rejected', updated_at=now()
+       where athlete_id=v_uid and status='pending';
 
       insert into public.user_roles(user_id,role)
       values (v_uid,'coach') on conflict (user_id,role) do nothing;
@@ -149,6 +152,9 @@ begin
       update public.athlete_coach_relationships
          set status='suspended', updated_at=now()
        where coach_id=v_uid and status='active';
+      update public.athlete_coach_relationships
+         set status='rejected', updated_at=now()
+       where coach_id=v_uid and status='pending';
 
       insert into public.user_roles(user_id,role)
       values (v_uid,'athlete') on conflict (user_id,role) do nothing;
@@ -291,7 +297,7 @@ begin
     return jsonb_build_object('success',true,'status','rejected','relationship_id',p_relationship_id);
   end if;
 
-  if not private.has_role(v_athlete,'athlete') then
+  if not exists (select 1 from public.user_roles ur where ur.user_id=v_athlete and ur.role='athlete') then
     raise exception 'The requesting account is no longer an athlete' using errcode='42501';
   end if;
 
@@ -656,6 +662,35 @@ create policy workout_exercises_read_program_access
     )
   );
 
+
+-- Exercise load and coach notes are stored separately from public instructions.
+alter table public.workout_exercises
+  add column if not exists working_weight numeric(8,2),
+  add column if not exists coach_comment text not null default '';
+
+do $
+begin
+  if not exists (
+    select 1 from pg_constraint
+     where conrelid='public.workout_exercises'::regclass
+       and conname='workout_exercises_working_weight_check'
+  ) then
+    alter table public.workout_exercises
+      add constraint workout_exercises_working_weight_check
+      check (working_weight is null or working_weight between 0 and 1500);
+  end if;
+  if not exists (
+    select 1 from pg_constraint
+     where conrelid='public.workout_exercises'::regclass
+       and conname='workout_exercises_coach_comment_check'
+  ) then
+    alter table public.workout_exercises
+      add constraint workout_exercises_coach_comment_check
+      check (char_length(coach_comment) <= 500);
+  end if;
+end;
+$;
+
 -- Program days and exercises can be edited only through a parent program owned by this coach.
 grant select,insert,update,delete on public.workout_days,public.workout_exercises to authenticated;
 
@@ -730,6 +765,246 @@ create policy workout_exercises_coach_delete
         and p.coach_id=(select auth.uid())
         and private.has_role((select auth.uid()),'coach'))
   );
+
+
+-- Pending requests expose only a small identity allow-list to their target coach.
+create or replace function public.coach_pending_request_profiles(p_relationship_ids uuid[])
+returns jsonb
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $
+declare
+  v_uid uuid := auth.uid();
+  v_count integer;
+  v_result jsonb;
+begin
+  if v_uid is null then raise exception 'Authentication required' using errcode='28000'; end if;
+  if not private.has_role(v_uid,'coach') then raise exception 'Coach access required' using errcode='42501'; end if;
+  select count(distinct x) into v_count
+    from unnest(coalesce(p_relationship_ids,'{}'::uuid[])) x;
+  if v_count > 25 then raise exception 'Request no more than 25 pending requests at once' using errcode='22023'; end if;
+  if exists (
+    select 1
+      from unnest(coalesce(p_relationship_ids,'{}'::uuid[])) requested(id)
+      left join public.athlete_coach_relationships r
+        on r.id=requested.id and r.coach_id=v_uid and r.status='pending'
+     where r.id is null
+  ) then raise exception 'Every request must belong to this coach and still be pending' using errcode='42501'; end if;
+
+  select coalesce(jsonb_agg(jsonb_build_object(
+    'relationship_id',r.id,
+    'athlete_id',r.athlete_id,
+    'name',up.profile->>'name',
+    'sport',up.profile->>'sport'
+  ) order by r.created_at desc), '[]'::jsonb)
+    into v_result
+    from public.athlete_coach_relationships r
+    left join public.user_profiles up on up.user_id=r.athlete_id
+   where r.id=any(coalesce(p_relationship_ids,'{}'::uuid[]))
+     and r.coach_id=v_uid
+     and r.status='pending';
+  return v_result;
+end;
+$;
+
+-- Save/update a coach-owned multi-day program and assign it atomically to an active client.
+create or replace function public.coach_save_program(
+  p_program_id uuid,
+  p_athlete_id uuid,
+  p_name text,
+  p_category text,
+  p_days jsonb,
+  p_due_date date default null
+)
+returns uuid
+language plpgsql
+security definer
+set search_path = ''
+as $
+declare
+  v_uid uuid := auth.uid();
+  v_program_id uuid := p_program_id;
+  v_day jsonb;
+  v_exercise jsonb;
+  v_day_id uuid;
+  v_day_number smallint := 0;
+  v_exercise_number smallint;
+  v_total integer := 0;
+  v_name text := trim(coalesce(p_name,''));
+  v_category text := trim(coalesce(p_category,''));
+  v_day_name text;
+  v_focus text;
+  v_exercise_name text;
+  v_reps text;
+  v_sets_text text;
+  v_rest_text text;
+  v_weight_text text;
+  v_sets smallint;
+  v_rest integer;
+  v_weight numeric(8,2);
+  v_comment text;
+  v_flat_exercises jsonb := '[]'::jsonb;
+  v_assignment_id uuid;
+begin
+  if v_uid is null then raise exception 'Authentication required' using errcode='28000'; end if;
+  if not private.has_role(v_uid,'coach') then raise exception 'Coach access required' using errcode='42501'; end if;
+  if p_athlete_id is null or not private.is_active_coach_for_athlete(p_athlete_id) then
+    raise exception 'An active athlete relationship is required' using errcode='42501';
+  end if;
+  if v_name='' or char_length(v_name)>120 then raise exception 'Program name must contain 1-120 characters' using errcode='22023'; end if;
+  if v_category not in ('Full Body','Split','Upper/Lower') then
+    raise exception 'Unsupported program category' using errcode='22023';
+  end if;
+  if p_days is null or jsonb_typeof(p_days)<>'array'
+     or jsonb_array_length(p_days)<1 or jsonb_array_length(p_days)>7 then
+    raise exception 'A program must contain between 1 and 7 training days' using errcode='22023';
+  end if;
+
+  if v_program_id is null then
+    insert into public.workout_programs(
+      coach_id,name,category,variation,difficulty,exercise_count,exercises,
+      weekly_frequency,schedule,is_library,is_published,description,created_at,updated_at
+    )
+    values(
+      v_uid,v_name,v_category,'Coach plan','beginner',0,'[]'::jsonb,
+      jsonb_array_length(p_days)::smallint,p_days,false,false,'',now(),now()
+    )
+    returning id into v_program_id;
+  else
+    perform 1
+      from public.workout_programs p
+     where p.id=v_program_id and p.coach_id=v_uid and p.is_library=false
+     for update;
+    if not found then raise exception 'Program not found or not owned by this coach' using errcode='42501'; end if;
+    delete from public.workout_exercises e
+     using public.workout_days d
+     where e.workout_day_id=d.id and d.program_id=v_program_id;
+    delete from public.workout_days where program_id=v_program_id;
+  end if;
+
+  for v_day in select value from jsonb_array_elements(p_days)
+  loop
+    v_day_number := v_day_number + 1;
+    v_day_name := trim(coalesce(v_day->>'name',''));
+    v_focus := trim(coalesce(v_day->>'focus',''));
+    if v_day_name='' or char_length(v_day_name)>80 or char_length(v_focus)>120 then
+      raise exception 'Each training day needs a short name and a focus of at most 120 characters' using errcode='22023';
+    end if;
+    if jsonb_typeof(v_day->'exercises') is distinct from 'array'
+       or jsonb_array_length(v_day->'exercises')<1
+       or jsonb_array_length(v_day->'exercises')>20 then
+      raise exception 'Each training day must contain between 1 and 20 exercises' using errcode='22023';
+    end if;
+
+    insert into public.workout_days(program_id,day_number,name,focus,is_rest_day)
+    values(v_program_id,v_day_number,v_day_name,v_focus,false)
+    returning id into v_day_id;
+
+    v_exercise_number := 0;
+    for v_exercise in select value from jsonb_array_elements(v_day->'exercises')
+    loop
+      v_exercise_number := v_exercise_number + 1;
+      v_exercise_name := trim(coalesce(v_exercise->>'name',''));
+      v_reps := trim(coalesce(v_exercise->>'reps','8-12'));
+      v_sets_text := coalesce(nullif(trim(v_exercise->>'sets'),''),'3');
+      v_rest_text := coalesce(nullif(trim(v_exercise->>'rest_seconds'),''),'60');
+      v_weight_text := nullif(trim(v_exercise->>'working_weight'),'');
+      v_comment := trim(coalesce(v_exercise->>'coach_comment',''));
+
+      if v_exercise_name='' or char_length(v_exercise_name)>120 then
+        raise exception 'Exercise names must contain 1-120 characters' using errcode='22023';
+      end if;
+      if char_length(v_reps)>40 or v_reps='' then raise exception 'Reps must contain 1-40 characters' using errcode='22023'; end if;
+      if v_sets_text !~ '^[0-9]{1,2}revoke all on public.coach_nutrition_target_history from anon,authenticated;
+grant select on public.coach_nutrition_target_history to authenticated;
+
+comment on table public.coach_nutrition_targets is
+  'Coach-managed nutrition values for one currently connected athlete; no automatic calorie deficit is generated.';
+comment on table public.coach_nutrition_target_history is
+  'Append-only snapshots of coach-managed nutrition target changes.';
+comment on table public.account_role_history is
+  'Audit trail for self-service athlete/coach role changes. Admin role is never self-service.';
+ then raise exception 'Sets must be a whole number' using errcode='22023'; end if;
+      v_sets := v_sets_text::smallint;
+      if v_sets<1 or v_sets>20 then raise exception 'Sets must be between 1 and 20' using errcode='22023'; end if;
+      if v_rest_text !~ '^[0-9]{1,4}revoke all on public.coach_nutrition_target_history from anon,authenticated;
+grant select on public.coach_nutrition_target_history to authenticated;
+
+comment on table public.coach_nutrition_targets is
+  'Coach-managed nutrition values for one currently connected athlete; no automatic calorie deficit is generated.';
+comment on table public.coach_nutrition_target_history is
+  'Append-only snapshots of coach-managed nutrition target changes.';
+comment on table public.account_role_history is
+  'Audit trail for self-service athlete/coach role changes. Admin role is never self-service.';
+ then raise exception 'Rest must be a whole number of seconds' using errcode='22023'; end if;
+      v_rest := v_rest_text::integer;
+      if v_rest<0 or v_rest>1800 then raise exception 'Rest must be between 0 and 1800 seconds' using errcode='22023'; end if;
+      if v_weight_text is not null then
+        if v_weight_text !~ '^[0-9]{1,4}(\.[0-9]{1,2})?revoke all on public.coach_nutrition_target_history from anon,authenticated;
+grant select on public.coach_nutrition_target_history to authenticated;
+
+comment on table public.coach_nutrition_targets is
+  'Coach-managed nutrition values for one currently connected athlete; no automatic calorie deficit is generated.';
+comment on table public.coach_nutrition_target_history is
+  'Append-only snapshots of coach-managed nutrition target changes.';
+comment on table public.account_role_history is
+  'Audit trail for self-service athlete/coach role changes. Admin role is never self-service.';
+ then raise exception 'Working weight must be a non-negative number' using errcode='22023'; end if;
+        v_weight := v_weight_text::numeric(8,2);
+        if v_weight<0 or v_weight>1500 then raise exception 'Working weight must be between 0 and 1500' using errcode='22023'; end if;
+      else
+        v_weight := null;
+      end if;
+      if char_length(v_comment)>500 then raise exception 'Exercise notes must be 500 characters or fewer' using errcode='22023'; end if;
+
+      insert into public.workout_exercises(
+        workout_day_id,sort_order,name,sets,reps,rest_seconds,working_weight,coach_comment
+      )
+      values(v_day_id,v_exercise_number,v_exercise_name,v_sets,v_reps,v_rest,v_weight,v_comment);
+
+      v_flat_exercises := v_flat_exercises || jsonb_build_array(jsonb_build_object(
+        'name',v_exercise_name,'sets',v_sets,'reps',v_reps,
+        'rest_seconds',v_rest,'working_weight',v_weight,
+        'coach_comment',v_comment,'day_number',v_day_number
+      ));
+      v_total := v_total + 1;
+    end loop;
+  end loop;
+
+  update public.workout_programs
+     set name=v_name,category=v_category,exercise_count=v_total,
+         exercises=v_flat_exercises,weekly_frequency=jsonb_array_length(p_days)::smallint,
+         schedule=p_days,updated_at=now()
+   where id=v_program_id and coach_id=v_uid;
+
+  select a.id into v_assignment_id
+    from public.assigned_workouts a
+   where a.program_id=v_program_id
+     and a.coach_id=v_uid
+     and a.athlete_user_id=p_athlete_id
+     and a.status in ('assigned','in_progress')
+   order by a.assigned_at desc
+   limit 1
+   for update;
+  if found then
+    update public.assigned_workouts
+       set due_date=p_due_date,updated_at=now()
+     where id=v_assignment_id;
+  else
+    insert into public.assigned_workouts(program_id,coach_id,athlete_user_id,status,due_date,assigned_at,updated_at)
+    values(v_program_id,v_uid,p_athlete_id,'assigned',p_due_date,now(),now());
+  end if;
+
+  return v_program_id;
+end;
+$;
+
+revoke all on function public.coach_pending_request_profiles(uuid[]) from public, anon, authenticated;
+revoke all on function public.coach_save_program(uuid,uuid,text,text,jsonb,date) from public, anon, authenticated;
+grant execute on function public.coach_pending_request_profiles(uuid[]) to authenticated;
+grant execute on function public.coach_save_program(uuid,uuid,text,text,jsonb,date) to authenticated;
 
 -- Keep grants restricted; there is no direct browser write path to role history or audit history.
 revoke all on public.coach_nutrition_target_history from anon,authenticated;
