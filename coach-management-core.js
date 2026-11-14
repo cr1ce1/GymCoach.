@@ -142,8 +142,8 @@ export function createTtlCache({ ttlMs = 30000, maxEntries = 100 } = {}) {
  * Keeps the UI contract small and mirrors the limits enforced by the SQL RPC.
  */
 export function normalizeProgramDays(days) {
-  if (!Array.isArray(days) || days.length < 1 || days.length > 7) {
-    throw new RangeError('A program must contain between 1 and 7 training days.');
+  if (!Array.isArray(days) || days.length < 2 || days.length > 5) {
+    throw new RangeError('A program must contain between 2 and 5 training days.');
   }
 
   return days.map((rawDay, dayIndex) => {
@@ -160,8 +160,8 @@ export function normalizeProgramDays(days) {
       throw new RangeError('Training day focus must contain no more than 120 characters.');
     }
 
-    if (!Array.isArray(rawDay.exercises) || rawDay.exercises.length < 1 || rawDay.exercises.length > 20) {
-      throw new RangeError('Each training day must contain between 1 and 20 exercises.');
+    if (!Array.isArray(rawDay.exercises) || rawDay.exercises.length < 2 || rawDay.exercises.length > 4) {
+      throw new RangeError('Each training day must contain between 2 and 4 exercises.');
     }
 
     const exercises = rawDay.exercises.map((rawExercise, exerciseIndex) => {
@@ -185,11 +185,11 @@ export function normalizeProgramDays(days) {
       if (!reps || reps.length > 40) {
         throw new RangeError('Reps must contain 1-40 characters.');
       }
-      if (!Number.isInteger(sets) || sets < 1 || sets > 20) {
-        throw new RangeError('Sets must be a whole number between 1 and 20.');
+      if (!Number.isInteger(sets) || sets < 1 || sets > 6) {
+        throw new RangeError('Sets must be a whole number between 1 and 6.');
       }
-      if (!Number.isInteger(restSeconds) || restSeconds < 0 || restSeconds > 1800) {
-        throw new RangeError('Rest must be a whole number between 0 and 1800 seconds.');
+      if (!Number.isInteger(restSeconds) || restSeconds < 0 || restSeconds > 600) {
+        throw new RangeError('Rest must be a whole number between 0 and 600 seconds.');
       }
       if (workingWeight !== null && (!Number.isFinite(workingWeight) || workingWeight < 0 || workingWeight > 1500)) {
         throw new RangeError('Working weight must be between 0 and 1500.');
