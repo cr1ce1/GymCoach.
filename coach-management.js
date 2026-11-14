@@ -167,7 +167,7 @@ async function renderClients(content) {
   let html = '<h3>Запити на співпрацю</h3><div class="cm-list">';
   html += state.pending.length ? state.pending.map(row=>'<div class="cm-item"><div><strong>'+val(row.name || 'Спортсмен')+'</strong><small>'+val(row.sport)+'</small></div><div class="cm-actions">'+btn('Прийняти','review','data-id="'+esc(row.relationship_id)+'"')+btn('Відхилити','review','data-id="'+esc(row.relationship_id)+'" data-decision="reject"',true)+'</div></div>').join('') : '<p class="cm-muted">Нових запитів немає.</p>';
   html += '</div><h3>Мої спортсмени</h3><div class="cm-list">';
-  html += state.clients.length ? state.clients.map(row=>'<div class="cm-item"><div><strong>'+val(row.name || 'Спортсмен')+'</strong><small>'+val(row.sport)+' · '+val(row.goal)+'</small></div>'+btn('Відкрити','client','data-id="'+esc(row.user_id)+'')+'</div>').join('') : '<p class="cm-muted">Поки немає активних клієнтів.</p>';
+  html += state.clients.length ? state.clients.map(row=>'<div class="cm-item"><div><strong>'+val(row.name || 'Спортсмен')+'</strong><small>'+val(row.sport)+' · '+val(row.goal)+'</small></div>'+btn('Відкрити','client','data-id="'+esc(row.user_id)+'"')+'</div>').join('') : '<p class="cm-muted">Поки немає активних клієнтів.</p>';
   html += '</div><div class="cm-actions">'+btn('Попередні','page','data-page="'+Math.max(0,state.page-1)+'"',true)+btn('Наступні','page','data-page="'+(state.page+1)+'"',true)+'</div><div id="cm-detail"></div><p id="cm-client-message" class="cm-message" role="status"></p>';
   content.innerHTML = html;
   if (selected) await renderClient(selected.user_id);
