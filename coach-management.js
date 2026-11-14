@@ -300,11 +300,20 @@ async function renderPrograms(content) {
     '<div class="cm-form"><div class="field"><label for="cm-program-name">Назва</label><input id="cm-program-name" maxlength="120" value="Індивідуальна програма"></div>'+
     '<div class="field"><label for="cm-program-category">Тип</label><select id="cm-program-category"><option>Full Body</option><option>Split</option><option>Upper/Lower</option></select></div>'+
     '<div class="field cm-full"><label for="cm-program-days">Тренувальні дні та вправи (JSON)</label><textarea id="cm-program-days" class="cm-json" spellcheck="false"></textarea></div></div>'+
-    '<p class="cm-muted">Кожен день має містити 1–20 вправ. Для вправ можна задати підходи, повторення, відпочинок, вагу та коментар.</p>'+
+    '<p class="cm-muted">Програма містить 2–5 тренувальних днів, у кожному — 2–4 вправи. Для вправ можна задати 1–6 підходів, повторення, відпочинок до 10 хвилин, вагу та коментар.</p>'+
     btn('Зберегти й призначити','save-program')+btn('Нова програма','clear-program','',true)+
     '<p id="cm-program-message" class="cm-message" role="status"></p><h3>Збережені програми</h3><div class="cm-list" id="cm-program-list">'+
     (result.data || []).map(row=>'<div class="cm-item"><div><strong>'+val(row.name)+'</strong><small>'+val(row.category)+'</small></div><div class="cm-actions">'+btn('Редагувати','edit-program','data-id="'+esc(row.id)+'"',true)+btn('Видалити','delete-program','data-id="'+esc(row.id)+'"',true)+'</div></div>').join('')+'</div>';
-  $('cm-program-days').value = JSON.stringify([{name:'День 1',focus:'Загальна підготовка',exercises:[{name:'Назва вправи',sets:3,reps:'8-12',rest_seconds:60,working_weight:null,coach_comment:''}]}],null,2);
+  $('cm-program-days').value = JSON.stringify([
+    {name:'День 1',focus:'Основний блок',exercises:[
+      {name:'Вправа 1',sets:3,reps:'8-12',rest_seconds:60,working_weight:null,coach_comment:''},
+      {name:'Вправа 2',sets:3,reps:'8-12',rest_seconds:60,working_weight:null,coach_comment:''}
+    ]},
+    {name:'День 2',focus:'Додатковий блок',exercises:[
+      {name:'Вправа 3',sets:3,reps:'8-12',rest_seconds:60,working_weight:null,coach_comment:''},
+      {name:'Вправа 4',sets:3,reps:'8-12',rest_seconds:60,working_weight:null,coach_comment:''}
+    ]}
+  ],null,2);
 }
 async function editProgram(id) {
   const p = await client().from('workout_programs').select('id,name,category').eq('id',id).eq('coach_id',state.user.id).maybeSingle();
@@ -345,9 +354,11 @@ async function saveProgram() {
   await renderPrograms($('cm-content'));
 }
 async function deleteProgram(id) {
-  if (!confirm('Видалити програму та пов’язані з нею призначення? Записи історії тренувань зберігаються окремо.')) return;
-  const result = await client().from('workout_programs').delete().eq('id',id).eq('coach_id',state.user.id);
+  if (!confirm('Видалити програму? Програми з історією призначень видалятися не будуть, щоб зберегти записи спортсменів.')) return;
+  const result = await client().rpc('coach_delete_program',{p_program_id:id});
   if (result.error) throw result.error;
+  if (result.data !== true) throw new Error('Програму не видалено.');
+  cache.invalidate();
   await renderPrograms($('cm-content'));
 }
 async function renderSchedule(content) {
