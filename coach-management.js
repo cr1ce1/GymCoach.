@@ -435,15 +435,24 @@ async function saveSchedule() {
   }
   if (!dates.length) return note($('cm-schedule-message'),'Не вдалося сформувати дати регулярного графіка.','error');
   if (dates.length>60) return note($('cm-schedule-message'),'Занадто багато занять для одного запиту. Зменш кількість днів або тижнів.','error');
+  let datesToCreate = dates;
+  if (selectedDays.length) {
+    const existing = await client().from('workout_schedule').select('scheduled_for')
+      .eq('user_id',athlete).eq('title',title).in('scheduled_for',dates).limit(60);
+    if (existing.error) return note($('cm-schedule-message'),existing.error.message,'error');
+    const existingDates = new Set((existing.data || []).map(row=>row.scheduled_for));
+    datesToCreate = dates.filter(day=>!existingDates.has(day));
+    if (!datesToCreate.length) return note($('cm-schedule-message'),'Усі ці дати вже є в календарі. Дублі не створено.','success');
+  }
 
-  const payloads = dates.map(scheduledFor=>({
+  const payloads = datesToCreate.map(scheduledFor=>({
     user_id:athlete,title,scheduled_for:scheduledFor,details:detailsPatch
   }));
   const result = await client().from('workout_schedule').insert(payloads);
   if (result.error) return note($('cm-schedule-message'),result.error.message,'error');
   cache.invalidate('schedule:');
   note($('cm-schedule-message'),selectedDays.length
-    ? 'Створено регулярний графік: '+dates.length+' тренувань.'
+    ? 'Створено регулярний графік: '+datesToCreate.length+' тренувань.'
     : 'Тренування додано до календаря.','success');
   await loadSchedule();
 }
