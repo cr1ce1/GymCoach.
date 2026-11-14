@@ -226,13 +226,17 @@ returns boolean
 language sql
 stable
 security definer
-set search_path = ''\nas $\n  select private.has_role((select auth.uid()),'coach')
+set search_path = ''
+as $
+  select private.has_role((select auth.uid()),'coach')
      and exists (
        select 1 from public.athlete_coach_relationships r
        where r.coach_id = (select auth.uid())
          and r.athlete_id = p_athlete_id
          and r.status = 'active'
-     );\n$;\n
+     );
+$;
+
 drop policy if exists workout_programs_update_owner on public.workout_programs;
 create policy workout_programs_update_owner
 on public.workout_programs for update to authenticated
