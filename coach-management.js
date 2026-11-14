@@ -368,6 +368,8 @@ async function renderSchedule(content) {
     '<div class="field"><label for="cm-event-date">Дата</label><input id="cm-event-date" type="date" value="'+new Date().toISOString().slice(0,10)+'"></div>'+
     '<div class="field"><label for="cm-event-time">Час</label><input id="cm-event-time" type="time"></div>'+
     '<div class="field"><label for="cm-event-status">Статус</label><select id="cm-event-status"><option value="planned">Заплановано</option><option value="completed">Виконано</option><option value="missed">Пропущено</option><option value="cancelled">Скасовано</option></select></div>'+
+    '<div class="field"><label for="cm-repeat-weeks">Повторювати тижнів</label><input id="cm-repeat-weeks" type="number" min="1" max="12" step="1" value="4"></div>'+
+    '<div class="field cm-full"><label for="cm-repeat-days">Дні тижня для регулярного графіка (можна обрати кілька)</label><select id="cm-repeat-days" multiple size="7"><option value="1">Понеділок</option><option value="2">Вівторок</option><option value="3">Середа</option><option value="4">Четвер</option><option value="5">П’ятниця</option><option value="6">Субота</option><option value="7">Неділя</option></select></div>'+
     '<div class="field cm-full"><label for="cm-event-notes">Примітки</label><input id="cm-event-notes" maxlength="1000"></div></div>'+
     btn('Зберегти тренування','save-schedule')+btn('Очистити форму','clear-schedule','',true)+
     '<p id="cm-schedule-message" class="cm-message" role="status"></p><h3>Заплановані події</h3><div id="cm-schedule-list" class="cm-list"></div>';
@@ -389,25 +391,60 @@ async function saveSchedule() {
   const title = $('cm-event-title').value.trim();
   const date = $('cm-event-date').value;
   const notes = $('cm-event-notes').value.trim();
+  const weeksValue = Number($('cm-repeat-weeks')?.value || 4);
   if (!athlete || !title || title.length>120 || !date || notes.length>1000) return note($('cm-schedule-message'),'Заповни спортсмена, назву та дату.','error');
-  let existingDetails = {};
+  if (!Number.isInteger(weeksValue) || weeksValue<1 || weeksValue>12) return note($('cm-schedule-message'),'Повторення можна встановити на 1–12 тижнів.','error');
+
+  const detailsPatch = {
+    time:$('cm-event-time').value || null,
+    status:$('cm-event-status').value,
+    notes
+  };
+
   if (state.scheduleId) {
     const existing = await client().from('workout_schedule').select('details')
       .eq('id',state.scheduleId).eq('user_id',athlete).maybeSingle();
     if (existing.error) return note($('cm-schedule-message'),existing.error.message,'error');
-    existingDetails = existing.data && existing.data.details && typeof existing.data.details === 'object'
+    const previousDetails = existing.data && existing.data.details && typeof existing.data.details==='object'
       ? existing.data.details : {};
+    const payload = {
+      user_id:athlete,title,scheduled_for:date,
+      details:Object.assign({},previousDetails,detailsPatch)
+    };
+    const result = await client().from('workout_schedule').update(payload).eq('id',state.scheduleId).eq('user_id',athlete);
+    if (result.error) return note($('cm-schedule-message'),result.error.message,'error');
+    state.scheduleId = null;
+    cache.invalidate('schedule:');
+    note($('cm-schedule-message'),'Тренування оновлено.','success');
+    await loadSchedule();
+    return;
   }
-  const payload = {user_id:athlete,title,scheduled_for:date,details:Object.assign({},existingDetails,{
-    time:$('cm-event-time').value || null,status:$('cm-event-status').value,notes
-  })};
-  const query = state.scheduleId
-    ? client().from('workout_schedule').update(payload).eq('id',state.scheduleId).eq('user_id',athlete)
-    : client().from('workout_schedule').insert(payload);
-  const result = await query;
+
+  const selectedDays = Array.from($('cm-repeat-days')?.selectedOptions || [])
+    .map(option=>Number(option.value)).filter(day=>Number.isInteger(day) && day>=1 && day<=7);
+  const dates = [];
+  if (selectedDays.length) {
+    const first = new Date(date+'T00:00:00Z');
+    for (let offset=0;offset<weeksValue*7;offset++) {
+      const current = new Date(first.getTime()+offset*86400000);
+      const weekday = current.getUTCDay() || 7;
+      if (selectedDays.includes(weekday)) dates.push(current.toISOString().slice(0,10));
+    }
+  } else {
+    dates.push(date);
+  }
+  if (!dates.length) return note($('cm-schedule-message'),'Не вдалося сформувати дати регулярного графіка.','error');
+  if (dates.length>60) return note($('cm-schedule-message'),'Занадто багато занять для одного запиту. Зменш кількість днів або тижнів.','error');
+
+  const payloads = dates.map(scheduledFor=>({
+    user_id:athlete,title,scheduled_for:scheduledFor,details:detailsPatch
+  }));
+  const result = await client().from('workout_schedule').insert(payloads);
   if (result.error) return note($('cm-schedule-message'),result.error.message,'error');
-  state.scheduleId = null;
-  note($('cm-schedule-message'),'Календар оновлено.','success');
+  cache.invalidate('schedule:');
+  note($('cm-schedule-message'),selectedDays.length
+    ? 'Створено регулярний графік: '+dates.length+' тренувань.'
+    : 'Тренування додано до календаря.','success');
   await loadSchedule();
 }
 async function editSchedule(id) {
@@ -491,7 +528,7 @@ async function coachClick(event) {
     else if (kind==='save-schedule') await saveSchedule();
     else if (kind==='edit-schedule') await editSchedule(action.dataset.id);
     else if (kind==='delete-schedule') await deleteSchedule(action.dataset.id);
-    else if (kind==='clear-schedule') { state.scheduleId=null; $('cm-event-title').value='Тренування'; $('cm-event-date').value=new Date().toISOString().slice(0,10); $('cm-event-time').value=''; $('cm-event-notes').value=''; $('cm-event-status').value='planned'; }
+    else if (kind==='clear-schedule') { state.scheduleId=null; $('cm-event-title').value='Тренування'; $('cm-event-date').value=new Date().toISOString().slice(0,10); $('cm-event-time').value=''; $('cm-event-notes').value=''; $('cm-event-status').value='planned'; $('cm-repeat-weeks').value='4'; Array.from($('cm-repeat-days').options).forEach(option=>option.selected=false); }
   } catch(error) {
     note($('cm-client-message') || $('cm-program-message') || $('cm-schedule-message') || $('cm-nutrition-message') || $('cm-content'),error.message || 'Не вдалося виконати дію.','error');
   } finally { action.disabled=false; }
