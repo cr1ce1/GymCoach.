@@ -90,3 +90,8 @@ test('cached client lists are scoped to the current authenticated account', () =
   assert.match(adapter, /state\.user\.id !== user\.id/);
   assert.match(adapter, /cache\.invalidate\(\)/);
 });
+
+
+test('switching the selected athlete clears a pending schedule edit id', () => {
+  assert.match(adapter, /event\.target\.id==='cm-schedule-client'[\s\S]{0,120}state\.scheduleId = null/);
+});
