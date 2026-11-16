@@ -203,14 +203,15 @@
 <link rel="stylesheet" id="gc-final-polish" href="./assets/css/36-gc-final-polish.css?v=20261116"/>
 <div id="stLanding" hidden>
   <div class="ln" data-no-autotranslate>
+  <div class="ln-backdrop" aria-hidden="true"><i class="ln-glow g1"></i><i class="ln-glow g2"></i><i class="ln-grid"></i></div>
   <header class="ln-head">
     <div class="ln-w ln-head-in">
       <a class="ln-logo" href="#lnTop" aria-label="Strenova"><img src="./strenova-icon-64.png" width="32" height="32" alt=""/><span>Strenova</span></a>
       <nav class="ln-links" aria-label="Розділи">
         <a href="#lnGym" data-ln="navGym">У залі</a>
+        <a href="#lnProgress" data-ln="navProgress">Прогрес</a>
         <a href="#lnCoach" data-ln="navCoach">Для тренерів</a>
         <a href="#lnPrice" data-ln="navPrice">Тарифи</a>
-        <a href="#lnFaq" data-ln="navFaq">Питання</a>
       </nav>
       <div class="ln-head-act">
         <button class="ln-lang" id="stLangButton" type="button" onclick="stToggleLanguageMenu()" aria-label="Перемкнути мову">UK</button>
@@ -220,36 +221,25 @@
     </div>
   </header>
 
-  <main class="ln-w" id="lnTop">
-    <section class="ln-hero">
-      <div class="ln-hero-copy">
-        <h1 data-ln="h1">Записуй кожен підхід. Дивись, як ростуть ваги.</h1>
-        <p class="ln-lead" data-ln="lead">Strenova — щоденник тренувань для залу. План на сьогодні, вага й повторення в один дотик, таймер відпочинку та історія прогресу. Тренер може вести твою програму й харчування.</p>
-        <div class="ln-cta">
+  <main id="lnTop">
+    <section class="ln-hero" data-world="violet" aria-labelledby="lnH1">
+      <div class="ln-w ln-hero-copy">
+        <h1 id="lnH1" class="ln-split" data-ln="h1">Записуй кожен підхід. Дивись, як ростуть ваги.</h1>
+        <p class="ln-lead ln-rise" data-ln="lead">Strenova — щоденник тренувань для залу. План на сьогодні, вага й повторення в один дотик, таймер відпочинку та історія прогресу. Тренер може вести твою програму й харчування.</p>
+        <div class="ln-cta ln-rise">
           <button class="ln-btn ln-primary ln-lg" type="button" onclick="stEnter('signup')" data-ln="ctaStart">Почати безкоштовно</button>
           <button class="ln-btn ln-ghost ln-lg" type="button" onclick="stEnter('login')" data-ln="ctaLogin">У мене вже є акаунт</button>
         </div>
-        <p class="ln-fine" data-ln="heroFine">Працює в браузері на телефоні й комп’ютері. Можна додати на початковий екран як застосунок.</p>
       </div>
-
-      <div class="ln-demo" aria-label="Демонстрація екрана тренування">
-        <div class="ln-demo-top">
-          <span data-ln="demoDay">Ноги · вправа 2 з 6</span>
-          <span class="ln-demo-tag" data-ln="demoTag">Демо</span>
-        </div>
-        <h2 class="ln-demo-ex" data-ln="demoEx">Присідання зі штангою</h2>
-        <p class="ln-demo-plan"><span data-ln="demoPlan">План 4 × 6–8</span> · <span data-ln="demoLast">минулого разу 77,5 кг × 8</span></p>
-        <div class="ln-sets" id="lnSets" role="list"></div>
-        <div class="ln-rest" id="lnRest" hidden>
-          <div><small data-ln="restLabel">Відпочинок</small><b id="lnRestT">1:30</b></div>
-          <button type="button" id="lnRestSkip" data-ln="restSkip">Далі</button>
-          <i id="lnRestBar"></i>
-        </div>
-        <p class="ln-demo-hint" data-ln="demoHint">Натисни ✓, щоб закрити підхід. Дані демо ніде не зберігаються.</p>
+      <div class="ln-stage">
+        <img class="ln-stage-poster" src="./assets/img/barbell.webp" width="1400" height="800" alt="" decoding="async" fetchpriority="high"/>
+        <canvas id="lnBarbell" tabindex="0" role="img" aria-label="3D-модель грифа з дисками. Перетягни, щоб покрутити"></canvas>
+        <p class="ln-drag-hint" data-ln="dragHint">Потягни, щоб покрутити гриф</p>
       </div>
+      <div class="ln-giant" aria-hidden="true"><span class="ln-giant-word">STRENOVA</span></div>
     </section>
 
-    <section class="ln-video" id="lnVideo" aria-labelledby="lnVideoH">
+    <section class="ln-video ln-band" id="lnVideo" aria-labelledby="lnVideoH" data-world="violet"><div class="ln-w">
       <div class="ln-video-head">
         <h2 id="lnVideoH" data-ln="vidH">Подивись, як це працює</h2>
         <p data-ln="vidP">Хвилина про Strenova: тренування в залі, прогрес і робота з тренером. Зі звуком і субтитрами.</p>
@@ -264,51 +254,81 @@
       <div class="ln-video-cta">
         <button class="ln-btn ln-primary ln-lg" type="button" onclick="stEnter('signup')" data-ln="ctaStart">Почати безкоштовно</button>
       </div>
-    </section>
+    </div></section>
 
-    <section class="ln-sec" id="lnGym" aria-labelledby="lnGymH">
-      <h2 id="lnGymH" data-ln="gymH">У залі нічого шукати не треба</h2>
-      <p class="ln-sec-lead" data-ln="gymLead">Екран тренування показує одну вправу за раз. Великі кнопки, без дрібних полів — зручно навіть однією рукою між підходами.</p>
-      <ol class="ln-steps">
-        <li><b data-ln="s1h">Відкрий тренування на сьогодні</b><span data-ln="s1p">Програма з профілю, від тренера або твоя власна. Видно вправи, підходи та робочу вагу.</span></li>
-        <li><b data-ln="s2h">Записуй вагу й повторення</b><span data-ln="s2p">Кнопки ± змінюють вагу на 2,5 кг. Значення переходять у наступний підхід автоматично.</span></li>
-        <li><b data-ln="s3h">Відпочивай за таймером</b><span data-ln="s3p">Після кожного підходу запускається таймер із сигналом. Екран не гасне, поки триває тренування.</span></li>
-      </ol>
-    </section>
-
-    <section class="ln-sec ln-split" aria-labelledby="lnProgH">
-      <div>
-        <h2 id="lnProgH" data-ln="progH">Прогрес видно без таблиць</h2>
-        <p class="ln-sec-lead" data-ln="progLead">Кожне завершене тренування потрапляє в історію. З неї рахуються робочі ваги, особисті рекорди й регулярність.</p>
-      </div>
-      <ul class="ln-feats">
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg><span><b data-ln="f1h">Історія та графіки</b><small data-ln="f1p">Що, коли і з якою вагою ти робив.</small></span></li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span><b data-ln="f2h">Календар занять</b><small data-ln="f2p">Плануй дні та переноси тренування.</small></span></li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3 3 5 6 5 9a5 5 0 01-10 0c0-3 2-6 5-9z"/></svg><span><b data-ln="f3h">Харчування</b><small data-ln="f3p">Щоденник їжі з підрахунком калорій і БЖВ.</small></span></li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span><b data-ln="f4h">Бібліотека вправ</b><small data-ln="f4p">Техніка виконання й типові помилки.</small></span></li>
-      </ul>
-    </section>
-
-    <section class="ln-sec ln-coach" id="lnCoach" aria-labelledby="lnCoachH">
-      <div class="ln-coach-copy">
-        <h2 id="lnCoachH" data-ln="coachH">Для тренерів: учні, програми й харчування в одному місці</h2>
-        <p class="ln-sec-lead" data-ln="coachLead">Зареєструйся як тренер і надішли учню свій код. Після підключення ти бачиш його тренування та можеш вести програму.</p>
-        <ul class="ln-checks">
-          <li data-ln="c1">Програми з підходами, повтореннями та робочою вагою</li>
-          <li data-ln="c2">Цілі калорій, білків, жирів і вуглеводів для кожного учня</li>
-          <li data-ln="c3">Розклад занять і результати кожного тренування</li>
-          <li data-ln="c4">Учень підключається сам і може від’єднатися будь-коли</li>
-        </ul>
-      </div>
-      <div class="ln-code" aria-hidden="true">
-        <small data-ln="codeLabel">Код тренера</small>
-        <b>COACH-7F2A1C</b>
-        <div class="ln-code-row"><span class="ln-av">ОК</span><span><strong data-ln="codeName">Олена К.</strong><em data-ln="codeMeta">Останнє тренування сьогодні</em></span></div>
-        <div class="ln-code-row"><span class="ln-av">МТ</span><span><strong data-ln="codeName2">Максим Т.</strong><em data-ln="codeMeta2">3 тренування за тиждень</em></span></div>
+    <section class="ln-sec ln-band ln-gym" id="lnGym" data-world="ember" aria-labelledby="lnGymH">
+      <div class="ln-w ln-split2">
+        <div>
+          <h2 id="lnGymH" class="ln-reveal" data-ln="gymH">У залі нічого шукати не треба</h2>
+          <p class="ln-sec-lead ln-reveal" data-ln="gymLead">Екран тренування показує одну вправу за раз. Великі кнопки, без дрібних полів — зручно навіть однією рукою між підходами.</p>
+          <ol class="ln-steps">
+            <li class="ln-reveal"><b data-ln="s1h">Відкрий тренування на сьогодні</b><span data-ln="s1p">Програма з профілю, від тренера або твоя власна. Видно вправи, підходи та робочу вагу.</span></li>
+            <li class="ln-reveal"><b data-ln="s2h">Записуй вагу й повторення</b><span data-ln="s2p">Кнопки ± змінюють вагу на 2,5 кг. Значення переходять у наступний підхід автоматично.</span></li>
+            <li class="ln-reveal"><b data-ln="s3h">Відпочивай за таймером</b><span data-ln="s3p">Після кожного підходу запускається таймер із сигналом.</span></li>
+          </ol>
+        </div>
+        <div class="ln-demo ln-reveal ln-tilt" aria-label="Демонстрація екрана тренування">
+          <div class="ln-demo-top">
+            <span data-ln="demoDay">Ноги · вправа 2 з 6</span>
+            <span class="ln-demo-tag" data-ln="demoTag">Демо</span>
+          </div>
+          <h3 class="ln-demo-ex" data-ln="demoEx">Присідання зі штангою</h3>
+          <p class="ln-demo-plan"><span data-ln="demoPlan">План 4 × 6–8</span> · <span data-ln="demoLast">минулого разу 77,5 кг × 8</span></p>
+          <div class="ln-sets" id="lnSets" role="list"></div>
+          <div class="ln-rest" id="lnRest" hidden>
+            <div><small data-ln="restLabel">Відпочинок</small><b id="lnRestT">1:30</b></div>
+            <button type="button" id="lnRestSkip" data-ln="restSkip">Далі</button>
+            <i id="lnRestBar"></i>
+          </div>
+          <p class="ln-demo-hint" data-ln="demoHint">Натисни ✓, щоб закрити підхід. Дані демо ніде не зберігаються.</p>
+        </div>
       </div>
     </section>
 
-    <section class="ln-sec" id="lnPrice" aria-labelledby="lnPriceH">
+    <section class="ln-sec ln-band ln-progress" id="lnProgress" data-world="ice" aria-labelledby="lnProgH">
+      <div class="ln-w ln-split2 ln-rev">
+        <div class="ln-float" aria-hidden="true">
+          <figure class="ln-phone f1" data-depth="0.10"><img src="./assets/img/app/stats.webp" width="540" height="1168" alt="" loading="lazy" decoding="async"/></figure>
+          <figure class="ln-phone f2" data-depth="-0.06"><img src="./assets/img/app/home.webp" width="540" height="1168" alt="" loading="lazy" decoding="async"/></figure>
+          <figure class="ln-phone f3" data-depth="0.16"><img src="./assets/img/app/nutrition.webp" width="540" height="1168" alt="" loading="lazy" decoding="async"/></figure>
+        </div>
+        <div>
+          <h2 id="lnProgH" class="ln-reveal" data-ln="progH">Прогрес видно без таблиць</h2>
+          <p class="ln-sec-lead ln-reveal" data-ln="progLead">Кожне завершене тренування потрапляє в історію. З неї рахуються робочі ваги, особисті рекорди й регулярність.</p>
+          <ul class="ln-feats">
+            <li class="ln-reveal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg><span><b data-ln="f1h">Історія та графіки</b><small data-ln="f1p">Що, коли і з якою вагою ти робив.</small></span></li>
+            <li class="ln-reveal"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span><b data-ln="f2h">Календар занять</b><small data-ln="f2p">Плануй дні та переноси тренування.</small></span></li>
+            <li class="ln-reveal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3 3 5 6 5 9a5 5 0 01-10 0c0-3 2-6 5-9z"/></svg><span><b data-ln="f3h">Харчування</b><small data-ln="f3p">Щоденник їжі з підрахунком калорій і БЖВ.</small></span></li>
+            <li class="ln-reveal"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span><b data-ln="f4h">Бібліотека вправ</b><small data-ln="f4p">Техніка виконання й типові помилки.</small></span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="ln-sec ln-band ln-coach" id="lnCoach" data-world="violet" aria-labelledby="lnCoachH">
+      <div class="ln-w ln-split2">
+        <div class="ln-coach-copy">
+          <h2 id="lnCoachH" class="ln-reveal" data-ln="coachH">Для тренерів: учні, програми й харчування в одному місці</h2>
+          <p class="ln-sec-lead ln-reveal" data-ln="coachLead">Зареєструйся як тренер і надішли учню свій код. Після підключення ти бачиш його тренування та можеш вести програму.</p>
+          <ul class="ln-checks">
+            <li class="ln-reveal" data-ln="c1">Програми з підходами, повтореннями та робочою вагою</li>
+            <li class="ln-reveal" data-ln="c2">Цілі калорій, білків, жирів і вуглеводів для кожного учня</li>
+            <li class="ln-reveal" data-ln="c3">Розклад занять і результати кожного тренування</li>
+            <li class="ln-reveal" data-ln="c4">Учень підключається сам і може від’єднатися будь-коли</li>
+          </ul>
+        </div>
+        <div class="ln-float ln-float-coach" aria-hidden="true">
+          <figure class="ln-phone f1" data-depth="0.08"><img src="./assets/img/app/coach.webp" width="540" height="1168" alt="" loading="lazy" decoding="async"/></figure>
+          <figure class="ln-phone f2" data-depth="-0.08"><img src="./assets/img/app/client.webp" width="540" height="1168" alt="" loading="lazy" decoding="async"/></figure>
+          <div class="ln-code" data-depth="0.18">
+            <small data-ln="codeLabel">Код тренера</small>
+            <b>COACH-7F2A1C</b>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ln-sec ln-band" id="lnPrice" aria-labelledby="lnPriceH" data-world="graphite"><div class="ln-w">
       <h2 id="lnPriceH" data-ln="priceH">Тарифи</h2>
       <div class="ln-prices">
         <article class="ln-price">
@@ -332,9 +352,9 @@
           <p class="ln-fine" data-ln="plusNote">Оплата на сайті поки не працює. Plus підключає власник Strenova вручну для твого акаунта.</p>
         </article>
       </div>
-    </section>
+    </div></section>
 
-    <section class="ln-sec" id="lnFaq" aria-labelledby="lnFaqH">
+    <section class="ln-sec ln-band" id="lnFaq" aria-labelledby="lnFaqH" data-world="graphite"><div class="ln-w">
       <h2 id="lnFaqH" data-ln="faqH">Питання</h2>
       <div class="ln-faq">
         <details><summary data-ln="q1">Де зберігаються мої дані?</summary><p data-ln="a1">В акаунті Strenova на серверах у ЄС. Доступ до записів має лише власник акаунта і тренер, до якого ти підключився. Чернетка поточного тренування також зберігається на пристрої, тож слабкий зв’язок у залі не зітре записані підходи.</p></details>
@@ -342,12 +362,15 @@
         <details><summary data-ln="q3">Як встановити Strenova на телефон?</summary><p><span data-ln="a3">Відкрий сайт у Safari (iPhone) або Chrome (Android) і вибери «Додати на початковий екран».</span> <button class="ln-link" type="button" onclick="stShowInstallGuide()" data-ln="a3btn">Покрокова інструкція</button></p></details>
         <details><summary data-ln="q4">Розрахунки калорій — це медична порада?</summary><p data-ln="a4">Ні. Калорії та БЖВ — орієнтовні розрахунки за формулами. Якщо маєш захворювання або травму, порадься з лікарем.</p></details>
       </div>
-    </section>
+    </div></section>
 
-    <section class="ln-final">
-      <h2 data-ln="finalH">Перше тренування — за п’ять хвилин</h2>
-      <p data-ln="finalP">Заповни короткий профіль, і Strenova складе стартову програму під твій досвід, мету й обладнання.</p>
-      <button class="ln-btn ln-primary ln-lg" type="button" onclick="stEnter('signup')" data-ln="ctaStart">Почати безкоштовно</button>
+    <section class="ln-final ln-band" data-world="violet">
+      <div class="ln-w">
+        <h2 class="ln-reveal" data-ln="finalH">Перше тренування — за п’ять хвилин</h2>
+        <p class="ln-reveal" data-ln="finalP">Заповни короткий профіль, і Strenova складе стартову програму під твій досвід, мету й обладнання.</p>
+        <button class="ln-btn ln-primary ln-lg ln-reveal" type="button" onclick="stEnter('signup')" data-ln="ctaStart">Почати безкоштовно</button>
+      </div>
+      <div class="ln-giant ln-giant-out" aria-hidden="true"><span class="ln-giant-word">STRENOVA</span></div>
     </section>
   </main>
 
@@ -358,7 +381,6 @@
     </div>
   </footer>
   </div>
-
   <div class="st-install-backdrop" id="stInstallGuide" hidden role="dialog" aria-modal="true" aria-labelledby="stInstallTitle" aria-describedby="stInstallIntro">
     <div class="st-install-dialog st-install-wizard">
       <button class="st-install-x" type="button" onclick="stHideInstallGuide()" aria-label="Close installation guide">×</button>
@@ -402,9 +424,13 @@
 
 <link rel="stylesheet" id="gc-home-mobile-layout-fix-20261109" href="./assets/css/50-gc-home-mobile-layout-fix-20261109.css?v=20261116"/>
 
-<link rel="stylesheet" id="strenova-ds" href="./assets/css/60-strenova-ds.css?v=20261116b"/>
-<script id="strenova-app" src="./assets/js/60-strenova-app.js?v=20261116b"></script>
+<link rel="stylesheet" id="strenova-ds" href="./assets/css/60-strenova-ds.css?v=20261117a"/>
+<script id="strenova-app" src="./assets/js/60-strenova-app.js?v=20261117a"></script>
 <script id="strenova-gym" src="./assets/js/61-strenova-gym.js?v=20261116b"></script>
-<link rel="stylesheet" id="strenova-landing-css" href="./assets/css/61-strenova-landing.css?v=20261116c"/>
-<script id="strenova-landing" src="./assets/js/62-strenova-landing.js?v=20261116c"></script>
+<link rel="stylesheet" id="strenova-landing-css" href="./assets/css/61-strenova-landing.css?v=20261117a"/>
+<script id="strenova-barbell" src="./assets/js/64-strenova-barbell.js?v=20261117a"></script>
+<script id="strenova-landing" src="./assets/js/62-strenova-landing.js?v=20261117a"></script>
+<link rel="stylesheet" id="strenova-onb-css" href="./assets/css/63-strenova-onboarding.css?v=20261117a"/>
+<script id="strenova-onb" src="./assets/js/63-strenova-onboarding.js?v=20261117a"></script>
+<script id="strenova-v3" src="./assets/js/65-strenova-app-v3.js?v=20261117a"></script>
 </body></html>

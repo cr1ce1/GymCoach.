@@ -315,3 +315,43 @@ nav#nav button[hidden]{display:none!important}
 /* A leftover page-enter transform turns #session into the containing block for
    position:fixed children, which pushed the workout dock off-screen. */
 #session.sx-focus-on,#session.sx-focus-on.active{transform:none!important;animation:none!important;filter:none!important}
+
+/* =====================================================================
+   APP v3 (2026-11-17): week ring, page enter motion, press feedback
+   ===================================================================== */
+.sx-week{position:relative;display:grid;grid-template-columns:112px 1fr;gap:18px;align-items:center;padding:20px;border-radius:24px;overflow:hidden;
+  background:radial-gradient(120% 140% at 0% 0%,rgba(143,109,255,.22),rgba(143,109,255,0) 60%),linear-gradient(170deg,rgba(255,255,255,.05),rgba(255,255,255,.015));
+  border:1px solid rgba(143,109,255,.28);box-shadow:0 30px 70px -45px rgba(143,109,255,.9)}
+.sx-week-ring{position:relative;width:112px;height:112px}
+.sx-week-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.sx-week-ring circle{fill:none;stroke-width:9;stroke-linecap:round}
+.sx-week-ring .trk{stroke:rgba(255,255,255,.08)}
+.sx-week-ring .val{stroke:url(#sxRingGrad) var(--sx-violet);stroke:var(--sx-violet);transition:stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 0 6px rgba(143,109,255,.6))}
+.sx-week-num{position:absolute;inset:0;display:grid;place-content:center;text-align:center;line-height:1}
+.sx-week-num b{font-family:var(--sx-display);font-weight:600;font-size:2rem}
+.sx-week-num small{display:block;margin-top:4px;color:var(--sx-muted);font-size:.8rem}
+.sx-week-body h2{font-family:var(--sx-display)!important;font-weight:600!important;font-size:1.25rem!important;letter-spacing:-.02em;margin:0!important}
+.sx-week-sub{margin:4px 0 0!important;color:var(--sx-text-2);font-size:.92rem}
+.sx-week-streak{display:inline-block;margin-left:4px;padding:1px 8px;border-radius:999px;background:var(--sx-amber-soft,rgba(255,181,71,.16));color:var(--sx-amber);font-size:.8rem;font-weight:650}
+.sx-week-days{list-style:none;display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:12px 0 0!important;padding:0!important}
+.sx-week-days li{display:grid;place-items:center;height:30px;border-radius:9px;background:rgba(255,255,255,.05);font-size:.74rem;color:var(--sx-muted);font-weight:600}
+.sx-week-days li.on{background:var(--sx-mint);color:#0b2a1f}
+.sx-week-days li.today:not(.on){box-shadow:inset 0 0 0 1.5px rgba(143,109,255,.8);color:var(--sx-text)}
+.sx-week-next{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;font-size:.88rem;color:var(--sx-text-2);flex-wrap:wrap}
+.sx-week-next b{color:var(--sx-text)}
+.sx-week>.sx-week-body>.sx-btn{margin-top:12px;width:100%}
+@media (max-width:379px){.sx-week{grid-template-columns:1fr;justify-items:start}.sx-week-ring{width:96px;height:96px}}
+@media (min-width:900px){.sx-week>.sx-week-body>.sx-btn{width:auto}}
+
+/* content of a newly opened page rises in (never the page itself) */
+.page.sx-enter>*{animation:sxEnter .42s cubic-bezier(.2,.8,.2,1) both}
+.page.sx-enter>*:nth-child(2){animation-delay:.04s}.page.sx-enter>*:nth-child(3){animation-delay:.08s}
+.page.sx-enter>*:nth-child(4){animation-delay:.12s}.page.sx-enter>*:nth-child(n+5){animation-delay:.16s}
+@keyframes sxEnter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+/* press feedback on every button-like control */
+.btn,.sx-btn,.sx-icon-btn,nav#nav button,.chip,.gt-chip{transition:transform var(--sx-fast) var(--sx-ease),background var(--sx-fast) var(--sx-ease),border-color var(--sx-fast) var(--sx-ease),opacity var(--sx-fast)}
+.btn:active:not(:disabled),.sx-btn:active:not(:disabled),.sx-icon-btn:active,nav#nav button:active,.chip:active,.gt-chip:active{transform:scale(.96)}
+@media (prefers-reduced-motion:reduce){.page.sx-enter>*{animation:none!important}.sx-week-ring .val{transition:none}}
+html body #home.sx-home.active{align-items:stretch!important}
+html body #home.sx-home>*{width:100%;max-width:none}
+html body #home.sx-home>*{grid-column:auto!important;grid-row:auto!important}
