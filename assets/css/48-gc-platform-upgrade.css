@@ -1,0 +1,29 @@
+[hidden]{display:none!important}
+.gc-role-picker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:8px 0 14px}
+.gc-role-option{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--panel2);color:var(--text);text-align:left;cursor:pointer}
+.gc-role-option.active{border-color:var(--gc-accent2,#a855f7);box-shadow:0 0 0 1px var(--gc-accent2,#a855f7) inset;background:rgba(139,92,246,.13)}
+.gc-role-option small{color:var(--muted)}
+.gc-platform-card{background:linear-gradient(145deg,rgba(139,92,246,.12),rgba(30,19,38,.95));border:1px solid var(--line);border-radius:18px;padding:18px;margin:12px 0}
+.gc-platform-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.gc-platform-stat{border:1px solid var(--line);border-radius:14px;padding:14px;background:rgba(10,7,17,.4);min-width:0}
+.gc-platform-stat strong{display:block;font-size:24px}
+.gc-platform-stat small{color:var(--muted)}
+.gc-platform-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.gc-platform-list{display:grid;gap:10px;margin-top:12px}
+.gc-platform-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:12px;min-width:0}
+.gc-platform-item>div{min-width:0;overflow-wrap:anywhere}
+.gc-platform-item small{display:block;color:var(--muted)}
+.gc-platform-actions{display:flex;gap:8px;flex-wrap:wrap}
+.gc-platform-input{width:100%;min-width:0}
+.gc-workout-exercise{padding:13px;border:1px solid var(--line);border-radius:13px;margin:9px 0;background:rgba(15,10,22,.55)}
+.gc-workout-exercise small{display:block;color:var(--muted);margin-top:5px}
+.gc-workout-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.gc-workout-controls .field{min-width:0}
+.gc-platform-status{min-height:20px;color:var(--muted);font-size:13px;margin-top:8px}
+@media(max-width:560px){
+ .gc-platform-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .gc-platform-stat{padding:11px}
+ .gc-platform-item{align-items:flex-start;flex-direction:column}
+ .gc-workout-controls{grid-template-columns:1fr}
+ .gc-role-picker{gap:7px}
+}

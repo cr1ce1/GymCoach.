@@ -1,0 +1,37 @@
+:root{--gc-accent:#8B5CF6;--gc-accent2:#D946EF;--gc-card:#220e30;--gc-muted:#bb9fce}
+#nav{display:flex;gap:1px!important;max-width:780px!important}
+#nav button{min-width:0!important;padding:7px 2px!important;font-size:9px!important;white-space:normal;line-height:1.15}
+#nav button span{font-size:19px!important;margin-bottom:3px}
+@media(max-width:430px){#nav button{font-size:8px!important}#nav button span{font-size:17px!important}}
+#calendar .gt-calendar-shell{background:linear-gradient(145deg,#230e31,#190a23);border:1px solid #492660;border-radius:22px;padding:16px;margin:12px 0 16px;box-shadow:0 18px 45px #0002}
+.gt-calendar-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.gt-calendar-month{font-size:clamp(18px,3vw,24px);font-weight:900;letter-spacing:-.5px}
+.gt-calendar-arrows{display:flex;gap:6px}.gt-calendar-arrows button{width:38px;height:38px;border:1px solid #502b69;border-radius:12px;color:#f0dbfe;background:#2c123d;font-size:20px}
+.gt-calendar-weekdays,.gt-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.gt-calendar-weekdays{margin-bottom:6px}.gt-calendar-weekdays span{text-align:center;font-size:10px;text-transform:uppercase;font-weight:800;color:#b493ca;padding:6px 0}
+.gt-calendar-day{min-width:0;aspect-ratio:1/1;border:1px solid transparent;border-radius:13px;background:#271136;color:#f5e7ff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-weight:750;font-size:13px;position:relative;padding:2px}
+.gt-calendar-day.outside{opacity:.35;background:transparent}.gt-calendar-day.today{border-color:#b54ff8}.gt-calendar-day.selected{background:linear-gradient(145deg,#5c0e90,#b34ff6);color:white;border-color:#c97dfc;box-shadow:0 6px 20px #9140c733}.gt-calendar-day .gt-cal-dot{width:5px;height:5px;border-radius:50%;background:#d9a5fc;display:block}.gt-calendar-day.has-workout:not(.selected) .gt-cal-dot{background:#b54ff8}
+.gt-calendar-selected{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid #432358;margin-top:13px;padding-top:14px}.gt-calendar-selected strong{display:block}.gt-calendar-selected small{display:block;color:var(--gc-muted);margin-top:4px}
+.gt-day-agenda{margin-top:12px;display:grid;gap:8px}.gt-agenda-item{display:flex;align-items:center;gap:10px;background:#291139;border:1px solid #492660;border-radius:13px;padding:12px}.gt-agenda-marker{width:9px;height:34px;flex:none;border-radius:20px;background:linear-gradient(#b54ff8,#c881f8)}.gt-agenda-copy{min-width:0;flex:1}.gt-agenda-copy strong{display:block;font-size:13px}.gt-agenda-copy small{color:var(--gc-muted)}
+#profile .gt-profile-overview{display:flex;align-items:center;gap:14px;padding:15px;border:1px solid #492660;background:linear-gradient(145deg,#2a103b,#1c0b27);border-radius:18px;margin-bottom:13px}
+#profile .gt-profile-avatar{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,#b54ff8,#b863f1);color:#1a0726;font-size:22px;font-weight:950;flex:none}
+#profile .gt-profile-overview strong{font-size:17px;display:block}#profile .gt-profile-overview small{color:var(--gc-muted);line-height:1.5}
+#profile .gt-profile-section{border:1px solid #45265a;background:linear-gradient(145deg,#240f32,#1b0b25);border-radius:18px;padding:15px;margin:12px 0}
+#profile .gt-profile-section .profile-group-title{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:#c97dfc;margin:0 0 14px;font-weight:900}
+#profile .gt-profile-section .grid{gap:10px}#profile .gt-profile-section .field{margin-bottom:10px}
+#profile .gt-profile-section .field:last-child{margin-bottom:0}
+#profile .gt-profile-section input,#profile .gt-profile-section select,#profile .gt-profile-section textarea{background:#1b0a27;border-color:#4b2863}
+#gtLiveCoach,#gtCoachInbox{max-width:840px;margin:10px auto}
+.gt-chat-hero{padding:18px;border-radius:20px;border:1px solid #50246e;background:radial-gradient(ellipse at 90% 0%,#471767 0,transparent 48%),linear-gradient(135deg,#281038,#170a20);margin-bottom:12px}
+.gt-chat-hero h1{font-size:clamp(23px,4vw,32px);margin:8px 0}.gt-chat-hero p{color:#c9addb;line-height:1.55;margin:6px 0 0}
+.gt-chat-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:12px;align-items:start}
+.gt-chat-side,.gt-chat-panel{border:1px solid #492660;border-radius:18px;background:#1d0c29;padding:13px;min-width:0}
+.gt-chat-status{padding:10px 11px;border-radius:12px;background:#29103a;color:#d4b9e6;font-size:12px;line-height:1.5;margin-bottom:10px}
+.gt-chat-thread-list{display:grid;gap:7px}.gt-chat-thread-button{width:100%;text-align:left;border:1px solid #492760;background:#271036;color:#f6e8ff;padding:11px;border-radius:12px}.gt-chat-thread-button.active{border-color:#b54ff8;background:#36124e}.gt-chat-thread-button strong{display:block;overflow-wrap:anywhere;font-size:13px}.gt-chat-thread-button small{display:block;color:#bb9fce;margin-top:4px}
+.gt-chat-messages{height:min(52vh,520px);min-height:280px;overflow:auto;display:flex;flex-direction:column;gap:9px;padding:4px 1px 12px}
+.gt-live-message{max-width:88%;padding:11px 13px;border-radius:15px;background:#311742;border:1px solid #492660;align-self:flex-start;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.5}
+.gt-live-message.mine{align-self:flex-end;background:linear-gradient(135deg,#530785,#9d45d8);border-color:#9742cf;color:#fff}.gt-live-message small{display:block;opacity:.65;font-size:10px;margin-top:6px}
+.gt-chat-compose{display:flex;gap:8px;align-items:flex-end;border-top:1px solid #3f2252;padding-top:12px}.gt-chat-compose textarea{width:100%;resize:vertical;min-height:48px;max-height:140px;background:#1c0928;border:1px solid #4d2965;border-radius:13px;padding:12px;color:#f9f1ff;outline:none}.gt-chat-compose button{height:46px;white-space:nowrap}
+.gt-chat-empty{text-align:center;padding:35px 15px;color:#bb9fce;line-height:1.6}.gt-chat-lock{padding:20px;border:1px solid #533666;border-radius:16px;background:#261035;line-height:1.6;color:#d5bde5}
+#subscription .gt-sub-active{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}#subscription .gt-sub-active .pill{background:#2b123c;color:#b76ee7;border:1px solid #461c62}
+@media(max-width:640px){.gt-chat-layout{grid-template-columns:1fr}.gt-chat-side{padding:10px}.gt-chat-thread-list{grid-template-columns:repeat(2,minmax(0,1fr))}.gt-chat-thread-button{padding:9px}.gt-calendar-day{border-radius:9px;font-size:12px}.gt-calendar-weekdays,.gt-calendar-grid{gap:3px}.gt-calendar-selected{align-items:flex-start;flex-direction:column}}

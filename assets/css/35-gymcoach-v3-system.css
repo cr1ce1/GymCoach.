@@ -1,0 +1,357 @@
+/* Strenova v3 — cohesive graphite / electric-lime design system */
+:root{
+  color-scheme:dark;
+  --bg:#09070b!important;
+  --panel:#141017!important;
+  --panel2:#1b151f!important;
+  --line:#33293a!important;
+  --lime:#8B5CF6;
+  --text:#f2f7f1!important;
+  --muted:#a49baa!important;
+  --danger:#ff8585!important;
+  --training-accent:#8B5CF6;
+  --training-black:#09070b!important;
+  --training-panel:#141017!important;
+  --training-line:#33293a!important;
+  --gc-accent:#8B5CF6;
+  --gc-accent2:#D946EF;
+  --gc-card:#141017!important;
+  --gc-muted:#a49baa!important;
+  --radius:22px;
+  --gc-shadow:0 18px 48px rgba(0,0,0,.24);
+  --gc-glow:0 0 0 1px rgba(177,78,243,.08),0 12px 36px rgba(177,78,243,.055);
+}
+html{background:var(--bg)!important;scroll-behavior:smooth}
+body{
+  background:radial-gradient(ellipse at 50% -16%,rgba(177,78,243,.10),transparent 43%),
+             radial-gradient(ellipse at 100% 38%,rgba(100,51,132,.07),transparent 28%),var(--bg)!important;
+  color:var(--text)!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+  letter-spacing:-.012em;padding-bottom:142px!important;
+}
+.top{width:min(100% - 40px,1280px)!important;max-width:1280px!important;margin:0 auto!important;padding:22px 0 18px!important;background:transparent!important;border:0!important}
+.top .brand,.auth-card .brand{display:flex!important;align-items:center!important;gap:12px!important;font-weight:950!important;letter-spacing:-.7px!important}
+.top .brand-mark,.auth-card .brand-mark,.gc-auth-visual-brand .brand-mark{
+  display:inline-grid!important;place-items:center!important;width:48px!important;height:48px!important;flex:0 0 48px!important;
+  border-radius:16px!important;background:linear-gradient(145deg,#c670ff,#b975e6)!important;color:#0e0911!important;
+  box-shadow:0 7px 26px rgba(177,78,243,.18)!important;font-size:22px!important;
+}
+.top .brand-mark svg,.auth-card .brand-mark svg{width:31px!important;height:31px!important}
+.top .brand-name{color:#f4f8f3!important;font-size:clamp(22px,2.8vw,29px)!important;font-weight:950!important;letter-spacing:-1px!important}
+.top .brand-name b,.auth-card .brand b{color:var(--lime)!important}
+.top .sub{margin:5px 0 0 60px!important;color:#b0a8b5!important;font-size:12px!important;letter-spacing:.02em}
+#langBtn.lang{border:1px solid #403448!important;background:#16111a!important;color:#e7f1e7!important;border-radius:999px!important;padding:8px 14px!important;min-height:42px;transition:.2s}
+#langBtn.lang:hover{border-color:var(--lime)!important}
+main{width:min(100% - 40px,1280px)!important;max-width:1280px!important;margin:0 auto!important;padding:0 0 42px!important}
+.page{width:100%;animation:gcPageIn .28s ease both}
+@keyframes gcPageIn{from{opacity:.35;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.section-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:14px!important;margin:28px 0 14px!important}
+.section-head h2,h2{color:#f1f7f1!important;font-size:clamp(20px,2.2vw,27px)!important;font-weight:900!important;letter-spacing:-.7px!important;line-height:1.15}
+h3,h4{color:#edf5ed!important;letter-spacing:-.3px}
+p{line-height:1.65}
+.muted,.hint,.gt-muted,.gt-metric small,.metric small{color:var(--muted)!important}
+.card,.option,.exercise-card,.onboard .card,.metric,.gt-metric,.gt-achievement,.gt-food-row,.th-day,.th-feature-card,.th-secondary-panel,.th-custom-row,.th-library-card,.gt-calendar-shell,.gt-chat-side,.gt-chat-panel,.gt-profile-section,.gt-sub-plan{
+  background:linear-gradient(145deg,rgba(25,19,29,.98),rgba(16,12,19,.99))!important;
+  border:1px solid var(--line)!important;border-radius:20px!important;box-shadow:0 12px 36px rgba(0,0,0,.16)!important;
+}
+.card{padding:clamp(16px,2.2vw,24px)!important;margin-bottom:14px!important}
+.option{padding:19px!important;min-height:142px!important;transition:transform .2s,border-color .2s,box-shadow .2s!important}
+.option:hover,.exercise-card:hover,.card.interactive:hover{border-color:rgba(177,78,243,.5)!important;transform:translateY(-2px);box-shadow:var(--gc-shadow)!important}
+.option b{font-weight:850!important;font-size:15px!important}
+.option small{color:var(--muted)!important;font-size:12px!important;line-height:1.5!important}
+.emoji{filter:saturate(.82)}
+.hero{border:1px solid rgba(177,78,243,.24)!important;border-radius:28px!important;background:radial-gradient(ellipse at 90% 0%,rgba(177,78,243,.11),transparent 42%),linear-gradient(135deg,#1f1724,#120d15 78%)!important;box-shadow:var(--gc-shadow)!important;padding:clamp(24px,4vw,42px)!important;overflow:hidden}
+.hero .eyebrow,.eyebrow,.tag{color:var(--lime)!important;letter-spacing:.13em!important;font-weight:900!important;font-size:10px!important}
+.hero h1{font-size:clamp(30px,4.6vw,50px)!important;line-height:1.05!important;letter-spacing:-1.6px!important;max-width:720px}
+.hero p{max-width:690px;color:#beb6c4!important;line-height:1.7!important}
+/* Home hero becomes the visual anchor of the entire app */
+#home>.hero{
+  position:relative;isolation:isolate;min-height:350px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
+  padding:clamp(28px,4vw,50px)!important;margin:8px 0 20px!important;
+  background-image:linear-gradient(90deg,rgba(10,6,12,.98) 0%,rgba(10,6,12,.94) 34%,rgba(10,6,12,.56) 62%,rgba(10,6,12,.10) 100%),url('../../strenova-icon-512.png')!important;
+  background-position:center,right 42%!important;background-size:cover!important;background-repeat:no-repeat!important;
+  border-color:rgba(177,78,243,.28)!important;
+}
+#home>.hero:after{content:"STRENOVA  /  TRAINING SYSTEM";position:absolute;right:25px;bottom:20px;color:rgba(237,226,245,.6);font-size:9px;font-weight:900;letter-spacing:.2em;z-index:-1}
+#home>.hero h1{max-width:620px;font-size:clamp(34px,5vw,58px)!important;text-shadow:0 4px 25px rgba(0,0,0,.3)}
+#home>.hero p{max-width:520px;font-size:clamp(14px,1.5vw,17px)!important;color:#c9c1ce!important}
+#home>.hero .btn{margin-top:10px}
+#home>.hero .eyebrow{padding:8px 11px;border:1px solid rgba(177,78,243,.25);border-radius:999px;background:rgba(15,9,19,.56);backdrop-filter:blur(8px)}
+/* Shared action buttons */
+.btn,.th-btn,.gt-small-btn,.gt-chip{border-radius:13px!important;font-weight:850!important;transition:transform .16s,filter .16s,border-color .16s,background .16s!important}
+.btn{border:1px solid var(--lime)!important;background:linear-gradient(120deg,#b14ef3,#b978e5)!important;color:#0f0a13!important;box-shadow:0 8px 23px rgba(177,78,243,.12)!important;padding:12px 17px!important}
+.btn:hover,.th-btn:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.btn:active,.th-btn:active{transform:translateY(0)}
+.btn.secondary,.th-btn.ghost,.gt-small-btn,.gt-chip{background:#1e1723!important;border:1px solid #42354a!important;color:#eaf3e9!important;box-shadow:none!important}
+.btn.danger{background:#3b1d1d!important;border-color:#713535!important;color:#ffdede!important}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--lime)!important;outline-offset:3px!important}
+button:disabled{opacity:.5!important;cursor:not-allowed!important;transform:none!important}
+/* Forms */
+input,select,textarea,.field input,.field select,.field textarea,input.field,select.field,textarea.field,.th-field{
+  background:#0f0a12!important;color:#f0f6ef!important;border:1px solid #3b3042!important;border-radius:13px!important;
+  padding:12px 14px!important;box-shadow:none!important;transition:border-color .18s,box-shadow .18s!important;
+}
+input::placeholder,textarea::placeholder{color:#7f7487!important}
+input:focus,select:focus,textarea:focus,.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--lime)!important;box-shadow:0 0 0 3px rgba(177,78,243,.11)!important}
+label{color:#e3dce8!important;font-weight:700!important}
+.field{margin:10px 0 15px!important}
+/* Quick links and macro dashboard */
+.gc-feature-strip{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:12px!important;margin:18px 0 28px!important}
+.gc-feature{background:linear-gradient(145deg,#19121d,#110c14)!important;border:1px solid #382b40!important;border-radius:19px!important;padding:16px!important;min-height:138px;transition:transform .2s,border-color .2s,box-shadow .2s!important}
+.gc-feature:hover{border-color:rgba(177,78,243,.55)!important;transform:translateY(-3px);box-shadow:var(--gc-glow)!important}
+.gc-feature-icon{background:#251b2b!important;border:1px solid #4d365c!important;color:var(--lime)!important;border-radius:14px!important;width:46px!important;height:46px!important}
+.gc-feature b{font-size:14px!important;color:#eff7ef!important}
+.gc-feature small{font-size:11px!important;color:#a69bad!important;line-height:1.45}
+#gtHomeBjuCard{border-color:rgba(177,78,243,.2)!important;background:linear-gradient(140deg,#19121e,#100b13)!important;box-shadow:var(--gc-shadow)!important;padding:22px!important}
+#gtHomeBjuCard .gt-home-bju-grid{gap:12px!important}
+#gtHomeBjuCard .gt-home-bju-item{background:linear-gradient(145deg,#241a2a,#17111b)!important;border:1px solid #40304b!important;border-radius:16px!important;padding:15px!important}
+#gtHomeBjuCard .gt-home-bju-item strong{color:var(--lime)!important;font-size:clamp(20px,2.2vw,28px)!important}
+#gtHomeBjuCard .gt-home-bju-item small{color:#afa4b6!important}
+#gtHomeBjuCard .gt-home-bju-intake{background:rgba(9,4,12,.45)!important;border:1px solid #3b3042!important;border-radius:13px!important;padding:12px!important;color:#c3bac9!important}
+#gtHomeBjuCard .pill,.pill{background:#241a2b!important;border:1px solid #4a3658!important;color:var(--lime)!important;border-radius:999px!important;padding:7px 11px!important;font-size:10px!important;font-weight:900!important;letter-spacing:.05em}
+/* Stats and home engagement */
+.stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;gap:12px!important}
+.stat{background:linear-gradient(145deg,#1d1622,#130e17)!important;border:1px solid #382b40!important;border-radius:17px!important;padding:17px 10px!important}
+.stat strong{color:var(--lime)!important;font-size:clamp(23px,3vw,31px)!important}
+.stat small{color:#aba1b1!important;font-weight:800!important;letter-spacing:.07em}
+#gtHomeExtras .gt-metric,.gt-metric,.metric{background:linear-gradient(145deg,#1f1724,#130e17)!important;border:1px solid #392c42!important;border-radius:17px!important}
+.gt-metric strong,.metric strong{color:var(--lime)!important}
+.gt-progress{background:#302637!important;height:9px!important;border-radius:999px!important}
+.gt-progress span{background:linear-gradient(90deg,#9f46db,#b14ef3,#b468e6)!important;border-radius:999px!important}
+.gt-achievement{background:#18121c!important;border-color:#3b3043!important;border-radius:16px!important}
+.gt-achievement.unlocked{border-color:#964bc8!important;box-shadow:var(--gc-glow)!important}
+/* Workout program builder, exercise library and live workout */
+#trainingHub{--th-accent:#8B5CF6;color:var(--text)!important}
+.th-tabs{background:#17121b!important;border:1px solid #362c3d!important;border-radius:20px!important;padding:6px!important}
+.th-tabs button{color:#a69bad!important;border-radius:15px!important}
+.th-tabs button.active{background:linear-gradient(120deg,#b14ef3,#b773e5)!important;color:#0f0a13!important}
+.th-program{background:linear-gradient(145deg,#1e1723,#120d15)!important;border-color:#382d40!important;color:#eff6ef!important;border-radius:20px!important}
+.th-program.active{background:linear-gradient(145deg,#2c1e35,#1e1425)!important;border:2px solid var(--lime)!important;box-shadow:var(--gc-glow)!important}
+.th-program.active span,.th-library-card .th-category{color:var(--lime)!important}
+.th-feature-card,.th-day,.th-secondary-panel,.th-custom-row,.th-library-card{background:linear-gradient(145deg,#1e1723,#110c14)!important;border-color:#382c40!important;border-radius:21px!important}
+.th-day-number,.th-kicker{background:#251b2b!important;border-color:#473752!important;color:var(--lime)!important}
+.th-ex-prescription,.th-day-meta,.th-feature-card .th-description,.th-feature-card .th-note{color:var(--muted)!important}
+.th-day-body,.th-day-exercise{border-color:#342a3b!important}
+.th-video-link{background:#251b2b!important;border-color:#533c63!important;color:var(--lime)!important}
+.th-start-day,.th-btn:not(.ghost){background:linear-gradient(120deg,#b14ef3,#b773e5)!important;color:#0e0812!important;border:0!important}
+.th-field{background:#0f0a12!important;border-color:#3b3042!important;color:var(--text)!important}
+#session .gt-logged-exercise{background:linear-gradient(145deg,#1e1623,#120d15)!important;border:1px solid #3b3042!important;border-radius:19px!important;box-shadow:var(--gc-shadow)!important}
+#session .gt-session-exercise-heading b{color:#f1f7f1!important}
+#session .gt-set-log-panel{background:#100b14!important;border-color:#382d40!important;border-radius:15px!important}
+#session .gt-set-row input,#session .gt-set-count-row input,#session .gt-v4-effort input,#session .gt-v4-effort select,#session .gt-set-row select{background:#0f0a12!important;border-color:#42344b!important;color:#f0f7ef!important}
+#session .gt-v4-progression,#gtWorkoutDayNote{border-color:rgba(177,78,243,.32)!important;background:linear-gradient(145deg,rgba(177,78,243,.10),rgba(22,15,27,.94))!important;border-radius:17px!important}
+#gtWorkoutDayNote .gt-note-icon{background:rgba(177,78,243,.14)!important}
+#gtCustomExerciseEditor{background:linear-gradient(145deg,#211727,#120d15)!important;border-color:#613c7a!important;border-radius:20px!important}
+#gtLibraryAddExerciseJump{background:#211727!important;border-color:#573b6a!important;border-radius:15px!important}
+#gtLibraryAddExerciseJump button{background:linear-gradient(120deg,#b14ef3,#b773e5)!important;color:#0e0912!important}
+.th-custom-exercise-result{background:#1a131f!important;border-color:#3b3042!important;border-radius:15px!important}
+.th-custom-exercise-copy small{color:var(--muted)!important}
+.th-btn.ghost{background:#201925!important;color:#e7f0e7!important;border:1px solid #453a4c!important}
+/* Calendar */
+#calendar .gt-calendar-shell{background:linear-gradient(145deg,#1f1724,#120d15)!important;border-color:#3b3042!important;border-radius:22px!important}
+.gt-calendar-arrows button{background:#221a28!important;border-color:#473951!important;color:#f0e8f5!important}
+.gt-calendar-weekdays span{color:#aea4b4!important}
+.gt-calendar-day{background:#1b1420!important;color:#e8f1e8!important;border-radius:13px!important}
+.gt-calendar-day.today{border-color:var(--lime)!important}
+.gt-calendar-day.selected{background:linear-gradient(130deg,#b14ef3,#b772e5)!important;color:#100a14!important;border-color:#ca7aff!important;box-shadow:0 7px 20px rgba(177,78,243,.16)!important}
+.gt-calendar-day .gt-cal-dot,.gt-calendar-day.has-workout:not(.selected) .gt-cal-dot{background:var(--lime)!important}
+.gt-calendar-selected{border-color:#3b3042!important}
+.gt-day-agenda .gt-agenda-item{background:#1b1420!important;border-color:#3b3042!important;border-radius:14px!important}
+.gt-agenda-marker{background:linear-gradient(#b14ef3,#b468e6)!important}
+/* Nutrition */
+#nutrition .hero{background:radial-gradient(ellipse at 90% 0%,rgba(177,78,243,.12),transparent 45%),linear-gradient(135deg,#231a29,#120d15)!important}
+.gt-food-row{background:#19121d!important;border-color:#3a2e42!important}
+.gt-food-row button,.gt-small-btn{background:#241b2a!important;border-color:#493954!important;color:#efe8f3!important}
+.gt-food-form .field{min-width:0}
+/* Progress, charts and profiles */
+.chart-bar span,.gt-progress span{background:linear-gradient(180deg,#c670ff,#b975e6)!important}
+#profile .gt-profile-overview{background:linear-gradient(145deg,#241a2a,#120d15)!important;border-color:#3e3047!important;border-radius:18px!important}
+#profile .gt-profile-avatar{background:linear-gradient(135deg,#c670ff,#b975e6)!important;color:#0f0a13!important}
+#profile .gt-profile-section{background:linear-gradient(145deg,#1e1723,#110c14)!important;border-color:#3b3042!important;border-radius:18px!important}
+#profile .gt-profile-section .profile-group-title{color:var(--lime)!important}
+#profile .gt-profile-section input,#profile .gt-profile-section select,#profile .gt-profile-section textarea{background:#0f0a12!important;border-color:#403448!important}
+#gtProfileWeightCard .gt-weight-record{background:#1b1420!important;border-color:#3b3042!important;border-radius:14px!important}
+#gtProfileWeightCard .gt-weight-record small{color:var(--muted)!important}
+/* Chat and Plus */
+.gt-chat-hero{background:radial-gradient(ellipse at 90% 0%,rgba(177,78,243,.10),transparent 48%),linear-gradient(145deg,#1f1725,#120d15)!important;border-color:#3e3047!important;border-radius:20px!important}
+.gt-chat-hero p,.gt-chat-status,.gt-chat-thread-button small{color:var(--muted)!important}
+.gt-chat-side,.gt-chat-panel{background:#17111b!important;border-color:#3b3042!important;border-radius:18px!important}
+.gt-chat-status,.gt-chat-thread-button{background:#201825!important;border-color:#3b3042!important;color:#ecf5eb!important;border-radius:13px!important}
+.gt-chat-thread-button.active{border-color:var(--lime)!important;background:#2c1f35!important}
+.bubble.bot{background:#221a28!important;color:#eef6ed!important;border:1px solid #3b3042!important}
+.bubble.user{background:linear-gradient(120deg,#b14ef3,#b773e5)!important;color:#0e0912!important}
+#subscription .gt-sub-hero{background:radial-gradient(ellipse at 90% 0%,rgba(177,78,243,.12),transparent 42%),linear-gradient(145deg,#1f1725,#110c14)!important;border-color:#41344a!important;border-radius:22px!important}
+#subscription .gt-sub-plan{background:linear-gradient(145deg,#1e1723,#120d15)!important;border-color:#3b3042!important;border-radius:20px!important}
+#subscription .gt-sub-plan.featured{border-color:var(--lime)!important;box-shadow:var(--gc-glow)!important}
+#subscription .gt-sub-price,#subscription .gt-sub-status{color:var(--lime)!important}
+#subscription .gt-sub-note{background:#17111b!important;border-color:#3b3042!important;color:var(--muted)!important}
+#gtCoachLock,#gtCalendarLock,.gt-chat-lock{background:rgba(12,8,15,.96)!important;border-color:#533c63!important;color:#eef7ed!important}
+#gtCoachLock button,#gtCalendarLock button,.gt-chat-lock button{background:linear-gradient(120deg,#b14ef3,#b773e5)!important;color:#0e0912!important}
+/* Authentication screen */
+#authGate{background:rgba(6,3,8,.94)!important;backdrop-filter:blur(16px)!important}
+.gc-auth-shell{width:min(1120px,100%)!important;border:1px solid #3f3148!important;border-radius:28px!important;overflow:hidden!important;box-shadow:0 30px 100px rgba(0,0,0,.6)!important;background:#110c14!important}
+.gc-auth-visual{background-image:linear-gradient(90deg,rgba(9,5,12,.93),rgba(9,5,12,.36)),url('../../strenova-icon-512.png')!important;background-position:center!important;background-size:cover!important}
+.gc-auth-visual-copy h2{font-size:clamp(32px,4vw,48px)!important;letter-spacing:-1.5px!important;line-height:1.05!important}
+.gc-auth-visual-copy p{color:#c8c0ce!important}
+.gc-auth-points span{color:#eae3ee!important}
+.gc-auth-visual-brand{color:#f1f8ef!important}
+.gc-auth-visual-footer{color:#cec4d4!important}
+.auth-card{background:linear-gradient(145deg,#19121e,#0f0a12)!important;border-color:#3e3047!important;border-radius:0!important;box-shadow:none!important}
+.auth-card h1{color:#f3f8f1!important}
+#gtGoogleLogin{background:#1e1723!important;border-color:#4a3c53!important;color:#f1f7ef!important}
+.auth-tabs .btn.secondary{background:#211926!important}
+/* Persistent bottom navigation */
+.nav,#nav{
+  position:fixed!important;z-index:1000!important;left:50%!important;right:auto!important;bottom:16px!important;top:auto!important;
+  transform:translateX(-50%)!important;width:min(900px,calc(100% - 36px))!important;max-width:900px!important;
+  display:flex!important;justify-content:space-around!important;align-items:center!important;gap:5px!important;
+  padding:8px!important;border:1px solid rgba(150,129,164,.24)!important;border-radius:22px!important;
+  background:rgba(15,11,18,.91)!important;backdrop-filter:blur(22px)!important;-webkit-backdrop-filter:blur(22px)!important;
+  box-shadow:0 18px 55px rgba(0,0,0,.55),0 0 0 1px rgba(177,78,243,.04)!important;
+}
+#nav button,.nav button{flex:1 1 0!important;min-width:0!important;min-height:54px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;border:0!important;border-radius:15px!important;padding:6px 4px!important;background:transparent!important;color:#aaa1b0!important;font-size:10px!important;line-height:1.1!important;white-space:nowrap!important;transition:background .18s,color .18s!important}
+#nav button span,.nav button span{font-size:19px!important;margin:0!important;line-height:1.1!important}
+#nav button i,.nav button i{font-style:normal!important;font-size:11px!important;font-weight:800!important}
+#nav button.active,.nav button.active{background:linear-gradient(135deg,rgba(177,78,243,.18),rgba(160,93,204,.09))!important;color:var(--lime)!important;box-shadow:inset 0 0 0 1px rgba(177,78,243,.16)!important}
+#nav button:hover,.nav button:hover{color:#f3e9fa!important;background:rgba(177,78,243,.07)!important}
+#gtInstallBanner{background:rgba(19,14,23,.97)!important;border-color:#533d62!important;bottom:calc(94px + env(safe-area-inset-bottom))!important}
+#gtInstallBanner .gt-install-action{background:var(--lime)!important;color:#0e0912!important}
+/* Empty states and utility feedback */
+.empty{border:1px dashed #493c51!important;border-radius:17px!important;background:rgba(20,15,24,.55)!important;color:var(--muted)!important;padding:22px!important}
+.tag.ok{color:var(--lime)!important}
+a{color:#c57af7}
+::selection{background:rgba(177,78,243,.28);color:#fff}
+@media(min-width:1100px){
+  #home .gc-feature-strip{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+  #home .grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  #home>.hero{min-height:390px}
+}
+@media(max-width:900px){
+  .gc-feature-strip{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .gc-chat-layout{grid-template-columns:1fr!important}
+  .th-program-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  main{width:min(100% - 32px,1280px)!important}
+  .top{width:min(100% - 32px,1280px)!important}
+}
+@media(max-width:600px){
+  body{padding-bottom:122px!important}
+  .top{width:calc(100% - 28px)!important;padding:16px 0 13px!important}
+  main{width:calc(100% - 28px)!important;padding-bottom:28px!important}
+  .top .brand-mark{width:43px!important;height:43px!important;flex-basis:43px!important;border-radius:14px!important}
+  .top .brand-name{font-size:22px!important}.top .sub{margin-left:55px!important;font-size:11px!important}
+  #home>.hero{min-height:380px!important;padding:24px 20px!important;background-image:linear-gradient(90deg,rgba(9,5,11,.96),rgba(9,5,11,.76) 57%,rgba(9,5,11,.28)),url('../../strenova-icon-512.png')!important;background-position:62% center!important}
+  #home>.hero h1{font-size:clamp(32px,9vw,44px)!important;max-width:100%}
+  #home>.hero p{max-width:100%;font-size:14px!important}
+  #home>.hero:after{right:15px;bottom:12px;font-size:8px}
+  .gc-feature-strip{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+  .gc-feature{min-height:122px!important;padding:13px!important}
+  .gc-feature:last-child{grid-column:1/-1;min-height:104px}
+  #home .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+  .option{min-height:124px!important;padding:14px!important}
+  .section-head{margin:23px 0 12px!important}
+  .card{padding:15px!important;border-radius:17px!important}
+  #gtHomeBjuCard .gt-home-bju-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+  #gtHomeBjuCard .gt-home-bju-item{padding:10px 7px!important}
+  #gtHomeBjuCard .gt-home-bju-item strong{font-size:clamp(16px,5vw,21px)!important}
+  #gtHomeBjuCard .gt-home-bju-item small{font-size:10px!important}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+  .stat{padding:12px 5px!important}
+  .stat strong{font-size:22px!important}
+  .stat small{font-size:9px!important}
+  .gt-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .gt-achievements{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .gt-food-form{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .gt-food-form .gt-food-name{grid-column:1/-1}
+  .gt-food-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .gt-food-row .gt-food-title{grid-column:1/-1}
+  .gt-food-row button{grid-column:1/-1}
+  .th-program-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .th-program{padding:14px 11px!important;min-height:120px!important;border-radius:18px!important}
+  .th-program strong{font-size:15px!important}
+  .th-feature-card{padding:20px!important;border-radius:20px!important}
+  .th-day{border-radius:19px!important}
+  .th-day summary{grid-template-columns:48px minmax(0,1fr) 20px!important;gap:10px!important;padding:15px!important}
+  .th-day-number{width:46px!important;height:46px!important;border-radius:14px!important;font-size:22px!important}
+  .th-day-body{padding:0 14px 14px!important}
+  .th-day-exercise{grid-template-columns:1fr!important}
+  .calendar-item{grid-template-columns:minmax(0,1fr) 108px!important}
+  .calendar-item .calendar-save{grid-column:1/-1}
+  .session-inputs{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #session .gt-set-row{grid-template-columns:48px minmax(0,1fr) minmax(0,1fr)!important;gap:7px!important}
+  #session .gt-set-type-label{grid-column:2/4}
+  .gt-chat-layout{grid-template-columns:1fr!important}
+  .gt-sub-plans{grid-template-columns:1fr!important}
+  #nav,.nav{left:9px!important;right:9px!important;bottom:8px!important;transform:none!important;width:auto!important;max-width:none!important;gap:2px!important;padding:6px!important;border-radius:18px!important}
+  #nav button,.nav button{min-height:49px!important;padding:5px 2px!important;gap:3px!important}
+  #nav button span,.nav button span{font-size:17px!important}
+  #nav button i,.nav button i{font-size:9px!important;letter-spacing:-.02em}
+  #gtInstallBanner{bottom:calc(73px + env(safe-area-inset-bottom))!important}
+}
+@media(max-width:380px){
+  .gc-feature-strip{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #nav button i,.nav button i{font-size:8px!important}
+  .top .sub{font-size:10px!important}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
+
+
+
+/* Late-loaded feature CSS is intentionally normalized here after all modules. */
+#home #gtRefreshTiles{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important;margin:8px 0 20px!important}
+#home .gt-refresh-tile{
+  border:1px solid #42354b!important;border-radius:20px!important;color:#f1f8ef!important;
+  background-image:linear-gradient(0deg,rgba(10,5,13,.96),rgba(10,5,13,.24)),url('../../strenova-icon-512.png')!important;
+  background-position:center 45%!important;background-size:cover!important;box-shadow:0 12px 32px rgba(0,0,0,.2)!important;
+  min-height:172px!important;padding:22px!important;transition:transform .2s,border-color .2s,box-shadow .2s!important;
+}
+#home .gt-refresh-tile.food{background-image:radial-gradient(ellipse at 85% 20%,rgba(177,78,243,.16),transparent 38%),linear-gradient(145deg,#251b2b,#100b14)!important;background-position:center!important}
+#home .gt-refresh-tile:hover{border-color:var(--lime)!important;transform:translateY(-3px);box-shadow:var(--gc-glow)!important}
+#home .gt-refresh-tile .gt-tile-icon{color:var(--lime)!important;font-size:24px!important}
+#home .gt-refresh-tile strong{color:#f4f8f1!important;font-size:clamp(18px,2vw,23px)!important}
+#home .gt-refresh-tile span{color:#c8bfce!important;font-size:13px!important}
+#home .gt-refresh-tile em{color:var(--lime)!important;font-size:13px!important}
+#recommend .gt-training-intro{background:radial-gradient(ellipse at 90% 0%,rgba(177,78,243,.12),transparent 45%),linear-gradient(145deg,#211727,#110c15)!important;border:1px solid #4c3b57!important;border-radius:22px!important}
+#recommend .gt-training-intro p{color:#c8bfce!important}
+#recommend .gt-program-chip{background:linear-gradient(145deg,#1f1725,#120d15)!important;border-color:#3d3046!important;color:#f1f8f0!important;border-radius:18px!important}
+#recommend .gt-program-chip small{color:#b2a8b8!important}
+#recommend .gt-program-chip.active,#recommend .gt-program-chip:hover{border-color:var(--lime)!important;box-shadow:var(--gc-glow)!important}
+#recommend .gt-program-chip.active small{color:var(--lime)!important}
+#recommend #planDays .card:hover{border-color:rgba(177,78,243,.55)!important}
+#recommend .exercise,#recommend .session,.exercise-card{border-color:#3d3046!important}
+#nutrition .hero:before{background:linear-gradient(90deg,rgba(9,5,12,.96),rgba(9,5,12,.76) 50%,rgba(9,5,12,.12)),url('../../strenova-icon-512.png') center/cover!important}
+/* All older cyan/blue action rules, including dynamically generated ones. */
+.btn:not(.secondary):not(.danger),#authGate .btn:not(.secondary):not(.danger),#authGate #authSubmit,
+.gt-refresh-access,.gt-custom-exercise-result .th-add-exercise,.th-more-results,
+#gtLibraryAddExerciseJump button,#gtCustomExerciseEditor .gt-custom-save{
+  background:linear-gradient(120deg,#b14ef3,#b773e5)!important;border-color:#b14ef3!important;color:#0e0912!important;
+  box-shadow:0 8px 22px rgba(177,78,243,.13)!important;
+}
+.gt-template-card,.gt-workout-template,.gt-template-item{background:linear-gradient(145deg,#1f1725,#120d15)!important;border-color:#3d3046!important;color:#edf5ec!important}
+.gt-template-card button,.gt-workout-template button,.gt-template-item button{border-radius:12px!important}
+#gtRefreshTiles+*{margin-top:16px}
+@media(max-width:650px){
+  #home #gtRefreshTiles{grid-template-columns:1fr!important;gap:10px!important}
+  #home .gt-refresh-tile{min-height:145px!important;padding:17px!important}
+}
+
+
+
+/* Backup, restore, templates and dynamically inserted controls */
+#home #gtV4BackupCard,.gt-v4-card{background:linear-gradient(145deg,#1c1521,#110c14)!important;border:1px solid #3d3046!important;border-radius:20px!important;box-shadow:var(--gc-shadow)!important;color:var(--text)!important}
+.gt-v4-actions button,.gt-v4-button{background:#221a28!important;border:1px solid #483a51!important;color:#efe8f3!important;border-radius:12px!important}
+.gt-v4-actions .gt-v4-primary,.gt-v4-primary{background:linear-gradient(120deg,#b14ef3,#b773e5)!important;border-color:#b14ef3!important;color:#0e0912!important}
+.gt-v4-status{color:var(--muted)!important}
+.gt-v4-dialog{background:rgba(6,3,8,.88)!important}
+.gt-v4-dialog-panel{background:#16101a!important;border-color:#473a50!important;color:var(--text)!important}
+.gt-v4-summary>div{background:#1e1723!important;border-color:#3d3046!important}
+.gt-v4-summary strong{color:var(--lime)!important}
+.gt-v4-card .pill{background:#241a2b!important;color:var(--lime)!important}
+/* Desktop navigation belongs below the header, not over the dashboard content. */
+@media(min-width:601px){
+  #nav{position:sticky!important;top:12px!important;bottom:auto!important;left:auto!important;right:auto!important;transform:none!important;
+    width:min(900px,calc(100% - 40px))!important;max-width:900px!important;margin:5px auto 24px!important;}
+}
+
+
+/* Keep the language toggle readable after legacy rules that collapse .lang text. */
+#langBtn.lang{font-size:12px!important;line-height:1!important;letter-spacing:.02em!important;min-width:88px!important;min-height:42px!important;color:#e7f1e7!important;visibility:visible!important;opacity:1!important}
+#langBtn.lang .lang-segment{font-size:11px!important;line-height:1!important;color:#e7f1e7!important;visibility:visible!important;opacity:1!important}
