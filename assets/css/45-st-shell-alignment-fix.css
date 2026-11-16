@@ -1,0 +1,162 @@
+/* STRENOVA dashboard layout — final single source of truth. Keep desktop spacious and mobile one-hand friendly. */
+html{max-width:100%!important;overflow-x:hidden!important;scroll-behavior:smooth}
+body.st-app-shell{width:100%!important;max-width:100%!important;margin:0!important;padding:0 0 28px!important;overflow-x:hidden!important;background:var(--bg)!important;color:var(--text)!important}
+body.st-app-shell>header.top{position:relative!important;left:auto!important;right:auto!important;top:auto!important;display:flex!important;align-items:center!important;gap:16px!important;width:calc(100% - 260px)!important;max-width:none!important;min-height:104px!important;margin:0 0 0 260px!important;padding:25px clamp(28px,3vw,48px) 18px!important;box-sizing:border-box!important;background:transparent!important;border:0!important}
+body.st-app-shell>header.top>div:first-child{display:none!important}
+body.st-app-shell main{display:block!important;position:relative!important;left:auto!important;width:calc(100% - 260px)!important;max-width:none!important;min-width:0!important;margin:0 0 0 260px!important;padding:0 clamp(28px,3vw,48px) 54px!important;box-sizing:border-box!important}
+body.st-app-shell .page{width:100%!important;max-width:1500px!important;min-width:0!important;margin:0 auto 26px!important}
+body.st-app-shell #nav{position:fixed!important;inset:0 auto 0 0!important;left:0!important;right:auto!important;top:0!important;bottom:0!important;width:260px!important;min-width:260px!important;max-width:260px!important;height:100vh!important;height:100dvh!important;max-height:100dvh!important;transform:none!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:6px!important;overflow-x:hidden!important;overflow-y:auto!important;margin:0!important;padding:24px 16px calc(20px + env(safe-area-inset-bottom))!important;box-sizing:border-box!important;background:rgba(13,9,22,.98)!important;border:0!important;border-right:1px solid rgba(168,85,247,.18)!important;border-radius:0!important;box-shadow:18px 0 48px rgba(0,0,0,.22)!important;z-index:1000!important}
+body.st-app-shell #nav .st-sidebar-brand{display:flex!important;flex:0 0 auto!important;align-items:center!important;justify-content:flex-start!important;gap:11px!important;padding:5px 10px 22px!important;margin:0 0 10px!important;border-bottom:1px solid rgba(168,85,247,.16)!important;font-size:20px!important;white-space:nowrap!important}
+body.st-app-shell #nav .st-sidebar-mark{display:grid!important;place-items:center!important;width:38px!important;height:38px!important;flex:0 0 38px!important;border-radius:13px!important;background:linear-gradient(135deg,#6D28D9,#A855F7)!important;color:#fff!important;font-size:20px!important;font-weight:950!important;box-shadow:0 7px 24px rgba(109,40,217,.28)!important}
+body.st-app-shell #nav>button.st-nav-primary,body.st-app-shell #nav .st-sidebar-extra>button,body.st-app-shell #nav .st-sidebar-bottom>button{display:flex!important;flex:0 0 auto!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:13px!important;width:100%!important;min-width:0!important;min-height:47px!important;max-width:none!important;padding:10px 12px!important;border:1px solid transparent!important;border-radius:14px!important;background:transparent!important;color:#B7ADC9!important;text-align:left!important;font-size:13px!important;line-height:1.25!important;white-space:normal!important;box-shadow:none!important}
+body.st-app-shell #nav button span{display:grid!important;place-items:center!important;width:23px!important;height:24px!important;flex:0 0 23px!important;margin:0!important;color:currentColor!important;font-size:19px!important}
+body.st-app-shell #nav button span svg{width:20px!important;height:20px!important;stroke:currentColor!important;fill:none!important;stroke-width:1.8!important}
+body.st-app-shell #nav button i{display:block!important;min-width:0!important;overflow:visible!important;font-style:normal!important;font-size:13px!important;font-weight:730!important;letter-spacing:0!important;white-space:normal!important}
+body.st-app-shell #nav button.active{background:linear-gradient(135deg,rgba(109,40,217,.34),rgba(168,85,247,.18))!important;border-color:rgba(168,85,247,.24)!important;color:color:#eadbff!important;box-shadow:inset 0 0 0 1px rgba(168,85,247,.08)!important}
+body.st-app-shell #nav button:hover{background:rgba(168,85,247,.09)!important;color:#fff!important}
+body.st-app-shell #nav .st-sidebar-extra{display:grid!important;flex:0 0 auto!important;gap:5px!important;margin:9px 0 0!important}
+body.st-app-shell #nav .st-sidebar-divider{display:block!important;height:1px!important;flex:0 0 1px!important;background:rgba(168,85,247,.16)!important;margin:11px 2px!important}
+body.st-app-shell #nav .st-sidebar-bottom{display:grid!important;flex:0 0 auto!important;gap:7px!important;margin-top:auto!important;padding-top:14px!important;border-top:1px solid rgba(168,85,247,.16)!important}
+body.st-app-shell #nav .st-sidebar-bottom>.st-sidebar-divider{display:none!important}
+body.st-app-shell #nav .st-sidebar-user{display:grid!important;grid-template-columns:38px minmax(0,1fr)!important;gap:10px!important;align-items:center!important;padding:11px 9px 2px!important;min-width:0!important}
+body.st-app-shell #nav .st-sidebar-user-copy{display:block!important;min-width:0!important}
+body.st-app-shell .st-dashboard-greeting{display:flex!important;flex:1 1 auto!important;flex-direction:column!important;gap:5px!important;min-width:0!important}
+body.st-app-shell .st-dashboard-greeting small{color:#B7ADC9!important;font-size:13px!important;letter-spacing:.02em!important}
+body.st-app-shell .st-dashboard-greeting strong{font-size:clamp(22px,2.1vw,30px)!important;line-height:1.12!important;letter-spacing:-.65px!important;color:#fff!important;overflow-wrap:anywhere!important}
+body.st-app-shell .st-top-actions{display:flex!important;align-items:center!important;gap:10px!important;margin-left:auto!important}
+body.st-app-shell .st-icon-button{display:grid!important;place-items:center!important;width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;border:1px solid var(--line)!important;border-radius:50%!important;background:#191326!important;color:#e9d5ff!important;box-shadow:0 6px 18px rgba(0,0,0,.18)!important}
+body.st-app-shell .st-icon-button svg{width:20px!important;height:20px!important;stroke:currentColor!important;fill:none!important}
+body.st-app-shell .top #langBtn{display:flex!important;align-items:center!important;justify-content:center!important;min-height:46px!important;min-width:58px!important;padding:7px 12px!important;border-radius:13px!important;background:#191326!important;border:1px solid var(--line)!important;color:#e9d5ff!important}
+/* Dashboard composition: stats first, quick actions next to attention, recent activity below. */
+body.st-app-shell #home.active{display:grid!important;grid-template-columns:minmax(0,1.65fr) minmax(300px,.9fr)!important;grid-template-areas:"stats stats" "quickhead attention" "quick attention" "progress ." "recent ."!important;column-gap:24px!important;row-gap:0!important;align-items:start!important;width:100%!important;max-width:1500px!important}
+body.st-app-shell #home>.hero,body.st-app-shell #home>.gc-feature-strip{display:none!important}
+body.st-app-shell #home>.st-home-stats{grid-area:stats!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important;width:100%!important;margin:8px 0 19px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+body.st-app-shell #home>.st-home-stats .stat{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:7px!important;min-width:0!important;min-height:142px!important;padding:17px 10px!important;margin:0!important;text-align:center!important;background:linear-gradient(150deg,#191326,#120d1e)!important;border:1px solid var(--line)!important;border-radius:20px!important;box-shadow:0 10px 28px rgba(0,0,0,.18)!important}
+body.st-app-shell #home>.st-home-stats .stat:before{content:"↗";display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:rgba(139,92,246,.16);color:#d8b4fe;font-size:19px;font-weight:900}
+body.st-app-shell #home>.st-home-stats .stat:nth-child(2):before{content:"◷"}body.st-app-shell #home>.st-home-stats .stat:nth-child(3):before{content:"⌁"}
+body.st-app-shell #home>.st-home-stats .stat strong{font-size:29px!important;line-height:1.05!important;color:#fff!important}
+body.st-app-shell #home>.st-home-stats .stat small{font-size:12px!important;letter-spacing:0!important;color:#B7ADC9!important}
+body.st-app-shell #home>.st-home-quick-head{grid-area:quickhead!important;margin:9px 0 13px!important;align-self:end!important}
+body.st-app-shell #home>.st-home-quick-head h2{font-size:22px!important;font-weight:850!important}
+body.st-app-shell #home>.grid{grid-area:quick!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important;min-width:0!important;width:100%!important}
+body.st-app-shell #home>.grid>.option{display:block!important;min-width:0!important;min-height:126px!important;height:100%!important;padding:16px 14px!important;border:1px solid var(--line)!important;border-radius:18px!important;background:linear-gradient(150deg,#191326,#120d1e)!important;text-align:left!important;box-shadow:0 9px 24px rgba(0,0,0,.15)!important}
+body.st-app-shell #home>.grid>.option:nth-child(4){display:none!important}
+body.st-app-shell #home>.grid>.option .emoji{display:grid!important;place-items:center;width:36px!important;height:36px!important;margin:0 0 11px!important;border-radius:12px!important;background:rgba(139,92,246,.16)!important;color:#d8b4fe!important;font-size:19px!important}
+body.st-app-shell #home>.grid>.option b{font-size:14px!important;font-weight:850!important}
+body.st-app-shell #home>.grid>.option small{font-size:12px!important;line-height:1.4!important;color:#B7ADC9!important}
+body.st-app-shell #stAttentionCard{grid-area:attention!important;min-width:0!important;margin:9px 0 0!important;padding:23px!important;align-self:stretch!important;border-radius:20px!important}
+body.st-app-shell #stAttentionCard .st-attention-head{gap:12px!important;margin-bottom:16px!important}
+body.st-app-shell #stAttentionCard .st-attention-head b{font-size:18px!important}
+body.st-app-shell #stAttentionCard .st-attention-copy{font-size:14px!important;line-height:1.55!important}
+body.st-app-shell #home>.st-home-progress-head{grid-area:progress!important;margin:26px 0 13px!important}
+body.st-app-shell #home>#recent{grid-area:recent!important;display:grid!important;place-content:center!important;min-width:0!important;min-height:220px!important;margin:0!important;padding:30px!important;text-align:center!important;border-radius:20px!important;background:linear-gradient(150deg,#191326,#120d1e)!important}
+body.st-app-shell #home>#recent:before{content:"♧";display:grid;place-items:center;width:58px;height:58px;border-radius:50%;margin:0 auto 15px;background:rgba(139,92,246,.16);color:#d8b4fe;font-size:27px;font-weight:900}
+/* Normalize later-generated feature, workout, nutrition and status components to the same purple palette. */
+body.st-app-shell .gt-feature-lock,body.st-app-shell .gt-session-free-banner,body.st-app-shell .gt-set-log-panel,body.st-app-shell .gt-progress-summary,body.st-app-shell .gt-progress-empty,body.st-app-shell .gt-workout-controls,body.st-app-shell .gt-resume-actions{background:#191326!important;border-color:var(--line)!important;color:#f4edff!important}
+body.st-app-shell .gt-feature-lock button,body.st-app-shell .gt-session-free-banner button,body.st-app-shell .gt-resume-primary,body.st-app-shell .gt-custom-save,body.st-app-shell .gt-draft-primary{background:linear-gradient(135deg,#8B5CF6,#A855F7)!important;color:#fff!important;border-color:rgba(168,85,247,.35)!important}
+body.st-app-shell .gt-session-completion,body.st-app-shell .exercise input,body.st-app-shell input[type=checkbox]{accent-color:#A855F7!important}
+body.st-app-shell .gt-status-dot.success,body.st-app-shell .gt-status-dot.ok,body.st-app-shell .status-success{background:#A855F7!important;color:#f5eaff!important}
+body.st-app-shell .gt-progress span,body.st-app-shell .gc-progress span,body.st-app-shell .chart-bar span{background:linear-gradient(90deg,#6D28D9,#A855F7,#D946EF)!important}
+body.st-app-shell .card,body.st-app-shell .metric,body.st-app-shell .gt-metric,body.st-app-shell .option,body.st-app-shell .exercise-card,body.st-app-shell .th-day,body.st-app-shell .th-feature-card,body.st-app-shell .th-secondary-panel,body.st-app-shell .th-library-card{color:#fff!important;border-color:var(--line)!important}
+body.st-app-shell input,body.st-app-shell select,body.st-app-shell textarea{font-size:16px!important;max-width:100%!important}
+body.st-app-shell .footer{color:#8f829f!important}
+/* Compact icon rail for tablets. */
+@media (min-width:768px) and (max-width:1099px){
+ body.st-app-shell{padding:0 0 24px!important}
+ body.st-app-shell #nav{width:78px!important;min-width:78px!important;max-width:78px!important;padding:20px 9px calc(18px + env(safe-area-inset-bottom))!important}
+ body.st-app-shell #nav .st-sidebar-brand{justify-content:center!important;padding:4px 0 18px!important;font-size:0!important}
+ body.st-app-shell #nav .st-sidebar-wordmark,body.st-app-shell #nav button i,body.st-app-shell #nav .st-sidebar-user{display:none!important}
+ body.st-app-shell #nav>button.st-nav-primary,body.st-app-shell #nav .st-sidebar-extra>button,body.st-app-shell #nav .st-sidebar-bottom>button{justify-content:center!important;gap:0!important;padding:9px 5px!important}
+ body.st-app-shell #nav .st-sidebar-extra{display:grid!important}
+ body.st-app-shell #nav .st-sidebar-bottom{align-items:center!important}
+ body.st-app-shell>header.top{width:calc(100% - 78px)!important;margin-left:78px!important;padding:22px 25px 16px!important}
+ body.st-app-shell main{width:calc(100% - 78px)!important;margin-left:78px!important;padding:0 25px 44px!important}
+ body.st-app-shell #home{grid-template-columns:minmax(0,1.45fr) minmax(260px,.9fr)!important;column-gap:16px!important}
+ body.st-app-shell #home>.grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ body.st-app-shell #home>.grid>.option:nth-child(4){display:block!important}
+ body.st-app-shell #home>.gc-feature-strip{display:none!important}
+}
+/* Mobile: preserve the bottom five-item navigation and put the rest in the More drawer. */
+@media (max-width:767px){
+ body.st-app-shell{padding:0 0 calc(82px + env(safe-area-inset-bottom))!important}
+ body.st-app-shell>header.top{position:sticky!important;left:0!important;top:0!important;z-index:1100!important;display:flex!important;width:100%!important;min-height:66px!important;margin:0!important;padding:calc(8px + env(safe-area-inset-top)) 12px 8px!important;background:rgba(9,7,17,.96)!important;border-bottom:1px solid rgba(168,85,247,.14)!important;backdrop-filter:blur(18px)!important}
+ body.st-app-shell>header.top>div:first-child{display:flex!important;align-items:center!important;min-width:0!important}
+ body.st-app-shell .top .brand-mark{width:36px!important;height:36px!important;flex:0 0 36px!important;border-radius:12px!important}
+ body.st-app-shell .top .brand-name{font-size:16px!important}
+ body.st-app-shell .top .sub,body.st-app-shell .st-dashboard-greeting{display:none!important}
+ body.st-app-shell .st-top-actions{gap:5px!important}
+ body.st-app-shell .st-icon-button{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important}
+ body.st-app-shell .st-more-toggle{display:grid!important;place-items:center!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;border-radius:12px!important}
+ body.st-app-shell .st-more-toggle span{display:none!important}
+ body.st-app-shell .top #langBtn{min-width:48px!important;max-width:58px!important;min-height:40px!important;padding:5px 7px!important}
+ body.st-app-shell main{width:100%!important;max-width:100%!important;margin:0!important;padding:10px 14px 28px!important}
+ body.st-app-shell .page{width:100%!important;max-width:100%!important;margin:0 auto 20px!important}
+ body.st-app-shell #nav{position:fixed!important;inset:auto 0 0 0!important;top:auto!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;min-width:0!important;max-width:none!important;height:auto!important;min-height:calc(68px + env(safe-area-inset-bottom))!important;max-height:none!important;flex-direction:row!important;align-items:stretch!important;justify-content:space-around!important;gap:3px!important;overflow:visible!important;margin:0!important;padding:7px 7px calc(7px + env(safe-area-inset-bottom))!important;background:rgba(17,13,27,.98)!important;border:0!important;border-top:1px solid var(--line)!important;border-radius:18px 18px 0 0!important;box-shadow:0 -12px 40px rgba(0,0,0,.32)!important}
+ body.st-app-shell #nav .st-sidebar-brand,body.st-app-shell #nav .st-sidebar-extra,body.st-app-shell #nav .st-sidebar-bottom{display:none!important}
+ body.st-app-shell #nav>button.st-nav-primary{display:flex!important;flex:1 1 0!important;min-width:0!important;max-width:none!important;min-height:50px!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:4px!important;padding:5px 2px!important;border-radius:12px!important}
+ body.st-app-shell #nav>button.st-nav-primary span{display:grid!important;width:100%!important;height:21px!important;flex:0 0 21px!important;font-size:18px!important}
+ body.st-app-shell #nav>button.st-nav-primary span svg{width:19px!important;height:19px!important}
+ body.st-app-shell #nav>button.st-nav-primary i{display:block!important;font-size:10px!important;line-height:1.1!important;text-align:center!important;white-space:nowrap!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important}
+ body.st-app-shell #nav>button:not(.st-nav-primary){display:none!important}
+ body.st-app-shell #home{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"stats" "quickhead" "quick" "attention" "progress" "recent"!important;column-gap:0!important}
+ body.st-app-shell #home>.hero,body.st-app-shell #home>.gc-feature-strip{display:none!important}
+ body.st-app-shell #home>.st-home-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;margin:4px 0 14px!important}
+ body.st-app-shell #home>.st-home-stats .stat{min-height:105px!important;padding:11px 5px!important;border-radius:15px!important}
+ body.st-app-shell #home>.st-home-stats .stat:before{width:30px!important;height:30px!important;font-size:15px!important}
+ body.st-app-shell #home>.st-home-stats .stat strong{font-size:22px!important}
+ body.st-app-shell #home>.st-home-stats .stat small{font-size:9px!important}
+ body.st-app-shell #home>.st-home-quick-head{margin:14px 0 9px!important}
+ body.st-app-shell #home>.st-home-quick-head h2{font-size:19px!important}
+ body.st-app-shell #home>.grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+ body.st-app-shell #home>.grid>.option,body.st-app-shell #home>.grid>.option:nth-child(4){display:block!important;min-height:108px!important;padding:13px 11px!important}
+ body.st-app-shell #home>.grid>.option b{font-size:13px!important}
+ body.st-app-shell #home>.grid>.option small{font-size:11px!important}
+ body.st-app-shell #stAttentionCard{margin:12px 0 0!important;padding:16px!important}
+ body.st-app-shell #home>.st-home-progress-head{margin:21px 0 10px!important}
+ body.st-app-shell #home>#recent{min-height:175px!important;padding:22px!important}
+ body.st-app-shell .grid,body.st-app-shell .grid3,body.st-app-shell .two-col{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+ body.st-app-shell .gt-metrics,body.st-app-shell .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+ body.st-app-shell .gt-food-form{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ body.st-app-shell .gt-food-form .gt-food-name{grid-column:1/-1!important}
+ body.st-app-shell .gt-food-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;overflow-wrap:anywhere!important}
+ body.st-app-shell .gt-food-row .gt-food-title,body.st-app-shell .gt-food-row button{grid-column:1/-1!important}
+ body.st-app-shell .calendar-item{grid-template-columns:minmax(0,1fr) 100px!important}
+ body.st-app-shell .calendar-item>*{min-width:0!important}
+ body.st-app-shell .gt-template-form{grid-template-columns:minmax(0,1fr)!important;width:100%!important}
+ body.st-app-shell .gt-template-form>*{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+ body.st-app-shell #libraryList{grid-template-columns:1fr!important}
+ body.st-app-shell .session-inputs{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
+ body.st-app-shell .session-inputs input{width:100%!important;min-width:0!important;padding:9px 6px!important}
+ body.st-app-shell #session .btn.full{position:sticky!important;bottom:calc(78px + env(safe-area-inset-bottom))!important;z-index:9!important;width:100%!important}
+ body.st-app-shell .st-more-backdrop{align-items:flex-end!important}
+ body.st-app-shell .st-more-panel{width:100%!important;max-width:100%!important;height:min(82dvh,720px)!important;padding:18px 16px calc(18px + env(safe-area-inset-bottom))!important;border-radius:22px 22px 0 0!important}
+ body.st-app-shell input,body.st-app-shell select,body.st-app-shell textarea{font-size:16px!important;min-width:0!important;max-width:100%!important}
+ #profile #calendar{scroll-margin-top:88px!important}
+}
+@media(max-width:380px){body.st-app-shell main{padding-left:10px!important;padding-right:10px!important}body.st-app-shell #nav{padding-left:3px!important;padding-right:3px!important;gap:2px!important}body.st-app-shell #nav>button.st-nav-primary i{font-size:8.5px!important}body.st-app-shell .st-top-actions{gap:3px!important}body.st-app-shell .st-top-actions>.st-icon-button:nth-child(2){display:none!important}body.st-app-shell #home>.st-home-stats{gap:5px!important}body.st-app-shell #home>.st-home-stats .stat{padding:8px 3px!important}}
+/* Functional home widgets stay available, but sit below the compact dashboard instead of occupying its attention column. */
+@media (min-width:768px){
+ body.st-app-shell #home>#gtHomeBjuCard,
+ body.st-app-shell #home>#gtRefreshTiles,
+ body.st-app-shell #home>#gtPersonalTemplatesPanel,
+ body.st-app-shell #home>#gtQuickActionsV3,
+ body.st-app-shell #home>#gtV4BackupCard,
+ body.st-app-shell #home>#gtHomeExtras{
+   grid-column:1/-1!important;grid-row:auto!important;width:100%!important;max-width:100%!important;min-width:0!important;
+ }
+ body.st-app-shell #home>#gtHomeBjuCard{margin-top:22px!important}
+ body.st-app-shell #home>#gtRefreshTiles{margin:16px 0!important}
+ body.st-app-shell #home>#gtPersonalTemplatesPanel,
+ body.st-app-shell #home>#gtQuickActionsV3,
+ body.st-app-shell #home>#gtV4BackupCard,
+ body.st-app-shell #home>#gtHomeExtras{margin:12px 0!important}
+}
+@media(max-width:767px){
+ body.st-app-shell #home>#gtHomeBjuCard,
+ body.st-app-shell #home>#gtRefreshTiles,
+ body.st-app-shell #home>#gtPersonalTemplatesPanel,
+ body.st-app-shell #home>#gtQuickActionsV3,
+ body.st-app-shell #home>#gtV4BackupCard,
+ body.st-app-shell #home>#gtHomeExtras{grid-column:1/-1!important;width:100%!important;max-width:100%!important;min-width:0!important}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}body.st-app-shell *,body.st-app-shell *::before,body.st-app-shell *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}

@@ -1,0 +1,10 @@
+.th-triceps-template{margin:12px 0 18px;border-color:#7225a6!important;background:linear-gradient(135deg,#29103a,#1d0c29)!important}
+.th-triceps-template h3{margin:9px 0;font-size:18px}.th-triceps-template p{line-height:1.55}
+.th-template-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.th-template-actions button{flex:1 1 190px}
+#gtHomeBjuCard .gt-home-bju-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:12px 0}
+#gtHomeBjuCard .gt-home-bju-item{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:11px;min-width:0}
+#gtHomeBjuCard .gt-home-bju-item strong{display:block;font-size:clamp(18px,3vw,24px);color:var(--lime);overflow-wrap:anywhere}
+#gtHomeBjuCard .gt-home-bju-item small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+#gtHomeBjuCard .gt-home-bju-intake{font-size:12px;color:var(--muted);line-height:1.55;padding:11px;border:1px solid var(--line);border-radius:12px;margin-top:10px}
+#gtCoachLock .gt-refresh-access{margin-top:2px;background:transparent!important;color:#f0dbfe!important;border:1px solid #70438e!important}
+@media(max-width:520px){#gtHomeBjuCard .gt-home-bju-grid{gap:6px}#gtHomeBjuCard .gt-home-bju-item{padding:8px}#gtHomeBjuCard .gt-home-bju-item small{font-size:10px}.th-template-actions button{flex-basis:100%}}

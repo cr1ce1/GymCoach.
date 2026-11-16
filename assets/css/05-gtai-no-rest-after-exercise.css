@@ -1,0 +1,2 @@
+/* User preference: remove the rest timer from the workout screen. */
+#session .timer, #session #gtV4HandsFree { display: none !important; }

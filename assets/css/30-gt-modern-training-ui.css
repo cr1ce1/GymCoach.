@@ -1,0 +1,33 @@
+:root{--gt-modern-ink:#f4f7f2;--gt-modern-muted:#aca4b2;--gt-modern-line:rgba(200,170,220,.16);--gt-modern-card:linear-gradient(145deg,rgba(37,30,42,.96),rgba(22,17,25,.98));}
+#session .gt-logged-exercise{border:1px solid var(--gt-modern-line)!important;border-radius:20px!important;padding:16px!important;margin:14px 0!important;background:var(--gt-modern-card)!important;box-shadow:0 12px 32px rgba(0,0,0,.14)!important;overflow:hidden}
+#session .gt-session-exercise-heading b{font-size:16px;letter-spacing:-.2px;color:var(--gt-modern-ink)}
+#session .gt-session-exercise-heading small{font-size:12px;line-height:1.5}
+#session .gt-set-log-panel{background:rgba(8,4,10,.26)!important;border-color:var(--gt-modern-line)!important;border-radius:15px!important;padding:12px!important}
+#session .gt-set-row{grid-template-columns:76px minmax(0,1fr) minmax(0,1fr)!important;gap:10px!important;padding:11px 0!important;border-color:rgba(200,170,220,.11)!important}
+#session .gt-set-row input,#session .gt-set-count-row input,#session .gt-v4-effort input,#session .gt-v4-effort select{border-radius:12px!important;min-height:42px!important;background:#151018!important;border:1px solid rgba(200,170,220,.22)!important;color:#f4f7f2!important;font-size:15px!important}
+#session .gt-set-number{padding-bottom:13px;font-size:13px;color:#dccfe4}
+#session .gt-set-row{grid-template-columns:64px minmax(85px,1fr) minmax(95px,1fr) minmax(110px,1fr)!important;align-items:end!important}
+#session .gt-set-row label{display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--gt-modern-muted)}
+#session .gt-set-row select{width:100%;min-height:42px;border-radius:12px!important;background:#151018!important;color:#f4f7f2!important;border:1px solid rgba(200,170,220,.22)!important}
+#session .gt-weight-help{font-size:12px;line-height:1.5;color:var(--gt-modern-muted);margin:0 0 10px}
+@media(max-width:520px){#session .gt-set-row{grid-template-columns:48px minmax(0,1fr) minmax(0,1fr)!important}#session .gt-set-type-label{grid-column:2/4} }
+#session .gt-set-log-panel h4{font-size:13px;color:#dccfe4;letter-spacing:.2px}
+#session .gt-v4-progression{border:1px solid rgba(177,78,243,.3)!important;border-radius:15px!important;background:linear-gradient(135deg,rgba(177,78,243,.09),rgba(177,78,243,.025))!important;padding:14px!important;margin:12px 0!important;line-height:1.6!important}
+#session .gt-v4-progression strong{display:block;font-size:14px;color:#d6a7f6;margin-bottom:6px}
+#session .gt-v4-progression button,#session .gt-v4-button{border-radius:12px!important;min-height:40px;padding:10px 14px!important;font-weight:750!important}
+#gtWorkoutDayNote{margin:14px 0 18px;padding:16px;border-radius:19px;border:1px solid rgba(177,78,243,.24);background:linear-gradient(140deg,rgba(177,78,243,.08),rgba(33,25,38,.75));}
+#gtWorkoutDayNote .gt-note-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+#gtWorkoutDayNote .gt-note-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:13px;background:rgba(177,78,243,.13);font-size:19px}
+#gtWorkoutDayNote strong{font-size:15px;color:var(--gt-modern-ink)}
+#gtWorkoutDayNote p{margin:2px 0 10px;font-size:12px;color:var(--gt-modern-muted);line-height:1.5}
+#gtWorkoutDayNote textarea{width:100%;box-sizing:border-box;resize:vertical;min-height:94px;padding:13px 14px;border-radius:13px;border:1px solid rgba(200,170,220,.2);background:#151018;color:#f4f7f2;font:inherit;line-height:1.5;outline:none}
+#gtWorkoutDayNote textarea:focus{border-color:#b14ef3;box-shadow:0 0 0 3px rgba(177,78,243,.1)}
+#gtWorkoutDayNote .gt-note-status{display:block;min-height:16px;margin-top:6px;font-size:11px;color:#b14ef3}
+#gtCustomExerciseEditor{border:1px solid rgba(177,78,243,.3)!important;border-radius:20px!important;background:linear-gradient(145deg,rgba(177,78,243,.09),rgba(27,21,31,.96))!important;padding:20px!important;margin:16px 0!important;box-shadow:0 14px 35px rgba(0,0,0,.13)}
+#gtCustomExerciseEditor h3{font-size:20px!important;letter-spacing:-.4px;margin-top:0!important}
+#gtCustomExerciseEditor .gt-custom-save{border-radius:12px!important;padding:12px 16px!important;font-weight:800!important;min-height:44px}
+#gtCustomExerciseEditor input,#gtCustomExerciseEditor select,#gtCustomExerciseEditor textarea{border-radius:12px!important;min-height:42px}
+#gtLibraryAddExerciseJump{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 15px;margin:0 0 14px;border:1px solid rgba(177,78,243,.26);border-radius:15px;background:rgba(177,78,243,.07)}
+#gtLibraryAddExerciseJump span{font-size:13px;line-height:1.45;color:var(--gt-modern-ink)}
+#gtLibraryAddExerciseJump button{border:0;border-radius:11px;background:#b14ef3;color:#130a19;font-weight:800;padding:11px 14px;cursor:pointer}
+@media(max-width:520px){#session .gt-logged-exercise{padding:12px!important;border-radius:16px!important}#session .gt-set-row{grid-template-columns:56px minmax(0,1fr) minmax(0,1fr)!important;gap:7px!important}#session .gt-set-row input{padding:8px 6px!important}#gtWorkoutDayNote{padding:13px}}

@@ -1,0 +1,2 @@
+(function(){var o=window.gtShowGate;window.stEnter=function(m){window.__stAuth=1;document.getElementById('stLanding').hidden=true;o(true);if(window.gtSetAuthMode)gtSetAuthMode(m)};
+window.gtShowGate=function(show){var L=document.getElementById('stLanding');if(show&&!window.__stAuth){L.hidden=false;document.getElementById('authGate').hidden=true;document.body.style.overflow=''}else{L.hidden=true;o(show)}}})();if(typeof gtUser!=='undefined'&&!gtUser){window.gtShowGate(true)}

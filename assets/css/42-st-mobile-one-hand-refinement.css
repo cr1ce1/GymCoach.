@@ -1,0 +1,84 @@
+/* Mobile refinement only: desktop dashboard composition remains unchanged. */
+@media (max-width:767px){
+  html,body{max-width:100%;overflow-x:hidden!important}
+  body.st-app-shell{padding-bottom:calc(78px + env(safe-area-inset-bottom))!important}
+  body.st-app-shell>header.top{
+    position:sticky!important;top:0!important;z-index:1100!important;
+    min-height:64px!important;padding:calc(8px + env(safe-area-inset-top)) 12px 8px!important;
+    background:rgba(9,7,17,.94)!important;border-bottom:1px solid rgba(168,85,247,.14)!important;
+    backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;
+  }
+  body.st-app-shell .top .brand{gap:8px!important;min-width:0!important}
+  body.st-app-shell .top .brand-mark{width:34px!important;height:34px!important;flex:0 0 34px!important}
+  body.st-app-shell .top .brand-name{font-size:16px!important;letter-spacing:-.35px!important}
+  body.st-app-shell .top .sub{display:none!important}
+  .st-dashboard-greeting{display:none!important}
+  .st-top-actions{display:flex!important;align-items:center!important;gap:5px!important;margin-left:auto!important;min-width:0!important}
+  .st-icon-button,.st-more-toggle{width:42px!important;min-width:42px!important;min-height:42px!important;height:42px!important;padding:0!important;border-radius:13px!important}
+  body.st-app-shell .top #langBtn{min-width:48px!important;width:auto!important;max-width:64px!important;min-height:40px!important;padding:4px 6px!important;flex:0 0 auto!important}
+  body.st-app-shell main{width:100%!important;max-width:100%!important;margin:0!important;padding:10px 12px 26px!important;min-width:0!important}
+  body.st-app-shell .page,body.st-app-shell .page>*{min-width:0!important;max-width:100%!important}
+  body.st-app-shell .card,body.st-app-shell .hero,body.st-app-shell .option,body.st-app-shell .exercise-card{min-width:0!important;max-width:100%!important}
+  body.st-app-shell .card{padding:14px!important;border-radius:18px!important}
+  body.st-app-shell .section-head{gap:8px!important;flex-wrap:wrap!important}
+  body.st-app-shell .section-head h2{font-size:clamp(17px,5vw,21px)!important;line-height:1.2!important}
+  body.st-app-shell .hero{padding:20px 17px!important;border-radius:21px!important}
+  body.st-app-shell .hero h1{font-size:clamp(25px,7.5vw,34px)!important;overflow-wrap:anywhere!important}
+  body.st-app-shell .hero p{font-size:14px!important;line-height:1.55!important}
+  body.st-app-shell .btn,body.st-app-shell .th-btn,body.st-app-shell .th-start-day,
+  body.st-app-shell .chip,body.st-app-shell .gt-small-btn{min-height:44px!important}
+  body.st-app-shell input,body.st-app-shell select,body.st-app-shell textarea{font-size:16px!important;min-width:0!important;max-width:100%!important}
+  body.st-app-shell .grid,body.st-app-shell .grid3,body.st-app-shell .two-col{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+  body.st-app-shell .gt-metrics,body.st-app-shell .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  body.st-app-shell #home>.st-home-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
+  body.st-app-shell #home>.st-home-stats .stat{min-width:0!important;padding:10px 4px!important}
+  body.st-app-shell #home>.st-home-stats .stat strong{font-size:clamp(18px,5vw,22px)!important}
+  body.st-app-shell #home>.grid .option{height:100%!important;min-height:112px!important;padding:13px 11px!important}
+  body.st-app-shell .th-program-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+  body.st-app-shell .th-program{min-width:0!important;min-height:112px!important;padding:13px 11px!important}
+  body.st-app-shell .th-program:nth-child(3){grid-column:1/-1}
+  body.st-app-shell .th-program strong{font-size:14px!important;overflow-wrap:anywhere!important}
+  body.st-app-shell .th-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:4px!important}
+  body.st-app-shell .th-tabs button{min-width:0!important;padding:11px 4px!important;font-size:12px!important}
+  body.st-app-shell .calendar-item{grid-template-columns:minmax(0,1fr) 100px!important;gap:7px!important}
+  body.st-app-shell .calendar-item>*{min-width:0!important}
+  body.st-app-shell .gt-template-form{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%!important;max-width:100%!important;min-width:0!important;gap:8px!important}
+  body.st-app-shell .gt-template-form>*{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+  body.st-app-shell .gt-template-form .btn{white-space:normal!important;overflow-wrap:anywhere!important;padding:11px 12px!important}
+  body.st-app-shell .gt-food-form{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  body.st-app-shell .gt-food-form>*{min-width:0!important}
+  body.st-app-shell .gt-food-form .gt-food-name{grid-column:1/-1!important}
+  body.st-app-shell .gt-food-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;min-width:0!important;overflow-wrap:anywhere!important}
+  body.st-app-shell .gt-food-row .gt-food-title,body.st-app-shell .gt-food-row button{grid-column:1/-1!important}
+  body.st-app-shell .session-inputs{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important}
+  body.st-app-shell .session-inputs input{width:100%!important;min-width:0!important;padding:9px 6px!important}
+  body.st-app-shell .session-row,body.st-app-shell .gt-logged-exercise,body.st-app-shell .gt-set-row{min-width:0!important;max-width:100%!important}
+  body.st-app-shell #libraryList{grid-template-columns:1fr!important}
+  body.st-app-shell .gt-progress-bars{max-width:100%!important;overflow:hidden!important}
+  body.st-app-shell table{max-width:100%!important}
+  body.st-app-shell .st-more-backdrop{align-items:flex-end!important}
+  body.st-app-shell .st-more-panel{width:100%!important;max-width:100%!important;height:min(82dvh,720px)!important;padding:18px 16px calc(18px + env(safe-area-inset-bottom))!important;border-radius:22px 22px 0 0!important}
+  body.st-app-shell #session .btn.full{position:sticky!important;bottom:calc(78px + env(safe-area-inset-bottom))!important;z-index:9!important;width:100%!important}
+  #profile #calendar{scroll-margin-top:88px!important}
+}
+@media (max-width:380px){
+  body.st-app-shell>header.top{padding-left:9px!important;padding-right:9px!important}
+  body.st-app-shell .top .brand-name{font-size:15px!important}
+  .st-top-actions{gap:3px!important}
+  .st-top-actions>.st-icon-button:nth-child(2){display:none!important}
+  body.st-app-shell main{padding-left:10px!important;padding-right:10px!important}
+  body.st-app-shell #nav{padding-left:3px!important;padding-right:3px!important;gap:2px!important}
+  body.st-app-shell #nav button.st-nav-primary{min-width:0!important;padding-left:1px!important;padding-right:1px!important}
+  body.st-app-shell #nav button.st-nav-primary i{font-size:8.5px!important;letter-spacing:-.1px!important}
+  body.st-app-shell .calendar-item{grid-template-columns:minmax(0,1fr)!important}
+  body.st-app-shell .calendar-item .calendar-save{grid-column:auto!important}
+  body.st-app-shell .session-inputs{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media (min-width:768px) and (max-width:1023px){
+  body.st-app-shell #nav button{min-height:48px!important}
+  body.st-app-shell main{min-width:0!important}
+  body.st-app-shell .page,body.st-app-shell .card{min-width:0!important}
+}
+@media (prefers-reduced-motion:reduce){
+  body.st-app-shell *,body.st-app-shell *::before,body.st-app-shell *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
