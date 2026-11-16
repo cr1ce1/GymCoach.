@@ -214,6 +214,8 @@
   function startHero() {
     if (!land || land.hidden || root.classList.contains('is-live')) return;
     requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-live')));
+    // never leave the headline hidden if animation frames are paused (background tab, prerender)
+    setTimeout(() => root.classList.add('is-live'), 1200);
     const cv = document.getElementById('lnBarbell'), stage = cv && cv.parentElement;
     if (cv && window.StrenovaBarbell && !bar) {
       bar = window.StrenovaBarbell.mount(cv, { onReady: () => stage.classList.add('is-3d') });
