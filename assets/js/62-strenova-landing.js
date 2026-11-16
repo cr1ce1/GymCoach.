@@ -46,7 +46,8 @@
     q4: 'Are the calorie numbers medical advice?', a4: 'No. Calories and macros are estimates from standard formulas. If you have a medical condition or injury, talk to a doctor.',
     finalH: 'Your first workout in five minutes',
     finalP: 'Fill in a short profile and Strenova builds a starting program for your experience, goal and equipment.',
-    privacy: 'Privacy policy', terms: 'Terms of use'
+    privacy: 'Privacy policy', terms: 'Terms of use',
+    vidH: 'See how it works', vidP: 'A one-minute tour of Strenova: training in the gym, progress and working with a coach. Ukrainian narration captions.', vidPlay: 'Watch the video'
   };
   const UK = {};
   root.querySelectorAll('[data-ln]').forEach((el) => { if (!(el.dataset.ln in UK)) UK[el.dataset.ln] = el.textContent; });
@@ -115,6 +116,27 @@
     }
     if (e.target.closest('#lnRestSkip')) stopRest();
   });
+
+  /* ---------- promo video: loads only on demand ---------- */
+  const vid = document.getElementById('lnVideoEl'), player = document.getElementById('lnPlayer'), playBtn = document.getElementById('lnPlay');
+  if (vid && player && playBtn) {
+    const vertical = () => window.matchMedia('(max-width: 599px) and (orientation: portrait)').matches;
+    vid.poster = vertical() ? './assets/video/poster-9x16.jpg' : './assets/video/poster-16x9.jpg';
+    playBtn.addEventListener('click', () => {
+      if (!vid.src) {
+        vid.src = vertical() ? './assets/video/strenova-promo-9x16.mp4?v=20261116c' : './assets/video/strenova-promo-16x9.mp4?v=20261116c';
+        vid.preload = 'auto';
+      }
+      vid.controls = true; player.classList.add('is-playing');
+      const p = vid.play(); if (p && p.catch) p.catch(() => {});
+      vid.focus({ preventScroll: true });
+    });
+    vid.addEventListener('ended', () => { player.classList.remove('is-playing'); vid.controls = false; try { vid.currentTime = 0; } catch (_) {} });
+    // stop the sound when the visitor leaves the landing (sign-up, log-in)
+    const land = document.getElementById('stLanding');
+    if (land) new MutationObserver(() => { if (land.hidden && !vid.paused) vid.pause(); }).observe(land, { attributes: true, attributeFilter: ['hidden', 'style', 'class'] });
+    document.addEventListener('visibilitychange', () => { if (document.hidden && !vid.paused) vid.pause(); });
+  }
 
   const prev = window.stSetLanguage;
   if (typeof prev === 'function' && !prev.__ln) {
