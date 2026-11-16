@@ -37,8 +37,8 @@
   const recommend=$('recommend');
   if(recommend&&!$('gcWorkoutBuilder')){
    const box=document.createElement('div');box.className='gc-platform-card';box.id='gcWorkoutBuilder';
-   box.innerHTML='<div class="section-head"><div><span class="tag">WORKOUT BUILDER</span><h2>Конструктор тренувань</h2></div></div><div class="gc-workout-controls"><div class="field"><label for="gcWorkoutCategory">Категорія</label><select id="gcWorkoutCategory"></select></div><div class="field"><label for="gcWorkoutVariation">Варіація</label><select id="gcWorkoutVariation"><option value="0">Базова</option><option value="1">Альтернативна</option><option value="2">Різноманітна</option></select></div><div class="field"><label for="gcWorkoutCount">Кількість вправ</label><select id="gcWorkoutCount"><option>2</option><option selected>3</option><option>4</option></select></div></div><div class="gc-platform-actions"><button class="btn" type="button" onclick="gcGenerateWorkout()">Створити тренування</button><button class="btn secondary" type="button" onclick="gcSaveFavoriteWorkout()">Зберегти улюблене</button></div><div id="gcWorkoutGenerated" class="gc-platform-list"></div><div id="gcWorkoutStatus" class="gc-platform-status" role="status"></div>';
-   recommend.insertBefore(box,recommend.firstChild);
+   box.innerHTML='<div class="section-head"><div><span class="tag">Без обладнання</span><h2>Швидке тренування вдома</h2></div></div><div class="gc-workout-controls"><div class="field"><label for="gcWorkoutCategory">Категорія</label><select id="gcWorkoutCategory"></select></div><div class="field"><label for="gcWorkoutVariation">Варіація</label><select id="gcWorkoutVariation"><option value="0">Базова</option><option value="1">Альтернативна</option><option value="2">Різноманітна</option></select></div><div class="field"><label for="gcWorkoutCount">Кількість вправ</label><select id="gcWorkoutCount"><option>2</option><option selected>3</option><option>4</option></select></div></div><div class="gc-platform-actions"><button class="btn" type="button" onclick="gcGenerateWorkout()">Створити тренування</button><button class="btn secondary" type="button" onclick="gcSaveFavoriteWorkout()">Зберегти улюблене</button></div><div id="gcWorkoutGenerated" class="gc-platform-list"></div><div id="gcWorkoutStatus" class="gc-platform-status" role="status"></div>';
+   recommend.appendChild(box);
   }
  }
  const BANK={
@@ -58,7 +58,8 @@
  const categories=Object.keys(BANK);
  function initWorkoutControls(){
   const select=$('gcWorkoutCategory');if(!select)return;
-  select.innerHTML=categories.map(c=>'<option>'+safe(c)+'</option>').join('');
+  const UK={'Upper Body':'Верх тіла','Lower Body':'Низ тіла','Push':'Жимові рухи','Pull':'Тягові рухи','Legs':'Ноги','Full Body':'Все тіло','Chest':'Груди','Back':'Спина','Shoulders':'Плечі','Arms':'Руки','Core':'Корпус','Cardio':'Кардіо'};
+  select.innerHTML=categories.map(c=>'<option value="'+safe(c)+'">'+safe(UK[c]||c)+'</option>').join('');
   gcGenerateWorkout();
  }
  function exercisePrescription(category,index){
@@ -137,8 +138,9 @@
   const s=sb(),code=$('gcAcceptCoachCode')?.value.trim().toUpperCase();
   if(!s||!code){status('gcConnectStatus','Вкажи код тренера.');return}
   const {data,error}=await s.rpc('accept_coach_invite',{p_invite_code:code});
-  status('gcConnectStatus',error?'Не вдалося підключитися: '+error.message:'Запрошення підтверджено. Тепер тренер бачить твій прогрес.');
-  if(!error){query.delete('invite');window.history.replaceState({},'',location.pathname+(query.toString()?'?'+query.toString():'')+location.hash);await loadAthleteDashboard(user())}
+  const failed=error||(data&&data.success===false);
+  status('gcConnectStatus',failed?'Не вдалося підключитися: '+(error?error.message:({not_found:'код не знайдено або він недійсний',rate_limited:'забагато спроб, спробуй через годину',already_connected:'спочатку від’єднайся від поточного тренера',self_invite:'це твій власний код'}[data.error]||data.error)):'Запрошення підтверджено. Тепер тренер бачить твій прогрес.');
+  if(!failed){query.delete('invite');window.history.replaceState({},'',location.pathname+(query.toString()?'?'+query.toString():'')+location.hash);await loadAthleteDashboard(user())}
  };
  window.gcDisconnectCoach=async function(id){
   if(!confirm('Від’єднати тренера від акаунта?'))return;
@@ -293,9 +295,11 @@
   window.gcCurrentRole=role;
   renderNavRole();
   await loadReferralCard(u);
-  if(role==='coach')await loadCoachDashboard(u);
-  else if(role==='admin')await loadAdminDashboard();
+  if(role==='admin')await loadAdminDashboard();
+  else if(window.Strenova&&window.Strenova.onRole){/* Strenova v2 renders the coach workspace and athlete coach blocks. */}
+  else if(role==='coach')await loadCoachDashboard(u);
   else await loadAthleteDashboard(u);
+  try{window.Strenova&&window.Strenova.onRole&&window.Strenova.onRole(role,u)}catch(e){console.warn('Strenova role modules:',e?.message||e)}
   window.gcHydratedUserId=u.id;
  }
  window.addEventListener('load',()=>{if(user())hydrate().catch(e=>console.warn('GymCoach initial account hydration:',e?.message||e));},{once:true});

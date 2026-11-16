@@ -1,6 +1,6 @@
 (function(){
   'use strict';
-  const LANGS=[
+  const LANGS_ALL=[
     {code:'en',name:'English',flag:'🇬🇧'},{code:'uk',name:'Українська',flag:'🇺🇦'},
     {code:'pl',name:'Polski',flag:'🇵🇱'},{code:'de',name:'Deutsch',flag:'🇩🇪'},
     {code:'fr',name:'Français',flag:'🇫🇷'},{code:'es',name:'Español',flag:'🇪🇸'},
@@ -10,6 +10,9 @@
     {code:'ro',name:'Română',flag:'🇷🇴'},{code:'hu',name:'Magyar',flag:'🇭🇺'},
     {code:'bg',name:'Български',flag:'🇧🇬'},{code:'ru',name:'Русский',flag:'🇷🇺'}
   ];
+  // Only Ukrainian and English have complete translations; the other locales were
+  // word-by-word replacements that produced mixed-language screens.
+  const LANGS=LANGS_ALL.filter(x=>x.code==='uk'||x.code==='en');
   const MAPS={
     pl:{'Home':'Strona główna','Training':'Trening','Workouts':'Treningi','Nutrition':'Odżywianie','Profile':'Profil','Plan':'Plan','History':'Historia','Features':'Funkcje','For athletes':'Dla sportowców','For coaches':'Dla trenerów','Pricing':'Cennik','FAQ':'FAQ','Log in':'Zaloguj się','Get started':'Rozpocznij','Start training':'Rozpocznij trening','Explore features':'Poznaj funkcje','Training programs':'Programy treningowe','Workout tracking':'Śledzenie treningów','Progress analytics':'Analiza postępów','Exercise library':'Biblioteka ćwiczeń','Training calendar':'Kalendarz treningów','Personal records':'Rekordy osobiste','Protein':'Białko','Fat':'Tłuszcze','Carbs':'Węglowodany','Save':'Zapisz','Delete':'Usuń','Search':'Szukaj','Add':'Dodaj','Edit':'Edytuj','Rest':'Odpoczynek','Day':'Dzień','Sets':'Serie','Reps':'Powtórzenia','Start workout':'Rozpocznij trening','Finish and save':'Zakończ i zapisz'},
     de:{'Home':'Startseite','Training':'Training','Workouts':'Workouts','Nutrition':'Ernährung','Profile':'Profil','Plan':'Plan','History':'Verlauf','Features':'Funktionen','For athletes':'Für Sportler','For coaches':'Für Trainer','Pricing':'Preise','FAQ':'FAQ','Log in':'Anmelden','Get started':'Loslegen','Start training':'Training starten','Explore features':'Funktionen ansehen','Training programs':'Trainingsprogramme','Workout tracking':'Training erfassen','Progress analytics':'Fortschrittsanalyse','Exercise library':'Übungsbibliothek','Training calendar':'Trainingskalender','Personal records':'Persönliche Bestleistungen','Protein':'Eiweiß','Fat':'Fett','Carbs':'Kohlenhydrate','Save':'Speichern','Delete':'Löschen','Search':'Suchen','Add':'Hinzufügen','Edit':'Bearbeiten','Rest':'Pause','Day':'Tag','Sets':'Sätze','Reps':'Wiederholungen','Start workout':'Training starten','Finish and save':'Beenden und speichern'},
@@ -32,7 +35,7 @@
   try{
     const base=translations.en||translations.uk;
     LANGS.forEach(x=>{if(x.code!=='en'&&x.code!=='uk')translations[x.code]=Object.assign({},base)});
-    if(!LANGS.some(x=>x.code===lang))lang='en';
+    if(!LANGS.some(x=>x.code===lang)){lang='uk';try{localStorage.setItem('gtai_lang','uk')}catch(e){}}
   }catch(e){console.warn('STRENOVA locale setup:',e)}
 
   const menu=document.createElement('div');menu.id='stLanguageMenu';menu.hidden=true;menu.setAttribute('role','dialog');menu.setAttribute('aria-label','Choose language');
@@ -40,11 +43,11 @@
   document.body.appendChild(menu);
   const codeName=()=>LANGS.find(x=>x.code===lang)?.code.toUpperCase()||'EN';
   function updateLangButtons(){
-    const b=document.getElementById('langBtn');if(b){b.innerHTML=`<span>${codeName()}</span><span aria-hidden="true">⌄</span>`;b.setAttribute('aria-label','Choose language');}
-    const l=document.getElementById('stLangButton');if(l)l.innerHTML=`${codeName()} <span>⌄</span>`;
+    const b=document.getElementById('langBtn');if(b){b.innerHTML=`<span>${codeName()}</span>`;b.setAttribute('aria-label',lang==='uk'?'Мова: українська. Перемкнути на англійську':'Language: English. Switch to Ukrainian');}
+    const l=document.getElementById('stLangButton');if(l)l.textContent=codeName();
     menu.querySelectorAll('[data-st-lang]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.stLang===lang?'true':'false'));
   }
-  window.stToggleLanguageMenu=function(){menu.hidden=!menu.hidden;updateLangButtons();};
+  window.stToggleLanguageMenu=function(){window.stSetLanguage(lang==='uk'?'en':'uk');};
   window.toggleLang=window.stToggleLanguageMenu;
   window.stSetLanguage=function(code){
     if(!LANGS.some(x=>x.code===code))return;

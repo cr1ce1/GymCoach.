@@ -75,9 +75,9 @@
   }
   function translateDom(){
     const root=document.body;if(!root)return;
-    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){if(!n.nodeValue||!n.nodeValue.trim())return NodeFilter.FILTER_REJECT;const tag=n.parentElement?.tagName;if(['SCRIPT','STYLE','NOSCRIPT','CODE','TEXTAREA'].includes(tag))return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT;}});
+    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){if(!n.nodeValue||!n.nodeValue.trim())return NodeFilter.FILTER_REJECT;const tag=n.parentElement?.tagName;if(['SCRIPT','STYLE','NOSCRIPT','CODE','TEXTAREA'].includes(tag))return NodeFilter.FILTER_REJECT;if(n.parentElement&&n.parentElement.closest('[data-no-autotranslate]'))return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT;}});
     let node;while(node=walker.nextNode()){const target=lang;const next=translateText(node.nodeValue,target);if(next!==node.nodeValue)node.nodeValue=next;}
-    document.querySelectorAll('input,textarea,button,summary,a,[aria-label],[title]').forEach(el=>['placeholder','title','aria-label'].forEach(attr=>{if(!el.hasAttribute(attr))return;const now=el.getAttribute(attr);const next=translateText(now,lang);if(next!==now)el.setAttribute(attr,next)}));
+    document.querySelectorAll('input,textarea,button,summary,a,[aria-label],[title]').forEach(el=>el.closest('[data-no-autotranslate]')||['placeholder','title','aria-label'].forEach(attr=>{if(!el.hasAttribute(attr))return;const now=el.getAttribute(attr);const next=translateText(now,lang);if(next!==now)el.setAttribute(attr,next)}));
     document.querySelectorAll('select option').forEach(el=>{const now=el.textContent,next=translateText(now,lang);if(next!==now)el.textContent=next});
   }
   let translating=false, trainingTab='programs', selectedProgram=localStorage.getItem('gtai_training_program')||'upperLower', legacyPlanEditor=null;
