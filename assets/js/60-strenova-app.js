@@ -548,7 +548,7 @@
         setStatus($('sxConnectStatus'), map[reason] || (/not found|expired/i.test(reason) ? map.not_found : /another coach/i.test(reason) ? map.already_connected : /Only athlete/i.test(reason) ? 'Підключитися до тренера може лише акаунт атлета.' : 'Не вдалося підключитися: ' + reason), 'bad');
         return;
       }
-      const q = new URLSearchParams(location.search); q.delete('invite'); history.replaceState({}, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash);
+      const q = new URLSearchParams(location.search); q.delete('invite'); window.history.replaceState({}, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash);
       S.toast('Тренера підключено', 'good'); await S.athleteMount(A.u);
     };
   }
@@ -593,7 +593,7 @@
     arranging = true;
     try {
       const pick = (sel) => home.querySelector(':scope > ' + sel);
-      const order = [pick('#gtWorkoutResumeCard'), pick('.hero'), pick('#sxHomeCoach'), pick('.st-home-stats'), pick('.st-home-progress-head'), pick('#recent'), pick('#gtHomeBjuCard'), pick('.st-home-quick-head'), pick('.st-home-quick-head + .grid') || pick('.grid')].filter(Boolean);
+      const order = [pick('#gtWorkoutResumeCard'), pick('.hero'), pick('#sxWeekCard'), pick('#sxHomeCoach'), pick('.st-home-stats'), pick('.st-home-progress-head'), pick('#recent'), pick('#gtHomeBjuCard'), pick('.st-home-quick-head'), pick('.st-home-quick-head + .grid') || pick('.grid')].filter(Boolean);
       order.forEach((el, i) => { if (home.children[i] !== el) home.insertBefore(el, home.children[i] || null); });
       const rec = $('recommend'), stats = $('stats'), profile = $('profile');
       moveInto('gtQuickActionsV3', rec); moveInto('gtPersonalTemplatesPanel', rec);
@@ -690,6 +690,7 @@
       if (id === 'nutrition' && A.loaded) renderNutritionCoach();
       if (id === 'coach-dashboard' && C.u && C.view !== 'editor') coachRender();
       if (id === 'home') scheduleArrange();
+      try { roleNav(window.gcCurrentRole || 'athlete'); } catch (_) {}
       syncNavActive(id);
     });
     const kick = () => { watchHome(); arrangeLayout(); };

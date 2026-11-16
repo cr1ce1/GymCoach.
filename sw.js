@@ -4,7 +4,7 @@
 //   so the app opens instantly in the gym and refreshes in the background.
 // - The pinned Supabase library from jsDelivr: cache first (the URL is versioned).
 // - Never cached: Supabase API calls, config.js, any non-GET request.
-const VERSION = 'strenova-2026-11-16';
+const VERSION = 'strenova-2026-11-17';
 const SHELL = `${VERSION}-shell`;
 const STATIC = `${VERSION}-static`;
 const SHELL_FILES = ['./', './index.html', './manifest.webmanifest', './strenova-icon-192.png', './strenova-icon-64.png', './assets/fonts/onest-var.woff', './assets/fonts/unbounded-600.woff', './404.html'];

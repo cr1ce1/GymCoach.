@@ -9,7 +9,7 @@
   if (!root) return;
 
   const EN = {
-    navGym: 'In the gym', navCoach: 'For coaches', navPrice: 'Pricing', navFaq: 'FAQ',
+    navGym: 'In the gym', navCoach: 'For coaches', navPrice: 'Pricing', navFaq: 'FAQ', navProgress: 'Progress', dragHint: 'Drag to spin the barbell',
     login: 'Log in', signup: 'Create account',
     h1: 'Log every set. Watch your weights go up.',
     lead: 'Strenova is a workout log built for the gym. Today’s plan, weight and reps in one tap, a rest timer and your progress history. A coach can manage your program and nutrition.',
@@ -63,6 +63,7 @@
     if (lb) { lb.textContent = L === 'en' ? 'EN' : 'UK'; lb.setAttribute('aria-label', L === 'en' ? 'Language: English. Switch to Ukrainian' : 'Мова: українська. Перемкнути на англійську'); }
     document.documentElement.lang = L;
     const y = document.getElementById('stYear'); if (y) y.textContent = String(new Date().getFullYear());
+    splitHero();
     renderSets();
   }
 
@@ -136,6 +137,105 @@
     const land = document.getElementById('stLanding');
     if (land) new MutationObserver(() => { if (land.hidden && !vid.paused) vid.pause(); }).observe(land, { attributes: true, attributeFilter: ['hidden', 'style', 'class'] });
     document.addEventListener('visibilitychange', () => { if (document.hidden && !vid.paused) vid.pause(); });
+  }
+
+  /* ---------- v3 motion: split headline, reveals, colour worlds, parallax, 3D ---------- */
+  const land = document.getElementById('stLanding');
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function splitHero() {
+    const h = document.getElementById('lnH1'); if (!h) return;
+    const words = h.textContent.trim().split(/\s+/);
+    h.setAttribute('aria-label', h.textContent.trim());
+    h.innerHTML = words.map((w, i) => `<span class="ln-wd" aria-hidden="true"><span style="transition-delay:${(i * 0.055).toFixed(3)}s">${w.replace(/[&<>]/g, '')}</span></span>`).join(' ');
+  }
+  const WORLDS = {
+    violet: [[143, 109, 255], [62, 214, 160]],
+    ember: [[255, 92, 54], [255, 181, 71]],
+    ice: [[57, 212, 255], [143, 109, 255]],
+    graphite: [[150, 140, 200], [62, 214, 160]]
+  };
+  let bar = null, world = 'violet';
+  function setWorld(w) {
+    if (!WORLDS[w] || w === world) return; world = w;
+    const [a, b] = WORLDS[w];
+    root.style.setProperty('--acc', a.join(','));
+    root.style.setProperty('--acc2', b.join(','));
+    if (bar) bar.setAccent(a.map((v) => v / 255), b.map((v) => v / 255));
+  }
+  if ('IntersectionObserver' in window) {
+    const rev = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        const el = en.target; const sib = [...el.parentElement.children].filter((x) => x.classList.contains('ln-reveal'));
+        el.style.transitionDelay = Math.min(0.32, sib.indexOf(el) * 0.08) + 's';
+        el.classList.add('is-in'); rev.unobserve(el);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    root.querySelectorAll('.ln-reveal').forEach((el) => rev.observe(el));
+    const links = {}; root.querySelectorAll('.ln-links a').forEach((a) => { links[a.getAttribute('href').slice(1)] = a; });
+    const wo = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        setWorld(en.target.dataset.world);
+        Object.values(links).forEach((a) => a.classList.remove('is-current'));
+        if (links[en.target.id]) links[en.target.id].classList.add('is-current');
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    root.querySelectorAll('[data-world]').forEach((el) => wo.observe(el));
+  } else root.querySelectorAll('.ln-reveal').forEach((el) => el.classList.add('is-in'));
+
+  // parallax + giant wordmark drift + barbell scroll, one rAF per scroll frame
+  const depthEls = [...root.querySelectorAll('[data-depth]')];
+  const giants = [...root.querySelectorAll('.ln-giant-word')];
+  const hero = root.querySelector('.ln-hero');
+  let ticking = false;
+  function onScroll() {
+    if (ticking || !land || land.hidden) return; ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      const vh = window.innerHeight;
+      if (!reduce) {
+        depthEls.forEach((el) => {
+          const r = el.getBoundingClientRect(); if (r.bottom < -200 || r.top > vh + 200) return;
+          el.style.setProperty('--py', (((r.top + r.height / 2) - vh / 2) * -Number(el.dataset.depth)).toFixed(1) + 'px');
+        });
+        giants.forEach((g, i) => {
+          const r = g.getBoundingClientRect(); if (r.bottom < -50 || r.top > vh + 50) return;
+          const k = ((r.top + r.height / 2) - vh / 2) / vh;
+          g.style.transform = `translate3d(${(i === 0 ? -k * 12 : k * 14).toFixed(2)}vw,0,0)`;
+        });
+      }
+      if (bar && hero) { const r = hero.getBoundingClientRect(); bar.setScroll(Math.max(0, Math.min(1, -r.top / Math.max(1, r.height)))); }
+    });
+  }
+  if (land) land.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+
+  function startHero() {
+    if (!land || land.hidden || root.classList.contains('is-live')) return;
+    requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-live')));
+    const cv = document.getElementById('lnBarbell'), stage = cv && cv.parentElement;
+    if (cv && window.StrenovaBarbell && !bar) {
+      bar = window.StrenovaBarbell.mount(cv, { onReady: () => stage.classList.add('is-3d') });
+      if (bar) {
+        const [a, b] = WORLDS[world]; bar.setAccent(a.map((v) => v / 255), b.map((v) => v / 255));
+        cv.addEventListener('pointerdown', () => stage.classList.add('was-dragged'), { once: true });
+      }
+    }
+    onScroll();
+  }
+  if (land) new MutationObserver(startHero).observe(land, { attributes: true, attributeFilter: ['hidden'] });
+  if (document.readyState === 'complete') startHero(); else window.addEventListener('load', startHero, { once: true });
+  setTimeout(startHero, 400);
+
+  // subtle tilt on the demo card for mouse users
+  const tilt = root.querySelector('.ln-tilt');
+  if (tilt && !reduce && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    tilt.addEventListener('pointermove', (e) => {
+      const r = tilt.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+      tilt.style.transform = `perspective(1200px) rotateX(${(-y * 4).toFixed(2)}deg) rotateY(${(x * 5).toFixed(2)}deg)`;
+    });
+    tilt.addEventListener('pointerleave', () => { tilt.style.transform = ''; });
   }
 
   const prev = window.stSetLanguage;
