@@ -317,6 +317,8 @@
   }
   async function afterLoginExtras(){await loadUserCustomExercises();await loadCloudDraft();ensureCustomExerciseEditor();refreshResumeCard();}
 
+  // Exposed for 28-gt-coach-complete-upgrades-v3.js, which calls it after login and on reconnect.
+  window.gtSyncLocalCustomExercises=function(){return syncLocalCustomExercises()};
   async function syncLocalCustomExercises(){
     const sb=db(),uid=userId();if(!sb||!uid||!navigator.onLine)return;
     const local=customList();if(!local.length)return;

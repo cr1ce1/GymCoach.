@@ -151,7 +151,7 @@
         <h3 id="sxExName">${esc(ex.name)}</h3>
         <div class="sx-fx-target">${ex.target ? `<span class="sx-badge violet">План: ${esc(ex.target)}</span>` : ''}${ex.complete ? '<span class="sx-badge mint">Виконано</span>' : ''}
           <button type="button" class="sx-btn small ghost" data-fx="tech">${icon('info')}Техніка</button></div>
-        ${ex.prev && !/ще немає/i.test(ex.prev) ? `<p class="sx-fx-prev">${esc(ex.prev)}</p>` : ''}
+        ${(S.progression && S.progression.html(ex.name, ex.target)) || (ex.prev && !/ще немає/i.test(ex.prev) ? `<p class="sx-fx-prev">${esc(ex.prev)}</p>` : '')}
         <div id="sxTech" hidden></div>
         ${ex.sets.length ? `<div class="sx-set-head" aria-hidden="true"><span>#</span><span>Вага, кг</span><span>Повтори</span><span></span></div>
         <div class="sx-sets">${ex.sets.map((s, i) => {
@@ -192,6 +192,8 @@
     host.querySelectorAll('[data-fx=finish]').forEach((b) => b.onclick = finish);
     const nx = host.querySelector('[data-fx=next]'); if (nx) nx.onclick = () => go(state.idx + 1);
     host.querySelector('[data-fx=rest]').onclick = () => startRest();
+    const ap = host.querySelector('[data-sx-apply]');
+    if (ap) ap.onclick = () => { const n = S.progression ? S.progression.apply(ex.row) : 0; S.toast && S.toast(n ? 'Підставлено в підходи' : 'Усі підходи вже заповнені', n ? 'good' : ''); render(); };
     host.querySelector('[data-fx=more]').onclick = () => { setMode('list'); render(); setTimeout(() => ex.row.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60); };
     const add = host.querySelector('[data-fx=addset]');
     if (add) add.onclick = () => { const btn = [...ex.row.querySelectorAll('button')].find((b) => /Додати підхід|Add set/i.test(b.textContent)); if (btn) { btn.click(); schedule(); } };

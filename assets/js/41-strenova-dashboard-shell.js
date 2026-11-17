@@ -141,9 +141,9 @@
   if(typeof oldApply==='function')window.applyLang=function(){const out=oldApply.apply(this,arguments);applyTranslations();return out};
   const oldSet=window.stSetLanguage;
   if(typeof oldSet==='function')window.stSetLanguage=function(){const out=oldSet.apply(this,arguments);applyTranslations();return out};
-  // Correct active state after the legacy navigation mapper has run.
+  // Keep the app shell in sync after every page change (the nav highlight is owned by 46-strenova-router.js).
   const oldShow=window.showPage;
-  if(typeof oldShow==='function')window.showPage=function(){const out=oldShow.apply(this,arguments);const active=document.querySelector('.page.active')?.id||arguments[0];const map={home:'home',recommend:'training',session:'training',nutrition:'nutrition',profile:'profile',coach:'coach','coach-live':'coach','coach-inbox':'coach',calendar:'calendar',stats:'stats'};nav.querySelectorAll('button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===(map[active]||active)));syncShell();updateIdentity();return out};
+  if(typeof oldShow==='function')window.showPage=function(){const out=oldShow.apply(this,arguments);syncShell();updateIdentity();return out};
   const primary=new Set(['home','training','nutrition','profile','coach']);
   const moveLateNavItems=()=>{const group=nav.querySelector('.st-sidebar-extra');if(!group)return;nav.querySelectorAll(':scope > button').forEach(b=>{if(!primary.has(b.dataset.page)&&!b.classList.contains('st-nav-profile')&&!b.classList.contains('st-nav-install')){group.appendChild(b);b.classList.add('st-nav-secondary')}})};
   if(window.MutationObserver){new MutationObserver(()=>moveLateNavItems()).observe(nav,{childList:true,subtree:false})}

@@ -49,10 +49,12 @@
   if (!$('gt-final-enhancements-css')) document.head.appendChild(css);
 
   // Access only comes from the Supabase membership check. Fail closed when the service is absent.
-  window.GT_PLUS_ACCESS = false;
+  // With the subscription feature switched off (05-strenova-features.js) the former Plus tools are open to everyone.
+  const plusFree = () => typeof window.strenovaFeature === 'function' && !window.strenovaFeature('subscription');
+  window.GT_PLUS_ACCESS = plusFree();
   const oldUpdatePremium = window.gtUpdatePremiumSurfaces;
   window.gtUpdatePremiumSurfaces = function(isPlus){
-    window.GT_PLUS_ACCESS = isPlus === true;
+    window.GT_PLUS_ACCESS = isPlus === true || plusFree();
     if (typeof oldUpdatePremium === 'function') oldUpdatePremium(window.GT_PLUS_ACCESS);
     applyPremiumUi();
   };
