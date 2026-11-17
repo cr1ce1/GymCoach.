@@ -370,6 +370,32 @@
   }
   S.summary = { show: showSummary, summarize, drawStory };
 
+  // A debounced draft upload that started before "Finish" can land after the draft was deleted
+  // and make the finished session reappear as "continue workout". Delete it once more when it is safe.
+  async function dropFinishedDraft() {
+    if ($('session')?.classList.contains('active')) return; // a new workout has already started
+    const id = uid() || 'local';
+    try { localStorage.removeItem('gtai_workout_draft_v2:' + id); } catch (_) {}
+    const sb = (() => { try { return typeof gtSupabase !== 'undefined' ? gtSupabase : null; } catch (_) { return null; } })();
+    if (sb && uid() && navigator.onLine !== false) {
+      try { const { error } = await sb.from('workout_drafts').delete().eq('user_id', uid()); if (error) console.warn('Could not clear the finished draft:', error.message); } catch (_) {}
+    }
+  }
+
+  // Workouts still waiting in the outbox are not in the cloud yet; keep them in the history after a reload.
+  function mergeOutbox() {
+    const queue = outbox(); if (!queue.length) return;
+    let list = workouts();
+    const have = new Set(list.map((w) => w.clientRecordId).filter(Boolean));
+    const add = queue.filter((w) => w && w.clientRecordId && !have.has(w.clientRecordId));
+    if (!add.length) return;
+    list = add.concat(list).sort(byDateDesc);
+    try { history = list; } catch (_) {}
+    try { localStorage.setItem('gtai_history', JSON.stringify(list)); } catch (_) {}
+    try { window.renderHome?.(); window.renderHistory?.(); window.gtRenderStats?.(); } catch (_) {}
+    try { S.renderWeek?.(); window.StrenovaV3?.renderWeek?.(); } catch (_) {}
+  }
+
   function wrapFinish() {
     const original = window.gtFinishWorkout;
     if (typeof original !== 'function' || original.__sxSummary) return;
@@ -382,7 +408,7 @@
       try { out = await original.apply(this, args); }
       finally { window.alert = nativeAlert; }
       const rec = workouts()[0];
-      if (rec && rec !== before) { showSummary(rec); renderNet(); }
+      if (rec && rec !== before) { showSummary(rec); renderNet(); setTimeout(dropFinishedDraft, 2500); }
       return out;
     };
     wrapped.__sxSummary = true;
@@ -405,11 +431,18 @@
     schedulePlan(); scheduleRows(); renderNet();
     const afterLogin = window.gtAfterLogin;
     if (typeof afterLogin === 'function' && !afterLogin.__sxProgress) {
-      const w = async function (...a) { const r = await afterLogin.apply(this, a); schedulePlan(); renderNet(); setTimeout(flush, 2000); return r; };
+      const w = async function (...a) { const r = await afterLogin.apply(this, a); mergeOutbox(); schedulePlan(); renderNet(); setTimeout(flush, 2000); return r; };
       w.__sxProgress = true; window.gtAfterLogin = w; try { gtAfterLogin = w; } catch (_) {}
     }
     setTimeout(warmCache, 4000);
-    setTimeout(flush, 5000);
+    // The first sign-in usually finishes before this module boots, so wait for it here as well.
+    let tries = 0;
+    const afterFirstLogin = () => {
+      let busy = false; try { busy = typeof gtAfterLoginPromise !== 'undefined' && !!gtAfterLoginPromise; } catch (_) {}
+      if (uid() && !busy) { mergeOutbox(); renderNet(); flush(); return; }
+      if (++tries < 40) setTimeout(afterFirstLogin, 500);
+    };
+    setTimeout(afterFirstLogin, 800);
   }
   if (document.readyState === 'complete') boot(); else window.addEventListener('load', boot, { once: true });
 })();

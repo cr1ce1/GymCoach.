@@ -712,8 +712,7 @@
     try{
       // Do not send per-set values for FREE accounts. Supabase remains the authority for access.
       const row={user_id:uid,client_record_id:item.clientRecordId,title:String(item.name||T('Тренування','Workout')),completed_exercises:Number(item.done)||0,minutes:Number(item.minutes)||0,details:window.GT_PLUS_ACCESS===true?{exercises:item.exercises||[]}: {},created_at:item.date||new Date().toISOString()};
-      const {data,error}=await sb.from('workout_logs').upsert(row,{onConflict:'user_id,client_record_id'}).select().single();
-      if(error)throw error;
+      const data=await window.gtSaveWorkoutLog(sb,row);
       item.id=data.id;item.syncStatus='synced';
       queue=getPendingWorkoutQueue(uid).filter(x=>x.clientRecordId!==item.clientRecordId);storePendingWorkoutQueue(uid,queue);
       let list=workouts();const existing=list.find(x=>x.clientRecordId===item.clientRecordId||String(x.id)===String(data.id));
