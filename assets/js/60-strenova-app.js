@@ -630,7 +630,7 @@
     // covers "My coach" / "My clients"; the chat keeps an explicit name.
     document.querySelectorAll('nav#nav button[data-page="coach-connect"], nav#nav button[data-page="coach-dashboard"]').forEach((x) => { if (x !== btn) x.hidden = true; });
     document.querySelectorAll('nav#nav button[data-page="coach-live"] i, nav#nav button[data-page="coach-inbox"] i').forEach((x) => { x.removeAttribute('data-st-ui'); x.textContent = coach ? (lang() === 'en' ? 'Client chats' : 'Чати з учнями') : (lang() === 'en' ? 'Coach chat' : 'Чат із тренером'); });
-    // 43-st-navigation-final-fix routes this tab through window.__stOpenCoachTab.
+    // 46-strenova-router.js routes this tab through window.__stOpenCoachTab.
     window.__stOpenCoachTab = () => { window.showPage(btn.dataset.sxTarget); syncNavActive(btn.dataset.sxTarget); };
   }
   function syncNavActive(id) {

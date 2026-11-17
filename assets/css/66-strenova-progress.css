@@ -1,0 +1,83 @@
+/* Strenova progress: progression cards, offline pill, workout summary (2026-11-17). */
+
+/* Subscription switched off (05-strenova-features.js): hide every way in. The page code stays. */
+html.sx-no-subscription #subscription,
+html.sx-no-subscription [data-page="subscription"],
+html.sx-no-subscription body.st-app-shell #nav .st-sidebar-extra>button[data-page="subscription"],
+html.sx-no-subscription body #nav button[data-page="subscription"],
+html.sx-no-subscription [data-route="subscription"],
+html.sx-no-subscription #stProfilePlusLink,
+html.sx-no-subscription #gtCalendarLock,
+html.sx-no-subscription #gtPRPlusButton,
+html.sx-no-subscription #gtCalOpenPlus,
+html.sx-no-subscription [onclick*="gtOpenPlusFromLock"],
+html.sx-no-subscription [onclick*="'subscription'"],
+html.sx-no-subscription #gtProgressCard .pill,
+html.sx-no-subscription #stLanding #lnPrice,
+html.sx-no-subscription #stLanding a[href="#lnPrice"],
+html.sx-no-subscription .gc-auth-points span:last-child,
+html.sx-no-subscription #coach-live .gt-chat-hero .eyebrow,
+html.sx-no-subscription #coach-inbox .gt-chat-hero .eyebrow{display:none!important}
+/* Athlete chat still needs server-side access; without a way to unlock it, hide its entry points. */
+html.sx-no-coach-chat #nav [data-page="coach-live"],
+html.sx-no-coach-chat body.st-app-shell #nav .st-sidebar-extra>button[data-page="coach-live"],
+html.sx-no-coach-chat body #nav button[data-page="coach-live"],
+html.sx-no-coach-chat #coach-connectContent [data-act="chat"],
+html.sx-no-coach-chat #stMoreDrawer [data-route="coach-live"]{display:none!important}
+
+.sx-vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- progression card (gym mode + session list) ---------- */
+.sx-prog{margin:4px 0 14px;padding:12px 14px;border-radius:var(--sx-r-md,14px);background:var(--sx-s2,#201f28);border:1px solid var(--sx-line-soft,#26252e);font-family:var(--sx-font)}
+.sx-prog-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:.95rem}
+.sx-prog-row+.sx-prog-row{margin-top:4px}
+.sx-prog-k{color:var(--sx-muted,#a29eae)}
+.sx-prog-row b{color:var(--sx-text,#f4f2f8);font-variant-numeric:tabular-nums;text-align:right}
+.sx-prog-next{font-size:1.08rem}
+.sx-prog-up .sx-prog-next{color:var(--sx-mint,#3ed6a0)}
+.sx-prog-deload .sx-prog-next{color:var(--sx-amber,#ffb547)}
+.sx-prog-why{margin:6px 0 0;color:var(--sx-text-2,#c9c5d3);font-size:.86rem;line-height:1.4}
+.sx-prog .sx-btn{margin-top:10px;width:100%}
+#exerciseList [data-sx-prog-host] .sx-prog{margin:8px 0}
+
+/* ---------- plan chip ---------- */
+.sx-prog-chip{display:inline-flex;align-items:center;margin:2px 0 0 8px;padding:2px 9px;border-radius:999px;font:600 .76rem/1.5 var(--sx-font);font-variant-numeric:tabular-nums;white-space:nowrap;
+  background:var(--sx-s3,#2a2933);color:var(--sx-text-2,#c9c5d3);vertical-align:middle}
+.sx-prog-chip.sx-prog-up{background:var(--sx-mint-soft,rgba(62,214,160,.14));color:var(--sx-mint,#3ed6a0)}
+.sx-prog-chip.sx-prog-deload{background:var(--sx-amber-soft,rgba(255,181,71,.14));color:var(--sx-amber,#ffb547)}
+
+/* ---------- offline / sync pill ---------- */
+.sx-net{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 10px);transform:translateX(-50%);z-index:9500;display:flex;align-items:center;gap:8px;max-width:calc(100vw - 24px);
+  padding:6px 12px;border-radius:999px;white-space:nowrap;background:var(--sx-s2,#201f28);border:1px solid var(--sx-line,#34323e);color:var(--sx-text,#f4f2f8);font:500 .78rem/1.3 var(--sx-font);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.sx-net[hidden]{display:none}
+.sx-net-dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--sx-violet,#8f6dff)}
+.sx-net.is-off .sx-net-dot{background:var(--sx-amber,#ffb547)}
+
+/* ---------- workout summary ---------- */
+body.sx-summary-open{overflow:hidden}
+.sx-sum{position:fixed;inset:0;z-index:9600;display:flex;align-items:flex-end;justify-content:center;background:rgba(10,9,14,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.sx-sum-panel{width:min(520px,100%);max-height:100dvh;overflow:auto;padding:28px 22px calc(22px + env(safe-area-inset-bottom));background:var(--sx-s1,#18171e);border:1px solid var(--sx-line-soft,#26252e);border-radius:28px 28px 0 0;font-family:var(--sx-font);color:var(--sx-text,#f4f2f8)}
+@media (min-width:700px){.sx-sum{align-items:center}.sx-sum-panel{border-radius:28px}}
+.sx-sum-mark{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--sx-mint-soft,rgba(62,214,160,.14));color:var(--sx-mint,#3ed6a0)}
+.sx-sum-mark svg{width:28px;height:28px}
+.sx-sum-date{margin:16px 0 0;color:var(--sx-muted,#a29eae);font-size:.9rem}
+.sx-sum h2{margin:4px 0 0;font:600 1.5rem/1.2 var(--sx-display);letter-spacing:-.01em}
+.sx-sum-name{margin:6px 0 0;color:var(--sx-text-2,#c9c5d3)}
+.sx-sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0 0}
+.sx-sum-stat{padding:14px 16px;border-radius:var(--sx-r-md,14px);background:var(--sx-s2,#201f28)}
+.sx-sum-stat b{display:block;font:600 1.35rem/1.15 var(--sx-display);font-variant-numeric:tabular-nums}
+.sx-sum-stat b small{font:500 .9rem var(--sx-font);color:var(--sx-text-2,#c9c5d3)}
+.sx-sum-stat span{display:block;margin-top:4px;color:var(--sx-muted,#a29eae);font-size:.85rem}
+.sx-sum-prs{margin:16px 0 0;padding:14px 16px;border-radius:var(--sx-r-md,14px);background:var(--sx-amber-soft,rgba(255,181,71,.14))}
+.sx-sum-prs h3{margin:0 0 8px;font:600 1rem var(--sx-display);color:var(--sx-amber,#ffb547)}
+.sx-sum-prs ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.sx-sum-prs li{display:grid;grid-template-columns:1fr auto;column-gap:10px}
+.sx-sum-prs li b{font-variant-numeric:tabular-nums}
+.sx-sum-prs li small{grid-column:1/-1;color:var(--sx-text-2,#c9c5d3);font-size:.8rem}
+.sx-sum-note{margin:14px 0 0;color:var(--sx-text-2,#c9c5d3);font-size:.88rem;line-height:1.45}
+.sx-sum-actions{display:grid;gap:10px;margin-top:22px}
+.sx-sum-anim .sx-sum-panel{animation:sxSumUp .32s var(--sx-ease,ease-out) both}
+.sx-sum-anim .sx-sum-mark{animation:sxSumPop .45s .12s var(--sx-ease,ease-out) both}
+@keyframes sxSumUp{from{transform:translateY(32px);opacity:0}to{transform:none;opacity:1}}
+@keyframes sxSumPop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sx-sum-anim .sx-sum-panel,.sx-sum-anim .sx-sum-mark{animation:none}}

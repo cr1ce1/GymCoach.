@@ -318,6 +318,8 @@
     return {date,maxWeight,target,reached,repMin,repMax,sets:allSets.length,minReps:Math.min(...reps),maxReps:Math.max(...reps),summary:allSets.map((s,i)=>`${i+1}) ${s.weight} кг × ${s.reps}`).join(' · ')};
   }
   function renderProgressionSuggestions(){
+    // Superseded by the progression card from 66-strenova-progress.js.
+    if(window.Strenova&&window.Strenova.progression){document.querySelectorAll('#exerciseList .gt-v4-progression').forEach(el=>el.remove());return;}
     if(window.GT_PLUS_ACCESS!==true)return;
     document.querySelectorAll('#exerciseList .gt-logged-exercise').forEach((row,i)=>{
       const index=Number(row.dataset.sessionIndex??i),e=sessionData()[index];if(!e)return;

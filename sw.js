@@ -3,8 +3,10 @@
 // - Same-origin static files (css/js/fonts/images): stale-while-revalidate,
 //   so the app opens instantly in the gym and refreshes in the background.
 // - The pinned Supabase library from jsDelivr: cache first (the URL is versioned).
-// - Never cached: Supabase API calls, config.js, any non-GET request.
-const VERSION = 'strenova-2026-11-17';
+// - config.js (public Supabase URL + publishable key only): network first, cached copy offline.
+// - The page posts the files it loaded ('sx-cache'), so the app opens offline after one visit.
+// - Never cached: Supabase API calls, sw.js, any non-GET request.
+const VERSION = 'strenova-2026-11-17c';
 const SHELL = `${VERSION}-shell`;
 const STATIC = `${VERSION}-static`;
 const SHELL_FILES = ['./', './index.html', './manifest.webmanifest', './strenova-icon-192.png', './strenova-icon-64.png', './assets/fonts/onest-var.woff', './assets/fonts/unbounded-600.woff', './404.html'];
@@ -18,7 +20,24 @@ self.addEventListener('activate', (e) => {
     .then((keys) => Promise.all(keys.filter((k) => !k.startsWith(VERSION)).map((k) => caches.delete(k))))
     .then(() => self.clients.claim()));
 });
-self.addEventListener('message', (e) => { if (e.data === 'skipWaiting') self.skipWaiting(); });
+self.addEventListener('message', (e) => {
+  if (e.data === 'skipWaiting') { self.skipWaiting(); return; }
+  if (e.data && e.data.type === 'sx-cache' && Array.isArray(e.data.urls)) e.waitUntil(warm(e.data.urls.slice(0, 200)));
+});
+async function warm(urls) {
+  const cache = await caches.open(STATIC);
+  await Promise.all(urls.map(async (u) => {
+    try {
+      const url = new URL(u, self.location.href);
+      const own = url.origin === self.location.origin;
+      if (!own && !url.href.startsWith(SUPABASE_LIB)) return;
+      if (url.pathname.endsWith('/sw.js')) return;
+      if (url.pathname.endsWith('/config.js')) { const r = await fetch(url.href, { cache: 'no-store' }); if (r.ok) await (await caches.open(SHELL)).put(url.href, r); return; }
+      if (await cache.match(url.href)) return;
+      const r = await fetch(url.href); if (r && r.ok) await cache.put(url.href, r);
+    } catch (_) {}
+  }));
+}
 
 function timeout(ms) { return new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)); }
 
@@ -39,6 +58,16 @@ async function staleWhileRevalidate(event, cacheName) {
   if (cached) { event.waitUntil(network); return cached; }
   return (await network) || Response.error();
 }
+async function networkFirst(req, cacheName) {
+  const cache = await caches.open(cacheName);
+  try {
+    const res = await Promise.race([fetch(req, { cache: 'no-store' }), timeout(5000)]);
+    if (res && res.ok) cache.put(req.url.split('?')[0], res.clone());
+    return res;
+  } catch (_) {
+    return (await cache.match(req.url.split('?')[0])) || Response.error();
+  }
+}
 async function cacheFirst(req, cacheName) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(req);
@@ -54,7 +83,8 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
   if (url.href.startsWith(SUPABASE_LIB)) { event.respondWith(cacheFirst(req, STATIC)); return; }
   if (url.origin !== self.location.origin) return;
-  if (url.pathname.endsWith('/config.js') || url.pathname.endsWith('/sw.js')) return;
+  if (url.pathname.endsWith('/sw.js')) return;
+  if (url.pathname.endsWith('/config.js')) { event.respondWith(networkFirst(req, SHELL)); return; }
   if (req.mode === 'navigate') { event.respondWith(pageResponse(req)); return; }
   if (/\.(css|js|woff2?|png|svg|webp|jpg|jpeg|ico|webmanifest)$/i.test(url.pathname)) {
     event.respondWith(staleWhileRevalidate(event, STATIC));

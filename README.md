@@ -10,6 +10,9 @@
 - `assets/js/60-strenova-app.js` — кабінет тренера, «Мій тренер» для атлета, компонування головної, навігація за роллю, видалення акаунта.
 - `assets/js/61-strenova-gym.js` — режим тренування в залі (одна вправа, степери ваги/повторень, таймер відпочинку, wake lock).
 - `assets/css/61-strenova-landing.css`, `assets/js/62-strenova-landing.js` — лендинг (UK/EN) з живим демо.
+- `assets/js/05-strenova-features.js` — перемикачі функцій. `subscription: false` ховає сторінку Strenova Plus і всі входи до неї; її код (`18-gt-subscription-page.js`, секція `#subscription`) лишається для допрацювання. Поки перемикач вимкнений, колишні Plus-функції доступні всім.
+- `assets/js/46-strenova-router.js` — єдина навігація (замість трьох латок 43/44/47): аліаси маршрутів, календар у профілі, активна вкладка.
+- `assets/js/66-strenova-progress.js` + `assets/css/66-strenova-progress.css` — прогресія ваг (план, режим залу, список), статус офлайну й повтор синхронізації, підсумок тренування з карткою для сторіс 1080×1920.
 - `privacy.html`, `terms.html`, `404.html`, `sw.js`, `manifest.webmanifest`.
 - Шрифти Onest і Unbounded розміщені локально (`assets/fonts`, ліцензія SIL OFL).
 
