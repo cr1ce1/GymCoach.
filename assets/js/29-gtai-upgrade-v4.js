@@ -140,7 +140,7 @@
     for(const item of newRows){
       try{
         const row={user_id:user,client_record_id:item.clientRecordId,title:String(item.name||'Workout'),completed_exercises:Number(item.done)||0,minutes:Number(item.minutes)||0,details:window.GT_PLUS_ACCESS===true?{exercises:item.exercises||[]}: {},created_at:item.date||new Date().toISOString()};
-        const {data,error}=await sb.from('workout_logs').upsert(row,{onConflict:'user_id,client_record_id'}).select().single();if(error)throw error;
+        const data=await window.gtSaveWorkoutLog(sb,row);
         item.id=data.id;item.syncStatus='synced';
         const q=readJSON(pendingWorkoutKey(),[]).filter(x=>x.clientRecordId!==item.clientRecordId);writeJSON(pendingWorkoutKey(),q);
       }catch(e){console.warn('Imported workout remains queued for sync:',e?.message||e);break}
