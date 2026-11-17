@@ -6,7 +6,7 @@
 // - config.js (public Supabase URL + publishable key only): network first, cached copy offline.
 // - The page posts the files it loaded ('sx-cache'), so the app opens offline after one visit.
 // - Never cached: Supabase API calls, sw.js, any non-GET request.
-const VERSION = 'strenova-2026-11-17d';
+const VERSION = 'strenova-2026-11-17e';
 const SHELL = `${VERSION}-shell`;
 const STATIC = `${VERSION}-static`;
 const SHELL_FILES = ['./', './index.html', './manifest.webmanifest', './strenova-icon-192.png', './strenova-icon-64.png', './assets/fonts/onest-var.woff', './assets/fonts/unbounded-600.woff', './404.html'];

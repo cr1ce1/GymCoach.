@@ -284,7 +284,7 @@
       </div>
       ${d.records.length ? `<div class="sx-sum-prs"><h3>Нові рекорди</h3><ul>${d.records.map((r) => `<li><span>${esc(r.name)}</span><b>${esc(kg(r.weight))} кг × ${r.reps}</b><small>було ${esc(kg(r.prev))} кг</small></li>`).join('')}</ul></div>` : ''}
       ${!d.sets ? '<p class="sx-sum-note">Підходи з вагою та повтореннями не записані, тому тоннажу й рекордів немає.</p>' : ''}
-      ${d.pending ? '<p class="sx-sum-note">Збережено на телефоні. Синхронізуємо з акаунтом, коли з’явиться інтернет.</p>' : ''}
+      ${d.pending ? `<p class="sx-sum-note">${navigator.onLine === false ? 'Збережено на телефоні. Синхронізуємо з акаунтом, коли з’явиться інтернет.' : 'Збережено на телефоні, але акаунт ще не підтвердив запис. Повторимо автоматично.'}</p>` : ''}
       <div class="sx-sum-actions">
         <button type="button" class="sx-btn block" data-sum="story">${icon('share')}Зберегти для сторіс</button>
         <button type="button" class="sx-btn block ghost" data-sum="close">Готово</button>
@@ -408,7 +408,7 @@
       try { out = await original.apply(this, args); }
       finally { window.alert = nativeAlert; }
       const rec = workouts()[0];
-      if (rec && rec !== before) { showSummary(rec); renderNet(); setTimeout(dropFinishedDraft, 2500); }
+      if (rec && rec !== before) { showSummary(rec); renderNet(); setTimeout(dropFinishedDraft, 2500); setTimeout(dropFinishedDraft, 9000); }
       return out;
     };
     wrapped.__sxSummary = true;
