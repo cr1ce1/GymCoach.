@@ -11,6 +11,7 @@
   const $ = (id) => document.getElementById(id);
   const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const icon = (n) => (S.icon ? S.icon(n) : '');
+  const tr = (uk, en) => { try { return localStorage.getItem('gtai_lang') === 'en' ? en : uk; } catch (_) { return uk; } };
   const MODE_KEY = 'strenova_session_mode';
   const IDX_KEY = 'strenova_focus_index';
   const START_KEY = 'strenova_focus_started';
@@ -29,7 +30,7 @@
     });
   }
   function readExercise(row, i) {
-    const name = row.querySelector('.session-ex-name')?.textContent.trim() || row.dataset.exercise || 'Вправа ' + (i + 1);
+    const name = row.querySelector('.session-ex-name')?.textContent.trim() || row.dataset.exercise || tr('Вправа ', 'Exercise ') + (i + 1);
     const target = row.querySelector('.gt-session-exercise-heading small, .details small, .session-main > small')?.textContent.trim() || '';
     const prev = row.querySelector('.gt-previous-result')?.textContent.trim() || '';
     const sets = setRowsOf(row);
@@ -51,9 +52,9 @@
   function ensureRestDock() {
     let d = $('sxRest'); if (d) return d;
     d = document.createElement('div'); d.id = 'sxRest'; d.className = 'sx-rest'; d.setAttribute('role', 'timer'); d.setAttribute('aria-live', 'off');
-    d.innerHTML = `<div><div class="sx-rest-label">Відпочинок</div><div class="sx-rest-time" id="sxRestTime">0:00</div></div>
-      <button type="button" data-rest="-15" aria-label="Мінус 15 секунд">−15</button><button type="button" data-rest="15" aria-label="Плюс 15 секунд">+15</button>
-      <button type="button" class="go" data-rest="skip">Далі</button><span class="sx-rest-bar" id="sxRestBar"></span>`;
+    d.innerHTML = `<div><div class="sx-rest-label">${tr('Відпочинок', 'Rest')}</div><div class="sx-rest-time" id="sxRestTime">0:00</div></div>
+      <button type="button" data-rest="-15" aria-label="${tr('Мінус 15 секунд', 'Minus 15 seconds')}">−15</button><button type="button" data-rest="15" aria-label="${tr('Плюс 15 секунд', 'Plus 15 seconds')}">+15</button>
+      <button type="button" class="go" data-rest="skip">${tr('Далі', 'Next')}</button><span class="sx-rest-bar" id="sxRestBar"></span>`;
     document.body.appendChild(d);
     d.addEventListener('click', (e) => {
       const b = e.target.closest('[data-rest]'); if (!b || !state.rest) return;
@@ -85,12 +86,12 @@
     const el = $('sxRestTime'); if (el) el.textContent = t;
     const bar = $('sxRestBar'); if (bar) bar.style.width = Math.max(0, Math.min(100, (left / r.total) * 100)) + '%';
     const d = $('sxRest');
-    if (left <= 0 && !r.alerted) { r.alerted = true; d?.classList.add('over'); const lab = d?.querySelector('.sx-rest-label'); if (lab) lab.textContent = 'Час на наступний підхід'; beep(); }
+    if (left <= 0 && !r.alerted) { r.alerted = true; d?.classList.add('over'); const lab = d?.querySelector('.sx-rest-label'); if (lab) lab.textContent = tr('Час на наступний підхід', 'Time for the next set'); beep(); }
     if (left < -300) stopRest();
   }
   function stopRest() {
     clearInterval(state.rest?.timer); state.rest = null;
-    const d = $('sxRest'); if (d) { d.classList.remove('show', 'over'); const lab = d.querySelector('.sx-rest-label'); if (lab) lab.textContent = 'Відпочинок'; }
+    const d = $('sxRest'); if (d) { d.classList.remove('show', 'over'); const lab = d.querySelector('.sx-rest-label'); if (lab) lab.textContent = tr('Відпочинок', 'Rest'); }
   }
 
   /* ---------- wake lock while training ---------- */
@@ -107,7 +108,7 @@
   function elapsed() {
     let st = Number(sessionStorage.getItem(START_KEY) || 0);
     if (!st) { st = Date.now(); sessionStorage.setItem(START_KEY, String(st)); }
-    const m = Math.floor((Date.now() - st) / 60000); return m < 60 ? m + ' хв' : Math.floor(m / 60) + ' год ' + (m % 60) + ' хв';
+    const m = Math.floor((Date.now() - st) / 60000); return m < 60 ? m + tr(' хв', ' min') : Math.floor(m / 60) + tr(' год ', ' h ') + (m % 60) + tr(' хв', ' min');
   }
   function ensureHost() {
     const session = $('session'); if (!session) return null;
@@ -137,47 +138,47 @@
     const ex = all[state.idx]; const next = all[state.idx + 1];
     const totalSets = all.reduce((s, e) => s + Math.max(e.sets.length, 1), 0);
     const doneSets = all.reduce((s, e) => s + (e.sets.length ? e.doneCount : (e.complete ? 1 : 0)), 0);
-    const title = $('sessionTitle')?.textContent.trim() || 'Тренування';
+    const title = $('sessionTitle')?.textContent.trim() || tr('Тренування', 'Workout');
     const nextSet = ex.sets.findIndex((s) => !s.done?.checked);
     const { t, video } = technique(ex);
     host.innerHTML = `
       <div class="sx-fx-top">
-        <div class="sx-between"><h2>${esc(title)}</h2><div class="sx-row" style="gap:4px;flex-wrap:nowrap"><button type="button" class="sx-btn small quiet" data-fx="list" aria-label="Показати всі вправи списком">${icon('list')}Список</button><button type="button" class="sx-icon-btn" data-fx="min" aria-label="Згорнути тренування. Прогрес збережеться">${icon('down')}</button></div></div>
-        <div class="sx-fx-meta"><span>Вправа <b>${state.idx + 1}</b> з ${all.length}</span><span>Підходи <b>${doneSets}</b>/${totalSets}</span><span>${icon('timer').replace('<svg', '<svg style="width:15px;height:15px;vertical-align:-3px"')} <b id="sxElapsed">${elapsed()}</b></span></div>
+        <div class="sx-between"><h2>${esc(title)}</h2><div class="sx-row" style="gap:4px;flex-wrap:nowrap"><button type="button" class="sx-btn small quiet" data-fx="list" aria-label="${tr('Показати всі вправи списком', 'Show all exercises as a list')}">${icon('list')}${tr('Список', 'List')}</button><button type="button" class="sx-icon-btn" data-fx="min" aria-label="${tr('Згорнути тренування. Прогрес збережеться', 'Minimize the workout. Progress is saved')}">${icon('down')}</button></div></div>
+        <div class="sx-fx-meta"><span>${tr('Вправа', 'Exercise')} <b>${state.idx + 1}</b> ${tr('з', 'of')} ${all.length}</span><span>${tr('Підходи', 'Sets')} <b>${doneSets}</b>/${totalSets}</span><span>${icon('timer').replace('<svg', '<svg style="width:15px;height:15px;vertical-align:-3px"')} <b id="sxElapsed">${elapsed()}</b></span></div>
         <div class="sx-progress" aria-hidden="true"><span style="width:${totalSets ? Math.round((doneSets / totalSets) * 100) : 0}%"></span></div>
       </div>
-      <nav class="sx-fx-pager" aria-label="Вправи">${all.map((e, i) => `<button type="button" data-go="${i}" class="${e.complete ? 'done' : ''}" ${i === state.idx ? 'aria-current="step"' : ''} aria-label="${esc(e.name)}${e.complete ? ', виконано' : ''}">${e.complete ? icon('check').replace('<svg', '<svg style="width:18px;height:18px"') : i + 1}</button>`).join('')}</nav>
+      <nav class="sx-fx-pager" aria-label="${tr('Вправи', 'Exercises')}">${all.map((e, i) => `<button type="button" data-go="${i}" class="${e.complete ? 'done' : ''}" ${i === state.idx ? 'aria-current="step"' : ''} aria-label="${esc(e.name)}${e.complete ? tr(', виконано', ', done') : ''}">${e.complete ? icon('check').replace('<svg', '<svg style="width:18px;height:18px"') : i + 1}</button>`).join('')}</nav>
       <section class="sx-fx-ex" aria-labelledby="sxExName">
         <h3 id="sxExName">${esc(ex.name)}</h3>
-        <div class="sx-fx-target">${ex.target ? `<span class="sx-badge violet">План: ${esc(ex.target)}</span>` : ''}${ex.complete ? '<span class="sx-badge mint">Виконано</span>' : ''}
-          <button type="button" class="sx-btn small ghost" data-fx="tech">${icon('info')}Техніка</button></div>
+        <div class="sx-fx-target">${ex.target ? `<span class="sx-badge violet">${tr('План', 'Plan')}: ${esc(ex.target)}</span>` : ''}${ex.complete ? `<span class="sx-badge mint">${tr('Виконано', 'Done')}</span>` : ''}
+          <button type="button" class="sx-btn small ghost" data-fx="tech">${icon('info')}${tr('Техніка', 'Technique')}</button></div>
         ${(S.progression && S.progression.html(ex.name, ex.target)) || (ex.prev && !/ще немає/i.test(ex.prev) ? `<p class="sx-fx-prev">${esc(ex.prev)}</p>` : '')}
         <div id="sxTech" hidden></div>
-        ${ex.sets.length ? `<div class="sx-set-head" aria-hidden="true"><span>#</span><span>Вага, кг</span><span>Повтори</span><span></span></div>
+        ${ex.sets.length ? `<div class="sx-set-head" aria-hidden="true"><span>#</span><span>${tr('Вага, кг', 'Weight, kg')}</span><span>${tr('Повтори', 'Reps')}</span><span></span></div>
         <div class="sx-sets">${ex.sets.map((s, i) => {
           const done = !!s.done?.checked;
           return `<div class="sx-set ${done ? 'is-done' : ''} ${i === nextSet ? 'is-next' : ''}" data-set="${i}">
             <span class="sx-set-n">${i + 1}</span>
-            <div class="sx-step"><button type="button" data-step="weight" data-d="-2.5" aria-label="Зменшити вагу підходу ${i + 1}">−</button><input inputmode="decimal" data-in="weight" value="${esc(fmtNum(s.weight?.value))}" aria-label="Вага підходу ${i + 1}, кг"><button type="button" data-step="weight" data-d="2.5" aria-label="Збільшити вагу підходу ${i + 1}">+</button></div>
-            <div class="sx-step"><button type="button" data-step="reps" data-d="-1" aria-label="Менше повторень у підході ${i + 1}">−</button><input inputmode="numeric" data-in="reps" value="${esc(fmtNum(s.reps?.value))}" aria-label="Повторення підходу ${i + 1}"><button type="button" data-step="reps" data-d="1" aria-label="Більше повторень у підході ${i + 1}">+</button></div>
-            <button type="button" class="sx-done" data-done aria-pressed="${done}" aria-label="${done ? 'Скасувати виконання' : 'Позначити виконаним'} підхід ${i + 1}">${icon('check')}</button>
-          </div>`; }).join('')}</div>` : `<button type="button" class="sx-btn block ${ex.complete ? 'ghost' : ''}" data-fx="exdone">${icon('check')}${ex.complete ? 'Скасувати виконання' : 'Вправу виконано'}</button>`}
+            <div class="sx-step"><button type="button" data-step="weight" data-d="-2.5" aria-label="${tr('Зменшити вагу підходу', 'Decrease weight, set')} ${i + 1}">−</button><input inputmode="decimal" data-in="weight" value="${esc(fmtNum(s.weight?.value))}" aria-label="Вага підходу ${i + 1}, кг"><button type="button" data-step="weight" data-d="2.5" aria-label="Збільшити вагу підходу ${i + 1}">+</button></div>
+            <div class="sx-step"><button type="button" data-step="reps" data-d="-1" aria-label="${tr('Менше повторень у підході', 'Fewer reps, set')} ${i + 1}">−</button><input inputmode="numeric" data-in="reps" value="${esc(fmtNum(s.reps?.value))}" aria-label="Повторення підходу ${i + 1}"><button type="button" data-step="reps" data-d="1" aria-label="Більше повторень у підході ${i + 1}">+</button></div>
+            <button type="button" class="sx-done" data-done aria-pressed="${done}" aria-label="${done ? tr('Скасувати виконання', 'Undo') : tr('Позначити виконаним', 'Mark done')} ${tr('підхід', 'set')} ${i + 1}">${icon('check')}</button>
+          </div>`; }).join('')}</div>` : `<button type="button" class="sx-btn block ${ex.complete ? 'ghost' : ''}" data-fx="exdone">${icon('check')}${ex.complete ? tr('Скасувати виконання', 'Undo') : tr('Вправу виконано', 'Exercise done')}</button>`}
         <div class="sx-fx-tools">
-          ${ex.sets.length ? `<button type="button" class="sx-btn small ghost" data-fx="addset">${icon('plus')}Підхід</button>` : ''}
-          <button type="button" class="sx-btn small ghost" data-fx="rest">${icon('timer')}Відпочинок</button>
-          <button type="button" class="sx-btn small quiet" data-fx="more">Заміна, RPE, нотатки</button>
+          ${ex.sets.length ? `<button type="button" class="sx-btn small ghost" data-fx="addset">${icon('plus')}${tr('Підхід', 'Set')}</button>` : ''}
+          <button type="button" class="sx-btn small ghost" data-fx="rest">${icon('timer')}${tr('Відпочинок', 'Rest')}</button>
+          <button type="button" class="sx-btn small quiet" data-fx="more">${tr('Заміна, RPE, нотатки', 'Swap, RPE, notes')}</button>
         </div>
       </section>
       <div class="sx-fx-nav">
-        <button type="button" class="sx-icon-btn" style="height:auto;min-height:60px;width:60px" data-fx="prev" ${state.idx === 0 ? 'disabled' : ''} aria-label="Попередня вправа">${icon('left')}</button>
-        ${next ? `<button type="button" class="sx-fx-next" data-fx="next"><small>Далі</small><b>${esc(next.name)}</b><small>${esc(next.target)}</small></button>` : `<button type="button" class="sx-fx-next" data-fx="finish"><small>Остання вправа</small><b>Завершити тренування</b></button>`}
+        <button type="button" class="sx-icon-btn" style="height:auto;min-height:60px;width:60px" data-fx="prev" ${state.idx === 0 ? 'disabled' : ''} aria-label="${tr('Попередня вправа', 'Previous exercise')}">${icon('left')}</button>
+        ${next ? `<button type="button" class="sx-fx-next" data-fx="next"><small>${tr('Далі', 'Next')}</small><b>${esc(next.name)}</b><small>${esc(next.target)}</small></button>` : `<button type="button" class="sx-fx-next" data-fx="finish"><small>${tr('Остання вправа', 'Last exercise')}</small><b>${tr('Завершити тренування', 'Finish workout')}</b></button>`}
       </div>
-      <button type="button" class="sx-btn block sx-fx-finish ${doneSets === totalSets ? '' : 'ghost'}" data-fx="finish">${icon('check')}Завершити й зберегти</button>`;
+      <button type="button" class="sx-btn block sx-fx-finish ${doneSets === totalSets ? '' : 'ghost'}" data-fx="finish">${icon('check')}${tr('Завершити й зберегти', 'Finish and save')}</button>`;
     bind(host, ex, all, t, video);
   }
 
   function listToggleHtml() {
-    return `<div class="sx-between" style="margin:0 0 12px"><span class="sx-sub">Режим списку</span><button type="button" class="sx-btn small ghost" data-fx="focus">${icon('focus')}Режим фокусу</button></div>`;
+    return `<div class="sx-between" style="margin:0 0 12px"><span class="sx-sub">${tr('Режим списку', 'List mode')}</span><button type="button" class="sx-btn small ghost" data-fx="focus">${icon('focus')}${tr('Режим фокусу', 'Focus mode')}</button></div>`;
   }
   function bindToggle() {
     const b = document.querySelector('#sxFocus [data-fx=focus]');
@@ -187,13 +188,13 @@
   function bind(host, ex, all, t, video) {
     host.querySelectorAll('[data-go]').forEach((b) => b.onclick = () => go(Number(b.dataset.go)));
     host.querySelector('[data-fx=list]').onclick = () => { setMode('list'); render(); };
-    host.querySelector('[data-fx=min]').onclick = () => { stopRest(); document.body.classList.remove('sx-training'); if (typeof window.showPage === 'function') window.showPage('home'); S.toast && S.toast('Тренування збережено як чернетку. Продовжиш з головної.'); };
+    host.querySelector('[data-fx=min]').onclick = () => { stopRest(); document.body.classList.remove('sx-training'); if (typeof window.showPage === 'function') window.showPage('home'); S.toast && S.toast(tr('Тренування збережено як чернетку. Продовжиш з головної.', 'Workout saved as a draft. Continue from Home.')); };
     host.querySelector('[data-fx=prev]').onclick = () => go(state.idx - 1);
     host.querySelectorAll('[data-fx=finish]').forEach((b) => b.onclick = finish);
     const nx = host.querySelector('[data-fx=next]'); if (nx) nx.onclick = () => go(state.idx + 1);
     host.querySelector('[data-fx=rest]').onclick = () => startRest();
     const ap = host.querySelector('[data-sx-apply]');
-    if (ap) ap.onclick = () => { const n = S.progression ? S.progression.apply(ex.row) : 0; S.toast && S.toast(n ? 'Підставлено в підходи' : 'Усі підходи вже заповнені', n ? 'good' : ''); render(); };
+    if (ap) ap.onclick = () => { const n = S.progression ? S.progression.apply(ex.row) : 0; S.toast && S.toast(n ? tr('Підставлено в підходи', 'Filled in') : tr('Усі підходи вже заповнені', 'All sets are already filled in'), n ? 'good' : ''); render(); };
     host.querySelector('[data-fx=more]').onclick = () => { setMode('list'); render(); setTimeout(() => ex.row.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60); };
     const add = host.querySelector('[data-fx=addset]');
     if (add) add.onclick = () => { const btn = [...ex.row.querySelectorAll('button')].find((b) => /Додати підхід|Add set/i.test(b.textContent)); if (btn) { btn.click(); schedule(); } };
@@ -203,8 +204,8 @@
       const box = $('sxTech'); if (!box) return;
       if (!box.hidden) { box.hidden = true; return; }
       box.hidden = false;
-      box.innerHTML = `<div class="sx-card" style="margin:0 0 12px;background:var(--sx-s2)">${t ? `${t.muscles ? `<p class="sx-sub"><b style="color:var(--sx-text)">М’язи:</b> ${esc(t.muscles)}</p>` : ''}${t.how ? `<p style="margin:8px 0">${esc(t.how)}</p>` : ''}${t.mistakes ? `<p class="sx-sub"><b style="color:var(--sx-text)">Типові помилки:</b> ${esc(t.mistakes)}</p>` : ''}` : '<p class="sx-sub">Опису цієї вправи ще немає в бібліотеці.</p>'}
-        <a class="sx-btn small ghost" style="margin-top:10px" href="${esc(video)}" target="_blank" rel="noopener noreferrer">${icon('play')}Відео техніки</a></div>`;
+      box.innerHTML = `<div class="sx-card" style="margin:0 0 12px;background:var(--sx-s2)">${t ? `${t.muscles ? `<p class="sx-sub"><b style="color:var(--sx-text)">${tr('М’язи', 'Muscles')}:</b> ${esc(t.muscles)}</p>` : ''}${t.how ? `<p style="margin:8px 0">${esc(t.how)}</p>` : ''}${t.mistakes ? `<p class="sx-sub"><b style="color:var(--sx-text)">${tr('Типові помилки', 'Common mistakes')}:</b> ${esc(t.mistakes)}</p>` : ''}` : `<p class="sx-sub">${tr('Опису цієї вправи ще немає в бібліотеці.', 'This exercise has no description in the library yet.')}</p>`}
+        <a class="sx-btn small ghost" style="margin-top:10px" href="${esc(video)}" target="_blank" rel="noopener noreferrer">${icon('play')}${tr('Відео техніки', 'Technique video')}</a></div>`;
     };
     host.querySelectorAll('.sx-set').forEach((rowEl) => {
       const i = Number(rowEl.dataset.set); const s = ex.sets[i];
@@ -251,7 +252,7 @@
 
   function finish() {
     const btn = [...document.querySelectorAll('#session button')].find((b) => !b.closest('#sxFocus') && /Завершити й зберегти|Finish and save/i.test(b.textContent));
-    if (!btn) { S.toast && S.toast('Не знайдено кнопку завершення', 'bad'); return; }
+    if (!btn) { S.toast && S.toast(tr('Не знайдено кнопку завершення', 'Finish button not found'), 'bad'); return; }
     stopRest(); btn.click();
     setTimeout(() => { if (!$('session')?.classList.contains('active')) { sessionStorage.removeItem(IDX_KEY); sessionStorage.removeItem(START_KEY); state.idx = 0; keepAwake(false); } }, 400);
   }

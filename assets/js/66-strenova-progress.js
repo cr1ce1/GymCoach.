@@ -19,7 +19,11 @@
   const reduce = () => window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const norm = (s) => String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/[’'`«»"()]/g, '').replace(/[^a-zа-яіїєґ0-9]+/gi, ' ').trim();
   const num = (v) => { const n = Number(String(v ?? '').replace(',', '.')); return Number.isFinite(n) ? n : 0; };
-  const kg = (n) => Number(n).toLocaleString('uk-UA', { maximumFractionDigits: 2 });
+  const EN = () => { try { return localStorage.getItem('gtai_lang') === 'en'; } catch (_) { return false; } };
+  const T = (uk, en) => (EN() ? en : uk);
+  const LOC = () => (EN() ? 'en-US' : 'uk-UA');
+  const KG = () => T('кг', 'kg'), REPS = () => T('повт.', 'reps');
+  const kg = (n) => Number(n).toLocaleString(LOC(), { maximumFractionDigits: 2 });
   const toast = (m, k) => (S.toast ? S.toast(m, k) : null);
 
   /* =================================================================
@@ -99,22 +103,22 @@
       else { next = { weight: top.weight, reps: repMin }; action = 'hold'; }
     }
     const reason = {
-      up: 'Усі повторення виконано, тож додаємо вагу.',
-      reps: top.weight === 0 ? 'Додай одне повторення.' : 'Вага та сама, додай повторення.',
-      hold: 'Минулого разу не всі повторення вийшли. Повтори цю вагу.',
-      deload: 'Двічі поспіль не вийшло. Трохи легше, щоб відновитися й піти далі.'
+      up: T('Усі повторення виконано, тож додаємо вагу.', 'You hit every rep, so the weight goes up.'),
+      reps: top.weight === 0 ? T('Додай одне повторення.', 'Add one rep.') : T('Вага та сама, додай повторення.', 'Same weight, add a rep.'),
+      hold: T('Минулого разу не всі повторення вийшли. Повтори цю вагу.', 'Some reps were missed last time. Repeat this weight.'),
+      deload: T('Двічі поспіль не вийшло. Трохи легше, щоб відновитися й піти далі.', 'Missed twice in a row. Go a bit lighter, recover and build back up.')
     }[action];
-    const lastText = top.weight > 0 ? `${kg(top.weight)} кг × ${top.reps.join(', ')}` : `${top.reps.join(', ')} повт.`;
-    const nextText = next.weight > 0 ? `${kg(next.weight)} кг × ${next.reps}` : `${next.reps} повт.`;
+    const lastText = top.weight > 0 ? `${kg(top.weight)} ${KG()} × ${top.reps.join(', ')}` : `${top.reps.join(', ')} ${REPS()}`;
+    const nextText = next.weight > 0 ? `${kg(next.weight)} ${KG()} × ${next.reps}` : `${next.reps} ${REPS()}`;
     return { name, last: top, lastDate: last.date, next, action, reason, lastText, nextText, repMin, repMax };
   }
   const ARROW = { up: '↑', reps: '', hold: '', deload: '↓' };
   function cardHtml(p, withApply) {
     return `<div class="sx-prog sx-prog-${p.action}" data-sx-prog>
-      <div class="sx-prog-row"><span class="sx-prog-k">Минулого разу</span><b>${esc(p.lastText)}</b></div>
-      <div class="sx-prog-row"><span class="sx-prog-k">Сьогодні</span><b class="sx-prog-next">${ARROW[p.action] ? `<span aria-hidden="true">${ARROW[p.action]}</span> ` : ''}${esc(p.nextText)}</b></div>
+      <div class="sx-prog-row"><span class="sx-prog-k">${T('Минулого разу', 'Last time')}</span><b>${esc(p.lastText)}</b></div>
+      <div class="sx-prog-row"><span class="sx-prog-k">${T('Сьогодні', 'Today')}</span><b class="sx-prog-next">${ARROW[p.action] ? `<span aria-hidden="true">${ARROW[p.action]}</span> ` : ''}${esc(p.nextText)}</b></div>
       <p class="sx-prog-why">${esc(p.reason)}</p>
-      ${withApply ? '<button type="button" class="sx-btn small ghost" data-sx-apply>Підставити в підходи</button>' : ''}</div>`;
+      ${withApply ? `<button type="button" class="sx-btn small ghost" data-sx-apply>${T('Підставити в підходи', 'Fill in my sets')}</button>` : ''}</div>`;
   }
   const fire = (el) => { el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); };
   // Fill the suggestion into sets that are not done yet. Weights the athlete already typed are kept.
@@ -149,7 +153,7 @@
         if (anchor) anchor.insertAdjacentElement('afterend', box); else row.prepend(box);
       }
       box.dataset.sig = sig; box.innerHTML = cardHtml(p, true);
-      box.querySelector('[data-sx-apply]').onclick = () => { applyToRow(row, p) ? toast('Підставлено: ' + p.nextText, 'good') : toast('Усі підходи вже заповнені'); S.gym?.render?.(); };
+      box.querySelector('[data-sx-apply]').onclick = () => { applyToRow(row, p) ? toast(T('Підставлено: ', 'Filled in: ') + p.nextText, 'good') : toast(T('Усі підходи вже заповнені', 'All sets are already filled in')); S.gym?.render?.(); };
     });
   }
   // Used by gym focus mode (61-strenova-gym.js).
@@ -173,8 +177,8 @@
       if (chip && chip.dataset.text === text) return;
       if (!chip) { chip = document.createElement('span'); chip.className = 'sx-prog-chip'; (rx || el).insertAdjacentElement('afterend', chip); }
       chip.dataset.text = text; chip.className = 'sx-prog-chip sx-prog-' + p.action;
-      chip.title = `Минулого разу: ${p.lastText}. ${p.reason}`;
-      chip.innerHTML = `<span class="sx-vh">Наступного разу: </span>${esc(text)}`;
+      chip.title = `${T('Минулого разу', 'Last time')}: ${p.lastText}. ${p.reason}`;
+      chip.innerHTML = `<span class="sx-vh">${T('Наступного разу: ', 'Next time: ')}</span>${esc(text)}`;
     });
   }
 
@@ -199,13 +203,13 @@
     pill.style.top = Math.max(8, Math.min(hb, 120)) + 8 + 'px';
     pill.classList.toggle('is-off', offline);
     pill.innerHTML = offline
-      ? `<span class="sx-net-dot"></span>Офлайн · усе зберігається на телефоні${pending ? ` · у черзі ${pending}` : ''}`
-      : syncing ? '<span class="sx-net-dot"></span>Синхронізація…' : `<span class="sx-net-dot"></span>Очікує синхронізації: ${pending}`;
+      ? `<span class="sx-net-dot"></span>${T('Офлайн · усе зберігається на телефоні', 'Offline · everything is saved on this device')}${pending ? ` · ${T('у черзі', 'queued')} ${pending}` : ''}`
+      : syncing ? `<span class="sx-net-dot"></span>${T('Синхронізація…', 'Syncing…')}` : `<span class="sx-net-dot"></span>${T('Очікує синхронізації', 'Waiting to sync')}: ${pending}`;
   }
   async function flush() {
     if (syncing || navigator.onLine === false || !uid() || typeof window.gtSyncWorkout !== 'function') return;
     const queue = outbox();
-    if (!queue.length) { if (lastPending > 0) { lastPending = 0; toast('Тренування синхронізовано', 'good'); } renderNet(); return; }
+    if (!queue.length) { if (lastPending > 0) { lastPending = 0; toast(T('Тренування синхронізовано', 'Workout synced'), 'good'); } renderNet(); return; }
     lastPending = queue.length;
     syncing = true; renderNet();
     let ok = 0;
@@ -214,10 +218,10 @@
     } catch (err) { console.warn('Strenova outbox retry failed:', err?.message || err); }
     syncing = false; renderNet();
     lastPending = outbox().length;
-    if (ok) { toast(ok === 1 ? 'Тренування синхронізовано' : `Синхронізовано тренувань: ${ok}`, 'good'); try { window.renderHistory?.(); window.gtRenderStats?.(); } catch (_) {} }
+    if (ok) { toast(ok === 1 ? T('Тренування синхронізовано', 'Workout synced') : `${T('Синхронізовано тренувань', 'Workouts synced')}: ${ok}`, 'good'); try { window.renderHistory?.(); window.gtRenderStats?.(); } catch (_) {} }
   }
   window.addEventListener('online', () => { lastPending = Math.max(lastPending, outbox().length); renderNet(); setTimeout(flush, 1500); });
-  window.addEventListener('offline', () => { renderNet(); toast('Немає інтернету. Усе, що ти запишеш, збережеться на телефоні.'); });
+  window.addEventListener('offline', () => { renderNet(); toast(T('Немає інтернету. Усе, що ти запишеш, збережеться на телефоні.', 'No internet. Everything you log is saved on this device.')); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { renderNet(); flush(); } });
   setInterval(() => { const n = outbox().length; if (n !== lastPending) { lastPending = n; renderNet(); } if (n) flush(); }, 45000);
 
@@ -244,7 +248,7 @@
       const ss = setsOf(e); if (!ss.length) continue;
       sets += ss.length; reps += ss.reduce((a, s) => a + s.reps, 0); volume += ss.reduce((a, s) => a + s.weight * s.reps, 0);
       const top = topOf(ss);
-      lines.push({ name: e.name, text: top.weight > 0 ? `${kg(top.weight)} кг × ${Math.max(...top.reps)}` : `${Math.max(...top.reps)} повт.` });
+      lines.push({ name: e.name, text: top.weight > 0 ? `${kg(top.weight)} ${KG()} × ${Math.max(...top.reps)}` : `${Math.max(...top.reps)} ${REPS()}` });
       if (top.weight <= 0) continue;
       const key = norm(e.name);
       let prevBest = 0, seen = false;
@@ -252,10 +256,10 @@
       if (seen && top.weight > prevBest) records.push({ name: e.name, weight: top.weight, reps: Math.max(...top.reps), prev: prevBest });
     }
     const minutes = Number(rec.duration_minutes || rec.minutes) || 0;
-    return { name: rec.name || 'Тренування', date: rec.date ? new Date(rec.date) : new Date(), minutes, sets, reps, volume: Math.round(volume), exercises: Number(rec.done) || (rec.exercises || []).filter((e) => e.completed || setsOf(e).length).length, records, lines, pending: rec.syncStatus === 'pending' || navigator.onLine === false };
+    return { name: rec.name || T('Тренування', 'Workout'), date: rec.date ? new Date(rec.date) : new Date(), minutes, sets, reps, volume: Math.round(volume), exercises: Number(rec.done) || (rec.exercises || []).filter((e) => e.completed || setsOf(e).length).length, records, lines, pending: rec.syncStatus === 'pending' || navigator.onLine === false };
   }
-  const durText = (m) => (m >= 60 ? `${Math.floor(m / 60)} год ${m % 60} хв` : `${m} хв`);
-  const dateText = (d) => d.toLocaleDateString('uk-UA', { day: 'numeric', month: 'long' });
+  const durText = (m) => (m >= 60 ? `${Math.floor(m / 60)} ${T('год', 'h')} ${m % 60} ${T('хв', 'min')}` : `${m} ${T('хв', 'min')}`);
+  const dateText = (d) => d.toLocaleDateString(LOC(), { day: 'numeric', month: 'long' });
 
   let lastFocus = null;
   function closeSummary() {
@@ -274,20 +278,20 @@
     el.innerHTML = `<div class="sx-sum-panel">
       <div class="sx-sum-mark" aria-hidden="true">${icon('check')}</div>
       <p class="sx-sum-date">${esc(dateText(d.date))}</p>
-      <h2 id="sxSumTitle">Тренування завершено</h2>
+      <h2 id="sxSumTitle">${T('Тренування завершено', 'Workout complete')}</h2>
       <p class="sx-sum-name">${esc(d.name)}</p>
       <div class="sx-sum-grid">
-        ${stat(d.minutes ? esc(durText(d.minutes)) : '—', 'час')}
-        ${stat(d.volume ? esc(kg(d.volume)) + '<small> кг</small>' : '—', 'тоннаж')}
-        ${stat(d.sets || '—', 'підходів')}
-        ${stat(d.exercises || '—', 'вправ')}
+        ${stat(d.minutes ? esc(durText(d.minutes)) : '—', T('час', 'time'))}
+        ${stat(d.volume ? esc(kg(d.volume)) + `<small> ${KG()}</small>` : '—', T('тоннаж', 'volume'))}
+        ${stat(d.sets || '—', T('підходів', 'sets'))}
+        ${stat(d.exercises || '—', T('вправ', 'exercises'))}
       </div>
-      ${d.records.length ? `<div class="sx-sum-prs"><h3>Нові рекорди</h3><ul>${d.records.map((r) => `<li><span>${esc(r.name)}</span><b>${esc(kg(r.weight))} кг × ${r.reps}</b><small>було ${esc(kg(r.prev))} кг</small></li>`).join('')}</ul></div>` : ''}
-      ${!d.sets ? '<p class="sx-sum-note">Підходи з вагою та повтореннями не записані, тому тоннажу й рекордів немає.</p>' : ''}
-      ${d.pending ? `<p class="sx-sum-note">${navigator.onLine === false ? 'Збережено на телефоні. Синхронізуємо з акаунтом, коли з’явиться інтернет.' : 'Збережено на телефоні, але акаунт ще не підтвердив запис. Повторимо автоматично.'}</p>` : ''}
+      ${d.records.length ? `<div class="sx-sum-prs"><h3>${T('Нові рекорди', 'New records')}</h3><ul>${d.records.map((r) => `<li><span>${esc(r.name)}</span><b>${esc(kg(r.weight))} ${KG()} × ${r.reps}</b><small>${T('було', 'was')} ${esc(kg(r.prev))} ${KG()}</small></li>`).join('')}</ul></div>` : ''}
+      ${!d.sets ? `<p class="sx-sum-note">${T('Підходи з вагою та повтореннями не записані, тому тоннажу й рекордів немає.', 'No sets with weight and reps were logged, so there is no volume or records.')}</p>` : ''}
+      ${d.pending ? `<p class="sx-sum-note">${navigator.onLine === false ? T('Збережено на телефоні. Синхронізуємо з акаунтом, коли з’явиться інтернет.', 'Saved on this device. It will sync to your account when you are back online.') : T('Збережено на телефоні, але акаунт ще не підтвердив запис. Повторимо автоматично.', 'Saved on this device, but your account has not confirmed it yet. We will retry automatically.')}</p>` : ''}
       <div class="sx-sum-actions">
-        <button type="button" class="sx-btn block" data-sum="story">${icon('share')}Зберегти для сторіс</button>
-        <button type="button" class="sx-btn block ghost" data-sum="close">Готово</button>
+        <button type="button" class="sx-btn block" data-sum="story">${icon('share')}${T('Зберегти для сторіс', 'Save for stories')}</button>
+        <button type="button" class="sx-btn block ghost" data-sum="close">${T('Готово', 'Done')}</button>
       </div></div>`;
     document.body.appendChild(el); document.body.classList.add('sx-summary-open');
     const btnStory = el.querySelector('[data-sum=story]');
@@ -319,12 +323,12 @@
     x.textBaseline = 'alphabetic';
     x.fillStyle = '#f4f2f8'; x.font = `600 44px ${DISPLAY}`; x.fillText('STRENOVA', P, 170);
     x.fillStyle = '#a29eae'; x.font = `500 38px ${BODY}`; x.textAlign = 'right'; x.fillText(dateText(d.date), W - P, 170); x.textAlign = 'left';
-    x.fillStyle = '#c9c5d3'; x.font = `500 42px ${BODY}`; x.fillText('Тренування завершено', P, 380);
+    x.fillStyle = '#c9c5d3'; x.font = `500 42px ${BODY}`; x.fillText(T('Тренування завершено', 'Workout complete'), P, 380);
     x.fillStyle = '#f4f2f8'; x.font = `600 88px ${DISPLAY}`;
     let y = 490; for (const l of wrap(x, d.name, W - P * 2).slice(0, 2)) { x.fillText(fit(x, l, W - P * 2), P, y); y += 106; }
     // stats 2x2
     y += 40;
-    const cells = [[d.minutes ? durText(d.minutes) : '—', 'час'], [d.volume ? kg(d.volume) + ' кг' : '—', 'тоннаж'], [String(d.sets || '—'), 'підходів'], [String(d.exercises || '—'), 'вправ']];
+    const cells = [[d.minutes ? durText(d.minutes) : '—', T('час', 'time')], [d.volume ? kg(d.volume) + ' ' + KG() : '—', T('тоннаж', 'volume')], [String(d.sets || '—'), T('підходів', 'sets')], [String(d.exercises || '—'), T('вправ', 'exercises')]];
     const cw = (W - P * 2 - 32) / 2, ch = 210;
     cells.forEach(([v, l], i) => {
       const cx = P + (i % 2) * (cw + 32), cy = y + Math.floor(i / 2) * (ch + 32);
@@ -335,38 +339,38 @@
     });
     y += ch * 2 + 32 + 110;
     if (d.records.length) {
-      x.fillStyle = '#ffb547'; x.font = `600 40px ${DISPLAY}`; x.fillText('Нові рекорди', P, y); y += 70;
+      x.fillStyle = '#ffb547'; x.font = `600 40px ${DISPLAY}`; x.fillText(T('Нові рекорди', 'New records'), P, y); y += 70;
       for (const r of d.records.slice(0, 3)) {
         x.fillStyle = '#f4f2f8'; x.font = `500 42px ${BODY}`; x.fillText(fit(x, r.name, W - P * 2 - 330), P, y);
-        x.fillStyle = '#ffb547'; x.font = `700 42px ${BODY}`; x.textAlign = 'right'; x.fillText(`${kg(r.weight)} кг × ${r.reps}`, W - P, y); x.textAlign = 'left'; y += 72;
+        x.fillStyle = '#ffb547'; x.font = `700 42px ${BODY}`; x.textAlign = 'right'; x.fillText(`${kg(r.weight)} ${KG()} × ${r.reps}`, W - P, y); x.textAlign = 'left'; y += 72;
       }
       y += 40;
     }
     const room = Math.floor((H - 260 - y) / 66);
     if (d.lines.length && room > 0) {
-      x.fillStyle = '#c9c5d3'; x.font = `600 36px ${DISPLAY}`; x.fillText('Вправи', P, y); y += 62;
+      x.fillStyle = '#c9c5d3'; x.font = `600 36px ${DISPLAY}`; x.fillText(T('Вправи', 'Exercises'), P, y); y += 62;
       for (const ln of d.lines.slice(0, Math.min(room - 1, 6))) {
         x.fillStyle = '#c9c5d3'; x.font = `500 38px ${BODY}`; x.fillText(fit(x, ln.name, W - P * 2 - 300), P, y);
         x.fillStyle = '#f4f2f8'; x.font = `700 38px ${BODY}`; x.textAlign = 'right'; x.fillText(ln.text, W - P, y); x.textAlign = 'left'; y += 66;
       }
     }
     x.fillStyle = '#8f6dff'; x.fillRect(P, H - 190, 120, 8);
-    x.fillStyle = '#a29eae'; x.font = `500 34px ${BODY}`; x.fillText('Записано в Strenova', P, H - 120);
+    x.fillStyle = '#a29eae'; x.font = `500 34px ${BODY}`; x.fillText(T('Записано в Strenova', 'Logged with Strenova'), P, H - 120);
     return c;
   }
   async function shareStory(d) {
     const canvas = await drawStory(d);
     const blob = await new Promise((r) => canvas.toBlob(r, 'image/png'));
-    if (!blob) { toast('Не вдалося створити картинку', 'bad'); return; }
+    if (!blob) { toast(T('Не вдалося створити картинку', 'Could not create the image'), 'bad'); return; }
     const fname = `strenova-${d.date.toISOString().slice(0, 10)}.png`;
     const file = typeof File === 'function' ? new File([blob], fname, { type: 'image/png' }) : null;
     try {
-      if (file && navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Моє тренування' }); return; }
+      if (file && navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: T('Моє тренування', 'My workout') }); return; }
     } catch (err) { if (err && err.name === 'AbortError') return; }
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 4000);
-    toast('Картинку збережено', 'good');
+    toast(T('Картинку збережено', 'Image saved'), 'good');
   }
   S.summary = { show: showSummary, summarize, drawStory };
 
